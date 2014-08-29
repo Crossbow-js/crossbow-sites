@@ -1,0 +1,7 @@
+title: "({crossbow.js})"
+
+s3prefix: "https://s3-eu-west-1.amazonaws.com/crossbow/"
+
+css:
+  dev: /css/main.css
+  production: main.min-d106a42e.css
