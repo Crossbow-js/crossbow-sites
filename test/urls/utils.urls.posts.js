@@ -62,15 +62,34 @@ describe("Creating Post URLS from keys", function () {
 
             assert.deepEqual(actual, expected);
         });
-        it.skip("Can use the date as part of URL structure", function(){
+        it("Can use the title as part of URL structure", function(){
 
-            var config = {};
+            var config = {
+                postUrlFormat: "/blog/:title",
+                prettyUrls: false
+            };
 
             var actual = makePostUrl("posts/2014-06-12-post1.md", config);
 
             var expected = {
-                filePath: "post1.html",
-                url: "/post1.html"
+                filePath: "blog/post1.html",
+                url: "/blog/post1.html"
+            };
+
+            assert.deepEqual(actual, expected);
+        });
+        it("Can use the date as part of URL structure + Pretty", function(){
+
+            var config = {
+                postUrlFormat: "/blog/:year/:month/:day/:title",
+                prettyUrls: true
+            };
+
+            var actual = makePostUrl("posts/2014-06-12-post1.md", config);
+
+            var expected = {
+                filePath: "blog/2014/06/12/post1/index.html",
+                url: "/blog/2014/06/12/post1"
             };
 
             assert.deepEqual(actual, expected);
@@ -82,7 +101,8 @@ describe("Creating Post URLS from keys", function () {
         it("Replaces filename with pretty, 1 level deep", function () {
 
             var config = {
-                postUrlFormat: "/:pretty"
+                postUrlFormat: "/:title",
+                prettyUrls: true
             };
 
             var actual = makePostUrl("posts/post1.md", config);
@@ -97,7 +117,8 @@ describe("Creating Post URLS from keys", function () {
         it("Replaces filename with pretty, 2 levels deep", function () {
 
             var config = {
-                postUrlFormat: "/:pretty"
+                postUrlFormat: "/:title",
+                prettyUrls: true
             };
 
             var actual = makePostUrl("posts/js/post1.md", config);
@@ -112,7 +133,8 @@ describe("Creating Post URLS from keys", function () {
         it("Uses prefixes given in `postUrlFormat` option", function () {
 
             var config = {
-                postUrlFormat: "/blog/:pretty"
+                postUrlFormat: "/blog/:title",
+                prettyUrls: true
             };
 
             var actual = makePostUrl("posts/js/post1.md", config);
