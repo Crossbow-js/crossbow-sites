@@ -3,21 +3,25 @@ var assert    = require("chai").assert;
 var crossbow  = require("../../index");
 
 var parentLayout = multiline.stripIndent(function () {/*
- <!DOCTYPE html>
- <html>
- <head><title>Parent Layout</title></head>
- {#content /}
- </html>
+<!DOCTYPE html>
+<html>
+<head><title>{page.title}</title></head>
+{#content /}
+</html>
  */
 });
 
 var childLayout = multiline.stripIndent(function () {/*
- ---
- layout: parent
- ---
- <body class="post">
- {#content /}
- </body>
+---
+layout: parent
+---
+<body class="post">{#content /}</body>
+ */});
+var childLayout2 = multiline.stripIndent(function () {/*
+---
+layout: child
+---
+<section>{#content /}</section>
  */});
 
 describe("Nested/child layouts", function () {
@@ -28,10 +32,11 @@ describe("Nested/child layouts", function () {
 
         // Add layouts to cache
         crossbow.populateCache("_layouts/parent.html", parentLayout);
-        crossbow.populateCache("_layouts/child.html", childLayout);
+        crossbow.populateCache("_layouts/child.html",  childLayout);
+        crossbow.populateCache("_layouts/child2.html", childLayout2);
     });
 
-    it("Uses nested layouts", function (done) {
+    it("Uses nested layouts 2", function (done) {
 
         var post1 = multiline.stripIndent(function () {/*
          ---
@@ -46,7 +51,27 @@ describe("Nested/child layouts", function () {
 
         crossbow.compileOne(post, {siteConfig: {sitename: "({shakyShane})"}}, function (err, out) {
             var compiled = out.compiled;
-            assert.include(compiled, "<head><title>Parent Layout</title></head>");
+            assert.include(compiled, "<head><title>Nested layout testing</title></head>");
+            assert.include(compiled, "<p>Nested layout testing</p>");
+            done();
+        });
+    });
+    it("Uses nested layouts 3", function (done) {
+
+        var post1 = multiline.stripIndent(function () {/*
+         ---
+         layout: child2
+         title: "Nested layout testing"
+         ---
+
+         {post.title}
+         */});
+
+        var post = crossbow.addPost("_posts/post2.md", post1, {});
+
+        crossbow.compileOne(post, {siteConfig: {sitename: "({shakyShane})"}}, function (err, out) {
+            var compiled = out.compiled;
+            assert.include(compiled, "<head><title>Nested layout testing</title></head>");
             assert.include(compiled, "<p>Nested layout testing</p>");
             done();
         });

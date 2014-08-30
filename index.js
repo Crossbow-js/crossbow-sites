@@ -7,14 +7,14 @@ var path = require("path");
 /**
  * Lib
  */
-var utils = require("./lib/utils");
-var yaml = require("./lib/yaml");
-var log = require("./lib/logger");
-var Post = require("./lib/post");
-var Page = require("./lib/page");
-var Paginator = require("./lib/paginator");
-var Partial = require("./lib/partial");
-var Cache = require("./lib/cache");
+var utils       = require("./lib/utils");
+var yaml        = require("./lib/yaml");
+var log         = require("./lib/logger");
+var Post        = require("./lib/post");
+var Page        = require("./lib/page");
+var Paginator   = require("./lib/paginator");
+var Partial     = require("./lib/partial");
+var Cache       = require("./lib/cache");
 
 var _cache = new Cache();
 
@@ -30,13 +30,17 @@ module.exports.setLogLevel = log.setLogLevel;
 /**
  * 3rd Party libs
  */
-var _ = require("lodash");
-var multiline = require("multiline");
-var merge = require("opt-merger").merge;
-var marked = require("marked");
-var highlight = require("highlight.js");
+var highlight   = require("highlight.js");
+var multiline   = require("multiline");
+var merge       = require("opt-merger").merge;
+var marked      = require("marked");
+var _           = require("lodash");
 
-var dust = require("dustjs-helpers");
+/**
+ * Templates use dust.
+ * @type {exports}
+ */
+var dust        = require("dustjs-helpers");
 dust.optimizers.format = function (ctx, node) {
     return node;
 };
@@ -113,18 +117,21 @@ function getFile(filePath, transform, allowEmpty) {
 }
 
 /**
- * @param data
- * @param cb
+ * Allow layouts to have layouts.
+ * Recursively render layout from the inside out (allows any number of nested layouts until the current
+ * one does not specify a layout)
+ * @param {String} layout
+ * @param {Object} data
+ * @param {Function} cb
  */
-function addLayout(data, cb) {
+function addLayout(layout, data, cb) {
 
-    var current = getFile(utils.getLayoutPath(data.page.front.layout));
+    var current = getFile(utils.getLayoutPath(layout));
 
     if (yaml.hasFrontMatter(current)) {
 
         // nested layout
         var _data   = yaml.readFrontMatter(current);
-        var parent = getFile(utils.getLayoutPath(_data.front.layout));
 
         renderTemplate(_data.content, data, function (err, out) {
 
@@ -132,7 +139,7 @@ function addLayout(data, cb) {
                 return chunk.write(out);
             };
 
-            renderTemplate(parent, data, cb);
+            addLayout(_data.front.layout, data, cb);
         });
 
     } else {
@@ -478,7 +485,7 @@ function construct(item, data, config, cb) {
             return chunk.write(fullContent);
         };
 
-        addLayout(data, function (err, out) {
+        addLayout(data.page.front.layout, data, function (err, out) {
             if (err) {
                 cb(err);
             } else {
@@ -582,9 +589,9 @@ function addPage(key, string, config) {
     return page;
 }
 
-/**-------------
+/*-------------/
  *  Public API
- */
+ *------------*/
 
 /**
  * Populate the cache
