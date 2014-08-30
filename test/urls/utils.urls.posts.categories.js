@@ -4,7 +4,7 @@ var makePostUrl = url.makePostUrl;
 
 describe("Creating Post URLS from keys + categories & tags", function () {
 
-    it("replaces filename, 1 level deep", function () {
+    it("Adds categories", function () {
 
         var config = {
             postUrlFormat: "/blog/:category/:filename",
@@ -22,7 +22,7 @@ describe("Creating Post URLS from keys + categories & tags", function () {
 
         assert.deepEqual(actual, expected);
     });
-    it("replaces filename, 1 level deep", function () {
+    it("Adds categories", function () {
 
         var config = {
             postUrlFormat: "/blog/:category/:filename",
@@ -36,6 +36,42 @@ describe("Creating Post URLS from keys + categories & tags", function () {
         var expected = {
             filePath: "blog/js/node/post1/index.html",
             url: "/blog/js/node/post1"
+        };
+
+        assert.deepEqual(actual, expected);
+    });
+    it("removes categories categories when none exist + pretty", function () {
+
+        var config = {
+            postUrlFormat: "/blog/:category/:filename",
+            prettyUrls: true
+        };
+
+        var categories = [];
+
+        var actual = makePostUrl("posts/post1.md", config, categories);
+
+        var expected = {
+            filePath: "blog/post1/index.html",
+            url: "/blog/post1"
+        };
+
+        assert.deepEqual(actual, expected);
+    });
+    it("removes categories categories when none exist + none pretty", function () {
+
+        var config = {
+            postUrlFormat: "/blog/:category/:filename",
+            prettyUrls: false
+        };
+
+        var categories = [];
+
+        var actual = makePostUrl("posts/post1.md", config, categories);
+
+        var expected = {
+            filePath: "blog/post1.html",
+            url: "/blog/post1.html"
         };
 
         assert.deepEqual(actual, expected);
