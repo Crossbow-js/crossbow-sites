@@ -21,7 +21,7 @@ describe("Creating a PAGE with maximum info", function(){
     });
     it("Has access to front matter", function() {
 
-        var page = new Page("projects/about-us.html", page1);
+        var page = new Page("projects/about-us.html", page1, {prettyUrls: true});
 
         assert.deepEqual(page.front.title,  "Homepage",                      "Adds title from front");
         assert.deepEqual(page.front.layout, "default",                       "Adds layout from front");

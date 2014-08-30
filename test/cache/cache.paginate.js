@@ -59,8 +59,10 @@ describe("Paginating the posts", function(){
         var cache = _cache.addPosts([post1, post2, post3, post4, post5, post6]);
         assert.equal(cache.posts().length, 6);
 
-        var page      = new Page("blog/posts/index.html", page1);
-        var paginator = new Paginator(cache.posts(), page, 3);
+        var config = {prettyUrls: true};
+
+        var page      = new Page("blog/posts/index.html", page1, config);
+        var paginator = new Paginator(cache.posts(), page, 3, config);
         var pages     = paginator.pages();
 
         assert.equal(pages.length, 2);
