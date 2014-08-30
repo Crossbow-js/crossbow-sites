@@ -38,7 +38,7 @@ describe("Creating a POST with maximum info", function(){
 
         assert.isTrue(postItem.dateObj instanceof Date);
     });
-    it("Uses Config", function() {
+    it("Uses Config for urls", function() {
 
         var postItem = new Post("_posts/post1.md", post1, {
             postUrlFormat: "/blog/:categories/:title",
@@ -46,7 +46,8 @@ describe("Creating a POST with maximum info", function(){
         });
         assert.deepEqual(postItem.url, "/blog/javascript/node-js/post1", "Adds URL + categories");
     });
-    it("Uses Config", function() {
+    it("Uses Config for urls", function() {
+
 
         var postItem = new Post("_posts/post1.md", post1, {
             postUrlFormat: "/blog/:categories/:title",

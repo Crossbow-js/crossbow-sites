@@ -60,7 +60,8 @@ describe("Creating Post URLS from keys", function () {
                 url: "/post1.html"
             };
 
-            assert.deepEqual(actual, expected);
+            assert.deepEqual(actual.filePath, "post1.html");
+            assert.deepEqual(actual.url, "/post1.html");
         });
         it("Can use the title as part of URL structure", function(){
 
@@ -71,12 +72,8 @@ describe("Creating Post URLS from keys", function () {
 
             var actual = makePostUrl("posts/2014-06-12-post1.md", config);
 
-            var expected = {
-                filePath: "blog/post1.html",
-                url: "/blog/post1.html"
-            };
-
-            assert.deepEqual(actual, expected);
+            assert.deepEqual(actual.filePath, "blog/post1.html");
+            assert.deepEqual(actual.url, "/blog/post1.html");
         });
         it("Can use the date as part of URL structure + Pretty", function(){
 
@@ -87,12 +84,8 @@ describe("Creating Post URLS from keys", function () {
 
             var actual = makePostUrl("posts/2014-06-12-post1.md", config);
 
-            var expected = {
-                filePath: "blog/2014/06/12/post1/index.html",
-                url: "/blog/2014/06/12/post1"
-            };
-
-            assert.deepEqual(actual, expected);
+            assert.deepEqual(actual.filePath, "blog/2014/06/12/post1/index.html");
+            assert.deepEqual(actual.url, "/blog/2014/06/12/post1");
         });
     });
 
