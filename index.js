@@ -433,13 +433,13 @@ function compileOne(item, config, cb) {
  */
 function doPagination(match, data, config, cb) {
 
-    var meta = utils.splitMeta(match.front.paginate);
-    var collection = _cache.getCollection(meta[0]);
+    var meta        = utils.splitMeta(match.front.paginate);
+    var collection  = _cache.getCollection(meta[0]);
 
-    var paginator = new Paginator(collection, match, meta[1]);
-    var paginatorPages = paginator.pages();
+    var paginator       = new Paginator(collection, match, meta[1], config);
+    var paginatorPages  = paginator.pages();
 
-    var compiledItems = [];
+    var compiledItems   = [];
 
     paginatorPages.forEach(function (item, i) {
 

@@ -133,6 +133,8 @@ describe("Creating a pagination index", function(){
 
          Per Page: {paged.perPage}
 
+         This URL:
+
          {#paged.items}
          {title}{~n}
          {/paged.items}
@@ -156,9 +158,11 @@ describe("Creating a pagination index", function(){
         coderBlog.addPost("_posts/post5.md", post5, {});
         coderBlog.addPost("_posts/post6.md", post6, {});
 
-        coderBlog.addPage("blog/posts/index.html", page1, {});
+        var page = coderBlog.addPage("blog/posts/index.html", page1, {prettyUrls: true});
 
-        coderBlog.compileOne("blog/posts/index.html", {siteConfig: {"site-name": "shane - test"}}, function (err, out) {
+        coderBlog.compileOne(page, {siteConfig: {"site-name": "shane - test"}}, function (err, out) {
+
+            assert.equal(out[0].url, "/blog/posts");
 
             assert.include(out[0].title, "Blog posts");
             assert.include(out[0].compiled, "shane - test");
@@ -171,9 +175,11 @@ describe("Creating a pagination index", function(){
 
             assert.include(out[1].compiled, "Post 4");
             assert.include(out[1].compiled, "Post 3");
+            assert.equal(out[1].url, "/blog/posts/page2");
 
             assert.include(out[2].compiled, "Post 2");
             assert.include(out[2].compiled, "Post 1");
+            assert.equal(out[2].url, "/blog/posts/page3");
 
             done();
         });
