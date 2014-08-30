@@ -54,4 +54,20 @@ describe("Creating a POST with maximum info", function(){
         });
         assert.deepEqual(postItem.url, "/blog/javascript/node-js/post1.html", "Adds URL + categories");
     });
+    it("uses slugify on categories", function() {
+        var post1 = multiline.stripIndent(function(){/*
+         ---
+         layout: post-test
+         title: "Homepage"
+         date: 2013-11-13
+         categories: javascript, node js
+         ---
+         post1
+         */});
+        var postItem = new Post("_posts/post1.md", post1, {
+            postUrlFormat: "/blog/:categories/:title",
+            prettyUrls: false
+        });
+        assert.deepEqual(postItem.url, "/blog/javascript/node-js/post1.html", "Adds URL + categories");
+    });
 });
