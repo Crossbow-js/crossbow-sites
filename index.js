@@ -1,42 +1,45 @@
 /**
  * Core modules
  */
-var fs    = require("fs");
-var path  = require("path");
+var fs = require("fs");
+var path = require("path");
 
 /**
  * Lib
  */
-var utils     = require("./lib/utils");
-var yaml      = require("./lib/yaml");
-var log       = require("./lib/logger");
-var Post      = require("./lib/post");
-var Page      = require("./lib/page");
+var utils = require("./lib/utils");
+var yaml = require("./lib/yaml");
+var log = require("./lib/logger");
+var Post = require("./lib/post");
+var Page = require("./lib/page");
 var Paginator = require("./lib/paginator");
-var Partial   = require("./lib/partial");
-var Cache     = require("./lib/cache");
-var _cache    = new Cache();
+var Partial = require("./lib/partial");
+var Cache = require("./lib/cache");
+
+var _cache = new Cache();
 
 module.exports.clearCache = function () {
     log("debug", "Clearing all caches, (posts, pages, includes, partials)");
     _cache.reset();
 };
 
-module.exports.log         = log;
-module.exports.utils       = utils;
+module.exports.log = log;
+module.exports.utils = utils;
 module.exports.setLogLevel = log.setLogLevel;
 
 /**
  * 3rd Party libs
  */
-var _         = require("lodash");
+var _ = require("lodash");
 var multiline = require("multiline");
-var merge     = require("opt-merger").merge;
-var marked    = require("marked");
+var merge = require("opt-merger").merge;
+var marked = require("marked");
 var highlight = require("highlight.js");
 
-var dust      = require("dustjs-helpers");
-dust.optimizers.format = function(ctx, node) { return node; };
+var dust = require("dustjs-helpers");
+dust.optimizers.format = function (ctx, node) {
+    return node;
+};
 dust.isDebug = true;
 
 /**
@@ -58,7 +61,15 @@ var defaults = {
     /**
      * Data format for posts
      */
-    dateFormat: "LL" // http://momentjs.com/docs/#/utilities/
+    dateFormat: "LL", // http://momentjs.com/docs/#/utilities/
+    /**
+     * Post url format, eg: /blog/:year/:month/:title
+     */
+    postUrlFormat: false,
+    /**
+     * Instead of `blog/post1.html,` you can have `blog/post1` instead
+     */
+    prettyUrls: true
 };
 
 /**
@@ -188,14 +199,14 @@ function getData(item, data, config) {
     var includeResolver = getCacheResolver(data, "include");
     var snippetResolver = getCacheResolver(data, "snippet");
 
-    data.item           = utils.prepareFrontVars(item, config);
-    data.page           = data.item;
-    data.post           = data.item;
-    data.posts          = utils.prepareFrontVars(_cache.posts(), config);
-    data.pages          = _cache.pages();
+    data.item = utils.prepareFrontVars(item, config);
+    data.page = data.item;
+    data.post = data.item;
+    data.posts = utils.prepareFrontVars(_cache.posts(), config);
+    data.pages = _cache.pages();
 
     // Site Data
-    data.site.data      = _cache.convertKeys("data", {});
+    data.site.data = _cache.convertKeys("data", {});
 
     // Add meta data if it's a post
     if (item.type === "post") {
@@ -203,12 +214,12 @@ function getData(item, data, config) {
     }
 
     // Helper functions
-    data.inc            = includeResolver;
-    data.include        = includeResolver;
-    data.snippet        = snippetResolver;
+    data.inc = includeResolver;
+    data.include = includeResolver;
+    data.snippet = snippetResolver;
 
-    data.highlight      = snippetHelper;
-    data.hl             = snippetHelper;
+    data.highlight = snippetHelper;
+    data.hl = snippetHelper;
 
     return data;
 }
@@ -223,7 +234,7 @@ function getData(item, data, config) {
  */
 function snippetHelper(chunk, context, bodies, params) {
     if (bodies.block) {
-        return chunk.capture(bodies.block, context, function(string, chunk) {
+        return chunk.capture(bodies.block, context, function (string, chunk) {
             chunk.end(
                 utils.wrapCode(
                     highlightSnippet(string, params.lang), params.lang
@@ -272,7 +283,7 @@ function getSnippetInclude(filePath, data, chunk, params) {
             dust.makeBase(data)
         );
     } else {
-        return chunk.map(function(chunk) {
+        return chunk.map(function (chunk) {
             return renderTemplate(utils.wrapSnippet(file, lang), data, function (err, out) {
                 if (err) {
                     chunk.end("");
@@ -346,7 +357,7 @@ function getMatch(item) {
  * @param config
  * @param cb
  */
-module.exports.compileOne = function (item, config, cb) {
+function compileOne(item, config, cb) {
 
     /**
      * Merge configs
@@ -390,20 +401,20 @@ module.exports.compileOne = function (item, config, cb) {
             }
         });
     }
-};
+}
 
 /**
  *
  */
 function doPagination(match, data, config, cb) {
 
-    var meta       = utils.splitMeta(match.front.paginate);
+    var meta = utils.splitMeta(match.front.paginate);
     var collection = _cache.getCollection(meta[0]);
 
-    var paginator      = new Paginator(collection, match, meta[1]);
+    var paginator = new Paginator(collection, match, meta[1]);
     var paginatorPages = paginator.pages();
 
-    var compiledItems  = [];
+    var compiledItems = [];
 
     paginatorPages.forEach(function (item, i) {
 
@@ -434,7 +445,7 @@ function construct(item, data, config, cb) {
     data.content = item.content;
 
     var escapedContent = utils.escapeCodeFences(item.content);
-    escapedContent     = utils.escapeInlineCode(escapedContent);
+    escapedContent = utils.escapeInlineCode(escapedContent);
 
     renderTemplate(escapedContent, data, function (err, out) {
 
@@ -466,7 +477,7 @@ function construct(item, data, config, cb) {
  * @param {String} [type]
  * @returns {*}
  */
-function populateCache (key, value, type) {
+function populateCache(key, value, type) {
 
     type = type || "partial";
 
@@ -477,7 +488,7 @@ function populateCache (key, value, type) {
     var partial = new Partial(key, value);
     _cache.addPartial(partial);
 
-    var shortKey   = partial.shortKey;
+    var shortKey = partial.shortKey;
     var partialKey = partial.partialKey;
 
     if (shortKey) {
@@ -506,32 +517,19 @@ function isInclude(path) {
 }
 
 /**
- *
- *
- *  Begin Public API
- *
- *
- */
-
-/**
- * Populate the cache
- */
-module.exports.populateCache = populateCache;
-
-/**
  * Allow api users to retrieve the cache.
  * @returns {{partials: {}, posts: Array, pages: Array}}
  */
-module.exports.getCache = function () {
+function getCache() {
     return _cache;
-};
+}
 
 /**
  * @param key
  * @param string
  * @param [config]
  */
-module.exports.addPost = function (key, string, config) {
+function addPost(key, string, config) {
 
     var post;
 
@@ -544,14 +542,14 @@ module.exports.addPost = function (key, string, config) {
     _cache.addPost(post);
 
     return post;
-};
+}
 
 /**
  * @param key
  * @param string
  * @param [config]
  */
-module.exports.addPage = function (key, string, config) {
+function addPage(key, string, config) {
 
     var page;
 
@@ -564,4 +562,17 @@ module.exports.addPage = function (key, string, config) {
     _cache.addPage(page);
 
     return page;
-};
+}
+
+/**-------------
+ *  Public API
+ */
+
+/**
+ * Populate the cache
+ */
+module.exports.populateCache = populateCache;
+module.exports.compileOne    = compileOne;
+module.exports.getCache      = getCache;
+module.exports.addPost       = addPost;
+module.exports.addPage       = addPage;
