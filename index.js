@@ -120,11 +120,29 @@ function addLayout(data, cb) {
 
     var current = getFile(utils.getLayoutPath(data.page.front.layout));
 
-    if (!current) {
-        return cb("file not found");
-    }
+    if (yaml.hasFrontMatter(current)) {
 
-    return renderTemplate(current, data, cb);
+        // nested layout
+        var _data   = yaml.readFrontMatter(current);
+        var parent = getFile(utils.getLayoutPath(_data.front.layout));
+
+        renderTemplate(_data.content, data, function (err, out) {
+
+            data.content = function (chunk) {
+                return chunk.write(out);
+            };
+
+            renderTemplate(parent, data, cb);
+        });
+
+    } else {
+
+        if (!current) {
+            return cb("file not found");
+        }
+
+        return renderTemplate(current, data, cb);
+    }
 }
 
 /**
@@ -445,7 +463,7 @@ function construct(item, data, config, cb) {
     data.content = item.content;
 
     var escapedContent = utils.escapeCodeFences(item.content);
-    escapedContent = utils.escapeInlineCode(escapedContent);
+    escapedContent     = utils.escapeInlineCode(escapedContent);
 
     renderTemplate(escapedContent, data, function (err, out) {
 
