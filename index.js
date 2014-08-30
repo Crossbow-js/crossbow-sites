@@ -224,9 +224,15 @@ function getData(item, data, config) {
     var includeResolver = getCacheResolver(data, "include");
     var snippetResolver = getCacheResolver(data, "snippet");
 
-    data.item = utils.prepareFrontVars(item, config);
-    data.page = data.item;
-    data.post = data.item;
+
+    data.item  = utils.prepareFrontVars(item, config);
+
+    // Add related posts
+    data.item.related  = utils.addRelated(item.categories, item.key, _cache.posts());
+
+
+    data.page  = data.item;
+    data.post  = data.item;
     data.posts = utils.prepareFrontVars(_cache.posts(), config);
     data.pages = _cache.pages();
 
@@ -239,12 +245,12 @@ function getData(item, data, config) {
     }
 
     // Helper functions
-    data.inc = includeResolver;
-    data.include = includeResolver;
-    data.snippet = snippetResolver;
+    data.inc       = includeResolver;
+    data.include   = includeResolver;
+    data.snippet   = snippetResolver;
 
     data.highlight = snippetHelper;
-    data.hl = snippetHelper;
+    data.hl        = snippetHelper;
 
     return data;
 }
