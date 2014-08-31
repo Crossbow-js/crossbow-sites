@@ -214,6 +214,38 @@ function addPostMeta(data, item) {
 }
 
 /**
+ * @param sections
+ * @returns {Function}
+ */
+function getSectionHelper(sections) {
+    return function (chunk, context, bodies, params) {
+        var output = "";
+        chunk.tap(function (data) {
+            output += data;
+            return "";
+        }).render(bodies.block, context).untap();
+        if (!sections[params.name]) {
+            sections[params.name] = [];
+        }
+        sections[params.name].push(output);
+        return chunk;
+    };
+}
+
+/**
+ * @param sections
+ * @returns {Function}
+ */
+function getYieldHelper(sections) {
+    return function (chunk, context, bodies, params) {
+        var sec = sections[params.name];
+        if (sec && sec.length) {
+            return chunk.write(sec.join(""));
+        }
+        return chunk;
+    };
+}
+/**
  * This set's up the 'data' object with all the info any templates/includes might need.
  * @param {Object} item
  * @param {Object} config - Site config
@@ -251,6 +283,11 @@ function getData(item, data, config) {
 
     data.highlight = snippetHelper;
     data.hl        = snippetHelper;
+
+    data.sections  = {};
+
+    data.section   = getSectionHelper(data.sections);
+    data["yield"]  = getYieldHelper(data.sections);
 
     return data;
 }
@@ -473,7 +510,6 @@ function doPagination(match, data, config, cb) {
 function construct(item, data, config, cb) {
 
     data = getData(item, data, config);
-    data.content = item.content;
 
     var escapedContent = utils.escapeCodeFences(item.content);
     escapedContent     = utils.escapeInlineCode(escapedContent);

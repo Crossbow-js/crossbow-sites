@@ -2,7 +2,8 @@ var _             = require("lodash");
 var assert        = require("chai").assert;
 var multiline     = require("multiline");
 
-var Page = require("../../lib/page");
+var Page     = require("../../lib/page");
+var crossbow = require("../../index");
 
 var page1 = multiline.stripIndent(function(){/*
 ---
@@ -15,6 +16,9 @@ Page 1
 
 describe("Creating a PAGE with maximum info", function(){
 
+    beforeEach(function () {
+        crossbow.clearCache();
+    });
     it("return an instance", function() {
         var page = new Page("projects/about-us.html", page1);
         assert.isTrue(page instanceof Page);
