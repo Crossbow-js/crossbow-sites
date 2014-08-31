@@ -3,6 +3,7 @@ var assert        = require("chai").assert;
 var multiline     = require("multiline");
 
 var Post  = require("../../lib/post");
+var crossbow  = require("../../index");
 var Cache = require("../../lib/cache");
 
 var content1 = multiline.stripIndent(function(){/*
@@ -62,5 +63,35 @@ describe("Adding Posts to the Cache", function(){
     it("Should order posts by newest", function(){
         var cache = _cache.addPost([post1, post2]);
         assert.deepEqual(cache.posts()[0].front.title, "Blog 2");
+    });
+    it("should update the contents of a post", function (done) {
+
+        var updatedContent = multiline.stripIndent(function(){/*
+         ---
+         layout: post-test
+         title: "Blog 1 - updated"
+         date: 2013-11-13
+         categories: javascript, node js
+         tags: code, jquery-ui, how to guide
+         ---
+
+
+         {post.title}
+         */});
+
+        crossbow.clearCache();
+
+        crossbow.populateCache("_layouts/post-test.html", "{#content /}");
+        crossbow.addPost("_posts/1.md", content1);
+
+        crossbow.compileOne("_posts/1.md", {}, function (err, out) {
+            crossbow.addPost("_posts/1.md", updatedContent);
+            crossbow.compileOne("_posts/1.md", {}, function (err, out) {
+                assert.notInclude(out.compiled, "<p>post1</p>");
+                assert.include(out.compiled, "<p>Blog 1 - updated</p>");
+                crossbow.clearCache();
+                done();
+            });
+        });
     });
 });

@@ -601,10 +601,19 @@ function addPost(key, string, config) {
 
     var post;
 
+    /**
+     * Update a cached post
+     */
     if (post = _cache.find(key, "posts")) {
+        post.addData(key, string);
+        utils.prepareFrontVars(post, config, true);
         return post;
     }
 
+    /**
+     * Create a new post.
+     * @type {Post}
+     */
     post = new Post(key, string, config);
 
     _cache.addPost(post);
@@ -622,6 +631,8 @@ function addPage(key, string, config) {
     var page;
 
     if (page = _cache.find(key, "pages")) {
+        page.addData(key, string);
+        utils.prepareFrontVars(page, config, true);
         return page;
     }
 

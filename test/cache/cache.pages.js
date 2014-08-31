@@ -4,6 +4,7 @@ var multiline     = require("multiline");
 
 var Page  = require("../../lib/page");
 var Cache = require("../../lib/cache");
+var crossbow = require("../../index");
 
 var content1 = multiline.stripIndent(function(){/*
 
@@ -45,5 +46,45 @@ describe("Adding Pages to the Cache", function(){
     it("Should find posts by key", function(){
         var page = _cache.addPages([page1, page2]).find("about-us.html");
         assert.isTrue(page instanceof Page);
+    });
+    it("should update the contents of a post", function (done) {
+
+        var initial = multiline.stripIndent(function(){/*
+         ---
+         layout: post
+         title: "Homepage"
+         ---
+
+         <h1>{post.title}</h1>
+         */});
+        var updatedContent = multiline.stripIndent(function(){/*
+         ---
+         layout: post
+         title: "Homepage - updated"
+         ---
+
+         <h1>{post.title}</h1>
+         */});
+
+        crossbow.clearCache();
+
+        crossbow.populateCache("_layouts/post.html", "{#content /}");
+
+        crossbow.addPage("/index.html", initial);
+
+        crossbow.compileOne("/index.html", {}, function (err, out) {
+
+            crossbow.addPage("/index.html", updatedContent);
+
+            crossbow.compileOne("/index.html", {}, function (err, out) {
+
+                assert.notInclude(out.compiled, "<h1>Homepage</h1>");
+                assert.include(out.compiled, "<h1>Homepage - updated</h1>");
+
+                crossbow.clearCache();
+
+                done();
+            });
+        });
     });
 });

@@ -11,7 +11,7 @@ describe("Yielding sections ", function(){
         crossbow.clearCache();
     });
 
-    it.only("allows sections with names:", function(done){
+    it("allows sections with names:", function(done){
 
         var page1 = multiline.stripIndent(function(){/*
          ---
@@ -45,7 +45,6 @@ describe("Yielding sections ", function(){
         var page = crossbow.addPage("projects/about-us.html", page1);
 
         crossbow.compileOne(page, {}, function (err, out) {
-            console.log(out.compiled);
             done();
         });
     });
