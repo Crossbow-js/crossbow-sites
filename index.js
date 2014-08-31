@@ -473,6 +473,44 @@ function compileOne(item, config, cb) {
 }
 
 /**
+ * @param cb
+ * @param config
+ * @param items
+ */
+function compileMany(items, config, cb) {
+
+    var compiled = [];
+
+    items.forEach(function (post, i) {
+
+        compileOne(post, config, function (err, out) {
+            if (err) {
+                cb(err);
+            }
+            if (Array.isArray(out)) {
+                compiled.concat(out);
+            } else {
+                compiled.push(out);
+            }
+            if (compiled.length === items.length) {
+                cb(null, compiled);
+            }
+        });
+    });
+}
+
+
+function compileAll(config, cb) {
+    return compileMany(_cache.posts().concat(_cache.pages()), config, cb);
+}
+function compilePosts(config, cb) {
+    return compileMany(_cache.posts(), config, cb);
+}
+function compilePages(config, cb) {
+    return compileMany(_cache.pages(), config, cb);
+}
+
+/**
  *
  */
 function doPagination(match, data, config, cb) {
@@ -671,6 +709,10 @@ function addPage(key, string, config) {
  */
 module.exports.populateCache = populateCache;
 module.exports.compileOne    = compileOne;
+module.exports.compilePosts  = compilePosts;
+module.exports.compilePages  = compilePages;
+module.exports.compileAll    = compileAll;
+module.exports.compileMany   = compileMany;
 module.exports.getCache      = getCache;
 module.exports.addPost       = addPost;
 module.exports.addPage       = addPage;

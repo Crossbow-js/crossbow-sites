@@ -118,7 +118,9 @@ describe("Adding Partials to the Cache", function(){
          */});
 
         crossbow.clearCache();
+
         crossbow.populateCache("_layouts/post-test.html", layout);
+
         var cache = crossbow.populateCache("_includes/button.html", "<button>{text}</button>");
 
         crossbow.addPage("projects/shane.html", page1, {});
