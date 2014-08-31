@@ -547,18 +547,39 @@ function construct(item, data, config, cb) {
  */
 function populateCache(key, value, type) {
 
+    var url = require("./lib/url");
     type = type || "partial";
+
+    var partial;
+    var shortKey;
+    var partialKey;
 
     if (type === "data") {
         return _cache.addData(key, value);
     }
 
-    var partial = new Partial(key, value);
-    _cache.addPartial(partial);
+    if (partial = _cache.find(url.makeShortKey(key), "partials")){
 
-    var shortKey = partial.shortKey;
-    var partialKey = partial.partialKey;
+        partial.content = value;
+        shortKey         = partial.shortKey;
+        partialKey       = partial.partialKey;
 
+    } else {
+
+        partial = new Partial(key, value);
+
+        _cache.addPartial(partial);
+
+        shortKey   = partial.shortKey;
+        partialKey = partial.partialKey;
+    }
+
+    addToDust(key, value, shortKey, partialKey);
+
+    return _cache;
+}
+
+function addToDust(key, value, shortKey, partialKey) {
     if (shortKey) {
 
         log("debug", "Adding to cache: %s", shortKey);
@@ -573,8 +594,6 @@ function populateCache(key, value, type) {
         log("debug", "Adding to cache: %s", key);
         dust.loadSource(dust.compile(value, key));
     }
-
-    return _cache;
 }
 
 /**

@@ -5,7 +5,7 @@ var sinon         = require("sinon");
 var fs            = require("fs");
 
 var Cache     = require("../../lib/cache");
-var coderBlog = require("../../index");
+var crossbow = require("../../index");
 var Partial   = require("../../lib/partial");
 
 describe("Adding Partials to the Cache", function(){
@@ -77,19 +77,19 @@ describe("Adding Partials to the Cache", function(){
 
          */});
 
-        coderBlog.populateCache("_layouts/post-test.html", layout);
-        coderBlog.populateCache("_includes/title.html", "<li>{title}</li>");
-        coderBlog.populateCache("_includes/title2.html", "<li>{post} - {_post.title}</li>");
-        coderBlog.populateCache("_includes/head.html", "<head><title>{post.title}</title></head>");
-        coderBlog.populateCache("_snippets/styles.css", ".shane { background: black }");
-        coderBlog.populateCache("_snippets/func.js", "var shane='kitten'");
-        coderBlog.populateCache("_includes/date.html", "<footer>Date: {post.date}</footer>");
-        coderBlog.populateCache("_includes/partials/footer.html", "<footer>Alternative links {params.url}</footer>");
+        crossbow.populateCache("_layouts/post-test.html", layout);
+        crossbow.populateCache("_includes/title.html", "<li>{title}</li>");
+        crossbow.populateCache("_includes/title2.html", "<li>{post} - {_post.title}</li>");
+        crossbow.populateCache("_includes/head.html", "<head><title>{post.title}</title></head>");
+        crossbow.populateCache("_snippets/styles.css", ".shane { background: black }");
+        crossbow.populateCache("_snippets/func.js", "var shane='kitten'");
+        crossbow.populateCache("_includes/date.html", "<footer>Date: {post.date}</footer>");
+        crossbow.populateCache("_includes/partials/footer.html", "<footer>Alternative links {params.url}</footer>");
 
-        coderBlog.addPost("_posts/post1.md", post1, {});
-        coderBlog.addPost("_posts/post2.md", post2, {});
+        crossbow.addPost("_posts/post1.md", post1, {});
+        crossbow.addPost("_posts/post2.md", post2, {});
 
-        coderBlog.compileOne("posts/post2.md", {}, function (err, out) {
+        crossbow.compileOne("posts/post2.md", {}, function (err, out) {
             var compiled = out.compiled;
             assert.include(compiled, "<head><title>Homepage 2</title></head>");
             assert.include(compiled, "<footer>Date: April 10, 2014</footer>");
@@ -99,6 +99,42 @@ describe("Adding Partials to the Cache", function(){
             fsStub.restore();
             done();
         });
+    });
+    it("Can update partials in the cache", function(done){
 
+        var layout = multiline.stripIndent(function(){/*
+         {#content /}
+         */});
+
+        var page1 = multiline.stripIndent(function(){/*
+         ---
+         layout: post-test
+         title: "Homepage"
+         date: 2014-04-10
+         ---
+
+         {#inc src="button" text="Sign up" /}
+
+         */});
+
+        crossbow.clearCache();
+        crossbow.populateCache("_layouts/post-test.html", layout);
+        var cache = crossbow.populateCache("_includes/button.html", "<button>{text}</button>");
+
+        crossbow.addPage("projects/shane.html", page1, {});
+
+        crossbow.compileOne("projects/shane.html", {}, function (err, out) {
+
+            assert.include(out.compiled, "<button>Sign up</button>");
+
+            crossbow.populateCache("_includes/button.html", "<button class=\"button\">{text}</button>");
+
+            assert.equal(cache.partials().length, 2);
+
+            crossbow.compileOne("projects/shane.html", {}, function (err, out) {
+                assert.include(out.compiled, "<button class=\"button\">Sign up</button>");
+                done();
+            });
+        });
     });
 });
