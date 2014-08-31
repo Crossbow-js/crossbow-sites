@@ -45,6 +45,7 @@ dust.optimizers.format = function (ctx, node) {
     return node;
 };
 dust.isDebug = true;
+//_.extend(dust.filters, {zws: function(value){ return value + "-filtered"} });
 
 /**
  * Default configuration
