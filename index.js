@@ -31,50 +31,22 @@ module.exports.setLogLevel = log.setLogLevel;
  * 3rd Party libs
  */
 var highlight   = require("highlight.js");
-var multiline   = require("multiline");
 var merge       = require("opt-merger").merge;
-var marked      = require("marked");
 var _           = require("lodash");
+
+/**
+ * Plugins
+ */
+var markdown = require("./lib/plugins/markdown");
 
 /**
  * Transforms for pages/posts
  * @type {*[]}
  */
 var transforms = [
-    markdownTransform
+    markdown
 ];
 
-/**
- * Markdown Support
- * @param out
- * @param data
- * @param config
- * @returns {*}
- */
-function markdownTransform(out, data, config) {
-
-    var item  = data.item || {};
-    var front = item.front || {};
-
-    // Always respect front-matter first
-    if (!_.isUndefined(front.markdown)) {
-        return front.markdown
-            ? processMardownContent(out, config)
-            : out;
-    }
-
-    // Next check if the filename has .md|.markdown
-    if (item.key.match(/\.md|\.markdown$/i)) {
-        return processMardownContent(out, config);
-    }
-
-    // Don't markdown pages, unless set in front matter
-    if (item.type === "page") {
-        return out;
-    }
-
-    return processMardownContent(out, config);
-}
 
 /**
  * Templates use dust.
@@ -219,38 +191,6 @@ function renderTemplate(template, data, cb) {
 }
 
 /**
- * @param string
- * @param config
- * @returns {*|exports}
- */
-function processMardownContent(string, config) {
-
-    if (!config.highlight) {
-        return marked(string);
-    }
-
-    marked.setOptions({
-        highlight: (function () {
-            return config.markdown && config.markdown.highlight
-                ? config.markdown.highlight
-                : highlightSnippet;
-        })()
-    });
-
-    return marked(string);
-}
-
-/**
- * @param code
- * @param [lang]
- * @param [callback]
- * @returns {*}
- */
-function highlightSnippet(code, lang, callback) {
-    return highlight.highlight(lang || "js", code).value;
-}
-
-/**
  * @param data
  * @param item
  */
@@ -351,7 +291,7 @@ function snippetHelper(chunk, context, bodies, params) {
         return chunk.capture(bodies.block, context, function (string, chunk) {
             chunk.end(
                 utils.wrapCode(
-                    highlightSnippet(string, params.lang), params.lang
+                    markdown.highlight(string, params.lang), params.lang
                 )
             );
         });
