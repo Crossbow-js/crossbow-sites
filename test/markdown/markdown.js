@@ -243,4 +243,47 @@ zoom: 1;
             done();
         }); // Good if no error thrown
     });
+    it("Can render any content as markdown if `markdown: true` given in header.", function(done) {
+
+        var index = multiline.stripIndent(function(){/*
+         ---
+         layout: test
+         title: "Homepage"
+         markdown: "true"
+         ---
+
+         #{page.title}
+
+         */});
+
+
+        // NO POSTS ADDED
+        coderBlog.populateCache("_layouts/test.html", "<body>{#content /}</body>");
+        coderBlog.addPage("docs/layouts.html", index);
+        coderBlog.compileOne("docs/layouts.html", {},  function (err, out) {
+            assert.include(out.compiled, "<h1 id=\"homepage\">Homepage</h1>");
+            done();
+        }); // Good if no error thrown
+    });
+    it("Can render any file with .md or .markdown extension", function(done) {
+
+        var index = multiline.stripIndent(function(){/*
+         ---
+         layout: test
+         title: "Homepage"
+         ---
+
+         #{page.title}
+
+         */});
+
+
+        // NO POSTS ADDED
+        coderBlog.populateCache("_layouts/test.html", "<body>{#content /}</body>");
+        coderBlog.addPage("docs/layouts.md", index);
+        coderBlog.compileOne("docs/layouts.md", {},  function (err, out) {
+            assert.include(out.compiled, "<h1 id=\"homepage\">Homepage</h1>");
+            done();
+        }); // Good if no error thrown
+    });
 });

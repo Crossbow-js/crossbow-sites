@@ -16,7 +16,7 @@ var Paginator   = require("./lib/paginator");
 var Partial     = require("./lib/partial");
 var Cache       = require("./lib/cache");
 
-var _cache = new Cache();
+var _cache     = new Cache();
 
 module.exports.clearCache = function () {
     log("debug", "Clearing all caches, (posts, pages, includes, partials)");
@@ -35,6 +35,46 @@ var multiline   = require("multiline");
 var merge       = require("opt-merger").merge;
 var marked      = require("marked");
 var _           = require("lodash");
+
+/**
+ * Transforms for pages/posts
+ * @type {*[]}
+ */
+var transforms = [
+    markdownTransform
+];
+
+/**
+ * Markdown Support
+ * @param out
+ * @param data
+ * @param config
+ * @returns {*}
+ */
+function markdownTransform(out, data, config) {
+
+    var item  = data.item || {};
+    var front = item.front || {};
+
+    // Always respect front-matter first
+    if (!_.isUndefined(front.markdown)) {
+        return front.markdown
+            ? processMardownContent(out, config)
+            : out;
+    }
+
+    // Next check if the filename has .md|.markdown
+    if (item.key.match(/\.md|\.markdown$/i)) {
+        return processMardownContent(out, config);
+    }
+
+    // Don't markdown pages, unless set in front matter
+    if (item.type === "page") {
+        return out;
+    }
+
+    return processMardownContent(out, config);
+}
 
 /**
  * Templates use dust.
@@ -326,15 +366,17 @@ function snippetHelper(chunk, context, bodies, params) {
  * @param config
  * @param data
  */
-function prepareContent(out, data, config) {
+function applyTransforms(out, data, config) {
 
-    if (data.page.type !== "post") {
+    if (!transforms.length) {
         return out;
     }
 
-    if (_.isUndefined(data.page.markdown) || data.page.markdown === false) {
-        return processMardownContent(out, config);
-    }
+    _.each(transforms, function (fn) {
+        out = fn(out, data, config);
+    });
+
+    return out;
 }
 
 /**
@@ -571,7 +613,7 @@ function construct(item, data, config, cb) {
             return cb(err);
         }
 
-        var fullContent = prepareContent(out, data, config);
+        var fullContent = applyTransforms(out, data, config);
 
         // Just write the cody content without parsing (already done);
         data.content = function (chunk) {
@@ -712,6 +754,13 @@ function addPage(key, string, config) {
     return page;
 }
 
+/**
+ *
+ */
+function registerTransform (fn) {
+    transforms.push(fn);
+}
+
 /*-------------/
  *  Public API
  *------------*/
@@ -728,3 +777,4 @@ module.exports.compileMany   = compileMany;
 module.exports.getCache      = getCache;
 module.exports.addPost       = addPost;
 module.exports.addPage       = addPage;
+module.exports.registerTransform = registerTransform;
