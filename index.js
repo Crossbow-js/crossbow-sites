@@ -64,6 +64,10 @@ var defaults = {
      */
     highlight: true,
     /**
+     * Should ALL code fences be auto-highlighted?
+     */
+    autoHighlight: false,
+    /**
      * Data format for posts
      */
     dateFormat: "LL", // http://momentjs.com/docs/#/utilities/
@@ -76,6 +80,7 @@ var defaults = {
      */
     prettyUrls: true
 };
+module.exports.defaults = defaults;
 
 /**
  * Get a file from the cache, or alternative look it up on FS from CWD as base
@@ -480,6 +485,7 @@ function compileOne(item, config, cb) {
 function compileMany(items, config, cb) {
 
     var compiled = [];
+    var count    = 0;
 
     items.forEach(function (post, i) {
 
@@ -487,12 +493,13 @@ function compileMany(items, config, cb) {
             if (err) {
                 cb(err);
             }
+            count += 1;
             if (Array.isArray(out)) {
                 compiled.concat(out);
             } else {
                 compiled.push(out);
             }
-            if (compiled.length === items.length) {
+            if (count === items.length) {
                 cb(null, compiled);
             }
         });
@@ -501,6 +508,11 @@ function compileMany(items, config, cb) {
 
 
 function compileAll(config, cb) {
+    var items = _cache.posts().concat(_cache.pages());
+    items.forEach(function (item) {
+        console.log(item.key);
+    });
+
     return compileMany(_cache.posts().concat(_cache.pages()), config, cb);
 }
 function compilePosts(config, cb) {

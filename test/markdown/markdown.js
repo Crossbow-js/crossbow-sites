@@ -220,4 +220,27 @@ zoom: 1;
             done();
         }); // Good if no error thrown
     });
+    it.skip("Does not auto-highlight code fences when no language given", function(done) {
+
+        var index = multiline.stripIndent(function(){/*
+         ---
+         layout: post-test
+         title: "Homepage"
+         randomVar: "Kittenz"
+         date: 2014-04-10
+         ---
+
+         ```
+         var snippet = "false";
+         ```
+         */});
+
+
+        // NO POSTS ADDED
+        coderBlog.addPost("_posts/post1.md", index);
+        coderBlog.compileOne("_posts/post1.md", {highlight: false}, function (err, out) {
+            console.log(out.compiled);
+            done();
+        }); // Good if no error thrown
+    });
 });
