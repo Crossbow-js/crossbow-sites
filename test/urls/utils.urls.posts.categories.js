@@ -15,12 +15,8 @@ describe("Creating Post URLS from keys + categories & tags", function () {
 
         var actual = makePostUrl("posts/post1.md", config, categories);
 
-        var expected = {
-            filePath: "blog/js/node/post1.html",
-            url: "/blog/js/node/post1.html"
-        };
-
-        assert.deepEqual(actual, expected);
+        assert.deepEqual(actual.filePath, "blog/js/node/post1.html");
+        assert.deepEqual(actual.url, "/blog/js/node/post1.html");
     });
     it("Adds categories", function () {
 
@@ -33,12 +29,8 @@ describe("Creating Post URLS from keys + categories & tags", function () {
 
         var actual = makePostUrl("posts/post1.md", config, categories);
 
-        var expected = {
-            filePath: "blog/js/node/post1/index.html",
-            url: "/blog/js/node/post1"
-        };
-
-        assert.deepEqual(actual, expected);
+        assert.deepEqual(actual.filePath, "blog/js/node/post1/index.html");
+        assert.deepEqual(actual.url, "/blog/js/node/post1");
     });
     it("removes categories categories when none exist + pretty", function () {
 
@@ -51,12 +43,8 @@ describe("Creating Post URLS from keys + categories & tags", function () {
 
         var actual = makePostUrl("posts/post1.md", config, categories);
 
-        var expected = {
-            filePath: "blog/post1/index.html",
-            url: "/blog/post1"
-        };
-
-        assert.deepEqual(actual, expected);
+        assert.deepEqual(actual.filePath, "blog/post1/index.html");
+        assert.deepEqual(actual.url, "/blog/post1");
     });
     it("removes categories categories when none exist + none pretty", function () {
 
@@ -69,11 +57,7 @@ describe("Creating Post URLS from keys + categories & tags", function () {
 
         var actual = makePostUrl("posts/post1.md", config, categories);
 
-        var expected = {
-            filePath: "blog/post1.html",
-            url: "/blog/post1.html"
-        };
-
-        assert.deepEqual(actual, expected);
+        assert.deepEqual(actual.filePath, "blog/post1.html");
+        assert.deepEqual(actual.url, "/blog/post1.html");
     });
 });

@@ -12,12 +12,8 @@ describe("Creating Post URLS from keys", function () {
 
             var actual = makePostUrl("posts/post1.md", config);
 
-            var expected = {
-                filePath: "post1.html",
-                url: "/post1.html"
-            };
-
-            assert.deepEqual(actual, expected);
+            assert.deepEqual(actual.filePath, "post1.html");
+            assert.deepEqual(actual.url, "/post1.html");
         });
         it("replaces filename, 2 levels deep", function () {
 
@@ -25,12 +21,8 @@ describe("Creating Post URLS from keys", function () {
 
             var actual = makePostUrl("posts/js/post1.md", config);
 
-            var expected = {
-                filePath: "js/post1.html",
-                url: "/js/post1.html"
-            };
-
-            assert.deepEqual(actual, expected);
+            assert.equal(actual.filePath, "js/post1.html");
+            assert.equal(actual.url, "/js/post1.html");
         });
         it("replaces filename, 5 levels deep", function () {
 
@@ -38,12 +30,8 @@ describe("Creating Post URLS from keys", function () {
 
             var actual = makePostUrl("posts/js/node/javascript/cats/post1.md", config);
 
-            var expected = {
-                filePath: "js/node/javascript/cats/post1.html",
-                url: "/js/node/javascript/cats/post1.html"
-            };
-
-            assert.deepEqual(actual, expected);
+            assert.deepEqual(actual.filePath, "js/node/javascript/cats/post1.html");
+            assert.deepEqual(actual.url, "/js/node/javascript/cats/post1.html");
         });
     });
 
@@ -100,12 +88,8 @@ describe("Creating Post URLS from keys", function () {
 
             var actual = makePostUrl("posts/post1.md", config);
 
-            var expected = {
-                filePath: "post1/index.html",
-                url: "/post1"
-            };
-
-            assert.deepEqual(actual, expected);
+            assert.equal(actual.filePath, "post1/index.html");
+            assert.equal(actual.url, "/post1");
         });
         it("Replaces filename with pretty, 2 levels deep", function () {
 
@@ -116,12 +100,8 @@ describe("Creating Post URLS from keys", function () {
 
             var actual = makePostUrl("posts/js/post1.md", config);
 
-            var expected = {
-                filePath: "js/post1/index.html",
-                url: "/js/post1"
-            };
-
-            assert.deepEqual(actual, expected);
+            assert.equal(actual.filePath, "js/post1/index.html");
+            assert.equal(actual.url, "/js/post1");
         });
         it("Uses prefixes given in `postUrlFormat` option", function () {
 
@@ -132,12 +112,9 @@ describe("Creating Post URLS from keys", function () {
 
             var actual = makePostUrl("posts/js/post1.md", config);
 
-            var expected = {
-                filePath: "blog/js/post1/index.html",
-                url: "/blog/js/post1"
-            };
+            assert.equal(actual.filePath, "blog/js/post1/index.html");
+            assert.equal(actual.url, "/blog/js/post1");
 
-            assert.deepEqual(actual, expected);
         });
     });
 });

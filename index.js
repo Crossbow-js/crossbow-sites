@@ -5,6 +5,12 @@ var fs = require("fs");
 var path = require("path");
 
 /**
+ * 3rd Party Modules
+ */
+var merge       = require("opt-merger").merge;
+var _           = require("lodash");
+
+/**
  * Lib
  */
 var utils       = require("./lib/utils");
@@ -16,36 +22,46 @@ var Paginator   = require("./lib/paginator");
 var Partial     = require("./lib/partial");
 var Cache       = require("./lib/cache");
 
-var _cache     = new Cache();
+/**
+ * Plugins
+ */
+var markdown   = require("./lib/plugins/markdown");
+var codeFences = require("./lib/plugins/code-fences");
+var drafts     = require("./lib/plugins/drafts");
+
+/**
+ * Load default plugins
+ */
+var defaultPlugins = {
+    "markdown": {
+        when: "before item render",
+        fn: markdown
+    },
+    "code fences": {
+        when: "before item parsed",
+        fn: codeFences
+    },
+    "drafts": {
+        when: "before item added",
+        fn: drafts
+    }
+};
+
+/**
+ * Global cache
+ * @type {Cache}
+ * @private
+ */
+var cache     = new Cache();
 
 module.exports.clearCache = function () {
     log("debug", "Clearing all caches, (posts, pages, includes, partials)");
-    _cache.reset();
+    cache.reset();
 };
 
 module.exports.log = log;
 module.exports.utils = utils;
 module.exports.setLogLevel = log.setLogLevel;
-
-/**
- * 3rd Party libs
- */
-var highlight   = require("highlight.js");
-var merge       = require("opt-merger").merge;
-var _           = require("lodash");
-
-/**
- * Plugins
- */
-var markdown = require("./lib/plugins/markdown");
-
-/**
- * Transforms for pages/posts
- * @type {*[]}
- */
-var transforms = [
-    markdown
-];
 
 
 /**
@@ -110,7 +126,7 @@ function getFile(filePath, transform, allowEmpty) {
 
     var content;
 
-    if (content = _cache.find(filePath, "partials")) {
+    if (content = cache.find(filePath, "partials")) {
         log("debug", "%Cgreen:Cache access%R for: %s", filePath);
         return content.content;
     } else {
@@ -195,8 +211,8 @@ function renderTemplate(template, data, cb) {
  * @param item
  */
 function addPostMeta(data, item) {
-    data.next = _cache.nextPost(item);
-    data.prev = _cache.prevPost(item);
+    data.next = cache.nextPost(item);
+    data.prev = cache.prevPost(item);
 }
 
 /**
@@ -242,20 +258,18 @@ function getData(item, data, config) {
     var includeResolver = getCacheResolver(data, "include");
     var snippetResolver = getCacheResolver(data, "snippet");
 
-
     data.item  = utils.prepareFrontVars(item, config);
 
     // Add related posts
-    data.item.related  = utils.addRelated(item.categories, item.key, _cache.posts());
-
+    data.item.related  = utils.addRelated(item.categories, item.key, cache.posts());
 
     data.page  = data.item;
     data.post  = data.item;
-    data.posts = utils.prepareFrontVars(_cache.posts(), config);
-    data.pages = _cache.pages();
+    data.posts = utils.prepareFrontVars(cache.posts(), config);
+    data.pages = cache.pages();
 
     // Site Data
-    data.site.data = _cache.convertKeys("data", {});
+    data.site.data = cache.convertKeys("data", {});
 
     // Add meta data if it's a post
     if (item.type === "post") {
@@ -290,9 +304,7 @@ function snippetHelper(chunk, context, bodies, params) {
     if (bodies.block) {
         return chunk.capture(bodies.block, context, function (string, chunk) {
             chunk.end(
-                utils.wrapCode(
-                    markdown.highlight(string, params.lang), params.lang
-                )
+                utils.wrapCode(markdown.highlight(string, params.lang), params.lang)
             );
         });
     }
@@ -305,18 +317,33 @@ function snippetHelper(chunk, context, bodies, params) {
  * @param out
  * @param config
  * @param data
+ * @param scope
  */
-function applyTransforms(out, data, config) {
+function applyContentTransforms(scope, out, data, config) {
 
-    if (!transforms.length) {
-        return out;
-    }
-
-    _.each(transforms, function (fn) {
-        out = fn(out, data, config);
+    _.each(defaultPlugins, function (plugin) {
+        if (plugin.when === scope) {
+            out = plugin.fn(out, data, config);
+        }
     });
 
     return out;
+}
+/**
+ * @param scope
+ * @param item
+ * @param config
+ * @returns {*}
+ */
+function applyItemTransforms(scope, item, config) {
+
+    _.each(defaultPlugins, function (plugin) {
+        if (plugin.when === scope) {
+            item = plugin.fn(item, config);
+        }
+    });
+
+    return item;
 }
 
 /**
@@ -396,9 +423,9 @@ function getMatch(item) {
 
     // Try to find an item from the cache
     if (_.isString(item)) {
-        match = _cache.find(item, "posts");
+        match = cache.find(item, "posts");
         if (!match) {
-            match = _cache.find(item, "pages");
+            match = cache.find(item, "pages");
         }
     } else {
         return item;
@@ -471,10 +498,13 @@ function compileMany(items, config, cb) {
 
     items.forEach(function (post, i) {
 
+        console.time("render 1");
+
         compileOne(post, config, function (err, out) {
             if (err) {
                 cb(err);
             }
+            console.timeEnd("render 1");
             count += 1;
             if (Array.isArray(out)) {
                 compiled.concat(out);
@@ -490,18 +520,20 @@ function compileMany(items, config, cb) {
 
 
 function compileAll(config, cb) {
-    var items = _cache.posts().concat(_cache.pages());
+
+    var items = cache.posts().concat(cache.pages());
+
     items.forEach(function (item) {
-        console.log(item.key);
+//        console.log(item.key);
     });
 
-    return compileMany(_cache.posts().concat(_cache.pages()), config, cb);
+    return compileMany(items, config, cb);
 }
 function compilePosts(config, cb) {
-    return compileMany(_cache.posts(), config, cb);
+    return compileMany(cache.posts(), config, cb);
 }
 function compilePages(config, cb) {
-    return compileMany(_cache.pages(), config, cb);
+    return compileMany(cache.pages(), config, cb);
 }
 
 /**
@@ -510,7 +542,7 @@ function compilePages(config, cb) {
 function doPagination(match, data, config, cb) {
 
     var meta        = utils.splitMeta(match.front.paginate);
-    var collection  = _cache.getCollection(meta[0]);
+    var collection  = cache.getCollection(meta[0]);
 
     var paginator       = new Paginator(collection, match, meta[1], config);
     var paginatorPages  = paginator.pages();
@@ -544,8 +576,7 @@ function construct(item, data, config, cb) {
 
     data = getData(item, data, config);
 
-    var escapedContent = utils.escapeCodeFences(item.content);
-    escapedContent     = utils.escapeInlineCode(escapedContent);
+    var escapedContent = applyContentTransforms("before item parsed", item.content, data, config);
 
     renderTemplate(escapedContent, data, function (err, out) {
 
@@ -553,7 +584,7 @@ function construct(item, data, config, cb) {
             return cb(err);
         }
 
-        var fullContent = applyTransforms(out, data, config);
+        var fullContent = applyContentTransforms("before item render", out, data, config);
 
         // Just write the cody content without parsing (already done);
         data.content = function (chunk) {
@@ -587,10 +618,10 @@ function populateCache(key, value, type) {
     var partialKey;
 
     if (type === "data") {
-        return _cache.addData(key, value);
+        return cache.addData(key, value);
     }
 
-    if (partial = _cache.find(url.makeShortKey(key), "partials")){
+    if (partial = cache.find(url.makeShortKey(key), "partials")){
 
         partial.content = value;
         shortKey         = partial.shortKey;
@@ -600,7 +631,7 @@ function populateCache(key, value, type) {
 
         partial = new Partial(key, value);
 
-        _cache.addPartial(partial);
+        cache.addPartial(partial);
 
         shortKey   = partial.shortKey;
         partialKey = partial.partialKey;
@@ -608,7 +639,7 @@ function populateCache(key, value, type) {
 
     addToDust(key, value, shortKey, partialKey);
 
-    return _cache;
+    return cache;
 }
 
 function addToDust(key, value, shortKey, partialKey) {
@@ -640,7 +671,7 @@ function isInclude(path) {
  * @returns {{partials: {}, posts: Array, pages: Array}}
  */
 function getCache() {
-    return _cache;
+    return cache;
 }
 
 /**
@@ -655,7 +686,7 @@ function addPost(key, string, config) {
     /**
      * Update a cached post
      */
-    if (post = _cache.find(key, "posts")) {
+    if (post = cache.find(key, "posts")) {
         post.addData(key, string);
         utils.prepareFrontVars(post, config, true);
         return post;
@@ -667,7 +698,12 @@ function addPost(key, string, config) {
      */
     post = new Post(key, string, config);
 
-    _cache.addPost(post);
+    var filtered = applyItemTransforms("before item added", post, config);
+
+    if (filtered) {
+        cache.addPost(filtered);
+        return filtered;
+    }
 
     return post;
 }
@@ -681,7 +717,7 @@ function addPage(key, string, config) {
 
     var page;
 
-    if (page = _cache.find(key, "pages")) {
+    if (page = cache.find(key, "pages")) {
         page.addData(key, string);
         utils.prepareFrontVars(page, config, true);
         return page;
@@ -689,7 +725,7 @@ function addPage(key, string, config) {
 
     page = new Page(key, string, config);
 
-    _cache.addPage(page);
+    cache.addPage(page);
 
     return page;
 }

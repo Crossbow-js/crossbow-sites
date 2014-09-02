@@ -239,7 +239,6 @@ zoom: 1;
         // NO POSTS ADDED
         coderBlog.addPost("_posts/post1.md", index);
         coderBlog.compileOne("_posts/post1.md", {highlight: false}, function (err, out) {
-            console.log(out.compiled);
             done();
         }); // Good if no error thrown
     });
