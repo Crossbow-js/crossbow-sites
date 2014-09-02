@@ -8,8 +8,8 @@ dust.cache        = {};
 dust.isDebug = true;
 dust.optimizers.format = function(ctx, node) { return node; };
 
-var coderBlog = require("../../index");
-//coderBlog.setLogLevel("debug");
+var crossbow = require("../../index");
+//crossbow.setLogLevel("debug");
 
 var postLayout = multiline.stripIndent(function(){/*
 <!DOCTYPE html>
@@ -58,14 +58,14 @@ describe("Processing a Markdown file", function(){
 
     beforeEach(function () {
 
-        coderBlog.clearCache();
+        crossbow.clearCache();
 
         // Add layouts to cache
-        coderBlog.populateCache("_layouts/post-test.html", postLayout);
-        coderBlog.populateCache("_layouts/page-test.html", pageLayout);
+        crossbow.populateCache("_layouts/post-test.html", postLayout);
+        crossbow.populateCache("_layouts/page-test.html", pageLayout);
 
         // Add HEAD section to cache
-        coderBlog.populateCache("_includes/head.html", "<head><title>{page.title} {site.sitename}</title></head>");
+        crossbow.populateCache("_includes/head.html", "<head><title>{page.title} {site.sitename}</title></head>");
     });
 
     it("Does not use markdown + still have vars", function(done) {
@@ -82,8 +82,8 @@ describe("Processing a Markdown file", function(){
 
 
         // NO POSTS ADDED
-        coderBlog.addPage("index.html", index);
-        coderBlog.compileOne("index.html", {}, function (err, out) {
+        crossbow.addPage("index.html", index);
+        crossbow.compileOne("index.html", {}, function (err, out) {
             var compiled = out.compiled;
             assert.include(compiled, "#Welcome to my blog.");
             assert.notInclude(compiled, "I have written before..");
@@ -117,8 +117,8 @@ describe("Processing a Markdown file", function(){
 
 
         // NO POSTS ADDED
-        coderBlog.addPost("_posts/post1.md", index);
-        coderBlog.compileOne("_posts/post1.md", {}, function (err, out) {
+        crossbow.addPost("_posts/post1.md", index);
+        crossbow.compileOne("_posts/post1.md", {}, function (err, out) {
             assert.include(out.compiled, "<p>Kittenz</p>");
             done();
         });
@@ -139,8 +139,8 @@ describe("Processing a Markdown file", function(){
 
 
         // NO POSTS ADDED
-        var page = coderBlog.addPage("index.html", index);
-        coderBlog.compileOne(page, {}, function (err, out) {
+        var page = crossbow.addPage("index.html", index);
+        crossbow.compileOne(page, {}, function (err, out) {
             var compiled = out.compiled;
             assert.include(compiled, "var shane = function(){ return; }");
             done();
@@ -165,8 +165,8 @@ describe("Processing a Markdown file", function(){
 
 
         // NO POSTS ADDED
-        coderBlog.addPost("_posts/index.markdown", index);
-        coderBlog.compileOne("_posts/index.markdown", {}, function (err, out) {
+        crossbow.addPost("_posts/index.markdown", index);
+        crossbow.compileOne("_posts/index.markdown", {}, function (err, out) {
             var compiled = out.compiled;
             assert.include(compiled, "<code class=\"lang-js\">");
             done();
@@ -214,8 +214,8 @@ zoom: 1;
 
 
         // NO POSTS ADDED
-        coderBlog.addPage("index.html", index);
-        coderBlog.compileOne("index.html", {}, function (err, out) {
+        crossbow.addPage("index.html", index);
+        crossbow.compileOne("index.html", {}, function (err, out) {
             assert.include(out.compiled, "Page Title: Homepage");
             done();
         }); // Good if no error thrown
@@ -237,8 +237,8 @@ zoom: 1;
 
 
         // NO POSTS ADDED
-        coderBlog.addPost("_posts/post1.md", index);
-        coderBlog.compileOne("_posts/post1.md", {highlight: false}, function (err, out) {
+        crossbow.addPost("_posts/post1.md", index);
+        crossbow.compileOne("_posts/post1.md", {highlight: false}, function (err, out) {
             done();
         }); // Good if no error thrown
     });
@@ -257,9 +257,9 @@ zoom: 1;
 
 
         // NO POSTS ADDED
-        coderBlog.populateCache("_layouts/test.html", "<body>{#content /}</body>");
-        coderBlog.addPage("docs/layouts.html", index);
-        coderBlog.compileOne("docs/layouts.html", {},  function (err, out) {
+        crossbow.populateCache("_layouts/test.html", "<body>{#content /}</body>");
+        crossbow.addPage("docs/layouts.html", index);
+        crossbow.compileOne("docs/layouts.html", {},  function (err, out) {
             assert.include(out.compiled, "<h1 id=\"homepage\">Homepage</h1>");
             done();
         }); // Good if no error thrown
@@ -278,9 +278,9 @@ zoom: 1;
 
 
         // NO POSTS ADDED
-        coderBlog.populateCache("_layouts/test.html", "<body>{#content /}</body>");
-        coderBlog.addPage("docs/layouts.md", index);
-        coderBlog.compileOne("docs/layouts.md", {},  function (err, out) {
+        crossbow.populateCache("_layouts/test.html", "<body>{#content /}</body>");
+        crossbow.addPage("docs/layouts.md", index);
+        crossbow.compileOne("docs/layouts.md", {},  function (err, out) {
             assert.include(out.compiled, "<h1 id=\"homepage\">Homepage</h1>");
             done();
         }); // Good if no error thrown

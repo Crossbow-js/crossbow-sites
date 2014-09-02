@@ -497,14 +497,10 @@ function compileMany(items, config, cb) {
     var count    = 0;
 
     items.forEach(function (post, i) {
-
-        console.time("render 1");
-
         compileOne(post, config, function (err, out) {
             if (err) {
                 cb(err);
             }
-            console.timeEnd("render 1");
             count += 1;
             if (Array.isArray(out)) {
                 compiled.concat(out);

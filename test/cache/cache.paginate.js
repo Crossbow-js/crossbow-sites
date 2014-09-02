@@ -6,7 +6,7 @@ var Post      = require("../../lib/post");
 var Page      = require("../../lib/page");
 var Paginator = require("../../lib/paginator");
 var Cache     = require("../../lib/cache");
-var coderBlog = require("../../index");
+var crossbow = require("../../index");
 
 var content1 = multiline.stripIndent(function(){/*
  ---

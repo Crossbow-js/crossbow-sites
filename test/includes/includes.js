@@ -8,8 +8,8 @@ dust.cache        = {};
 dust.isDebug = true;
 dust.optimizers.format = function(ctx, node) { return node; };
 
-var coderBlog = require("../../index");
-//coderBlog.setLogLevel("debug");
+var crossbow = require("../../index");
+//crossbow.setLogLevel("debug");
 
 var postLayout = multiline.stripIndent(function(){/*
 <!DOCTYPE html>
@@ -56,20 +56,20 @@ describe("Processing a file", function(){
     });
     beforeEach(function () {
 
-        coderBlog.clearCache();
+        crossbow.clearCache();
 
         // Add layouts to cache
-        coderBlog.populateCache("_layouts/post-test.html", postLayout);
-        coderBlog.populateCache("_layouts/page-test.html", pageLayout);
+        crossbow.populateCache("_layouts/post-test.html", postLayout);
+        crossbow.populateCache("_layouts/page-test.html", pageLayout);
 
         // Add HEAD section to cache
-        coderBlog.populateCache("_includes/head.html", "<head><title>{page.title} {site.sitename}</title></head>");
+        crossbow.populateCache("_includes/head.html", "<head><title>{page.title} {site.sitename}</title></head>");
     });
 
     it("Uses layout", function(done) {
 
-        var post = coderBlog.addPost("_posts/post2.md", post1, {});
-        coderBlog.compileOne(post, {siteConfig: {sitename: "({shakyShane})"}}, function (err, out) {
+        var post = crossbow.addPost("_posts/post2.md", post1, {});
+        crossbow.compileOne(post, {siteConfig: {sitename: "({shakyShane})"}}, function (err, out) {
             var compiled = out.compiled;
             assert.include(compiled, "Function Composition in Javascript");
             assert.include(compiled, "({shakyShane})");
@@ -92,8 +92,8 @@ describe("Processing a file", function(){
 
          */});
 
-        var page = coderBlog.addPage("index.html", index, {});
-        coderBlog.compileOne(page, {}, function (err, out) {
+        var page = crossbow.addPage("index.html", index, {});
+        crossbow.compileOne(page, {}, function (err, out) {
             var compiled = out.compiled;
             assert.include(compiled, "#Welcome to my blog.");
             assert.notInclude(compiled, "I have written before..");
@@ -128,10 +128,10 @@ describe("Processing a file", function(){
 
 
         // NO POSTS ADDED
-        coderBlog.addPost("_posts/post1.html", post1, {});
-        coderBlog.addPost("_posts/post2.html", post2, {});
-        var page = coderBlog.addPage("index.html", index, {});
-        coderBlog.compileOne(page, {}, function (err, out) {
+        crossbow.addPost("_posts/post1.html", post1, {});
+        crossbow.addPost("_posts/post2.html", post2, {});
+        var page = crossbow.addPage("index.html", index, {});
+        crossbow.compileOne(page, {}, function (err, out) {
             var compiled = out.compiled;
 
             assert.include(compiled, "Welcome to my blog");
@@ -155,11 +155,11 @@ describe("Processing a file", function(){
          */});
 
         // NO POSTS ADDED
-        coderBlog.populateCache("/_includes/button.tmpl.html", "<button>{text}</button>");
+        crossbow.populateCache("/_includes/button.tmpl.html", "<button>{text}</button>");
 
-        var page = coderBlog.addPage("index.html", index, {});
+        var page = crossbow.addPage("index.html", index, {});
 
-        coderBlog.compileOne(page, {}, function (err, out) {
+        crossbow.compileOne(page, {}, function (err, out) {
             var compiled = out.compiled;
             assert.include(compiled, "<button>Sign Up</button>");
             done();
@@ -179,9 +179,9 @@ describe("Processing a file", function(){
          */});
 
         // NO POSTS ADDED
-        coderBlog.populateCache("user/whatever/_includes/button.html", "<button>Sign up</button>");
-        coderBlog.addPage("werg/wergwerg/wergwergw/werg/_posts/post1.md", post2, {});
-        coderBlog.compileOne("posts/post1.md", {}, function (err, out) {
+        crossbow.populateCache("user/whatever/_includes/button.html", "<button>Sign up</button>");
+        crossbow.addPage("werg/wergwerg/wergwergw/werg/_posts/post1.md", post2, {});
+        crossbow.compileOne("posts/post1.md", {}, function (err, out) {
             assert.include(out.compiled, "<button>Sign up</button>");
             done();
         });
@@ -201,9 +201,9 @@ describe("Processing a file", function(){
          */});
 
         // NO POSTS ADDED
-        var post = coderBlog.addPage("wef/_posts/post2.md", post2, {});
-        coderBlog.populateCache("some/Random/path/_includes/button.html", "<button>{params.text}</button>");
-        coderBlog.compileOne(post, {}, function (err, out) {
+        var post = crossbow.addPage("wef/_posts/post2.md", post2, {});
+        crossbow.populateCache("some/Random/path/_includes/button.html", "<button>{params.text}</button>");
+        crossbow.compileOne(post, {}, function (err, out) {
             assert.include(out.compiled, "<button>Sign up</button>");
             done();
         });
@@ -225,9 +225,9 @@ describe("Processing a file", function(){
          */});
 
         // NO POSTS ADDED
-        coderBlog.populateCache("_includes/button.tmpl.html", "<button>{params.text}</button>", "partials");
-        coderBlog.addPage("_posts/post2.md", post2, {});
-        coderBlog.compileOne("posts/post2.md", {siteConfig: {title: "Blog Name"}}, function (err, out) {
+        crossbow.populateCache("_includes/button.tmpl.html", "<button>{params.text}</button>", "partials");
+        crossbow.addPage("_posts/post2.md", post2, {});
+        crossbow.compileOne("posts/post2.md", {siteConfig: {title: "Blog Name"}}, function (err, out) {
             var compiled = out.compiled;
             assert.include(compiled, "<button>Sign Up</button>");
             assert.include(compiled, "Blog Name");
@@ -250,8 +250,8 @@ describe("Processing a file", function(){
          */});
 
         // NO POSTS ADDED
-        coderBlog.addPost("_posts/post2.md", post2, {});
-        coderBlog.compileOne("_posts/post2.md", {siteConfig: {sitename: "(shakyShane)"}}, function (err, out) {
+        crossbow.addPost("_posts/post2.md", post2, {});
+        crossbow.compileOne("_posts/post2.md", {siteConfig: {sitename: "(shakyShane)"}}, function (err, out) {
             sinon.assert.calledOnce(fsStub);
             assert.include(out.compiled, "<p>crossbow.js is awesome</p>");
             done();
@@ -274,8 +274,8 @@ describe("Processing a file", function(){
          */});
 
         // NO POSTS ADDED
-        coderBlog.addPost("_posts/post2.md", post2, {});
-        coderBlog.compileOne("_posts/post2.md", {siteConfig: {sitename: "(shakyShane)"}}, function (err, out) {
+        crossbow.addPost("_posts/post2.md", post2, {});
+        crossbow.compileOne("_posts/post2.md", {siteConfig: {sitename: "(shakyShane)"}}, function (err, out) {
             assert.include(out.compiled, "<span class=\"hljs-keyword\">var</span>");
             done();
         });
@@ -318,12 +318,12 @@ describe("Processing a file", function(){
 
          */});
 
-        coderBlog.populateCache("_snippets/function2.js", "var name = \"shane\"");
+        crossbow.populateCache("_snippets/function2.js", "var name = \"shane\"");
 
-        var post = coderBlog.addPost("_posts/post2.md", post2, {});
-        coderBlog.addPost("_posts/post21.md", post3, {});
+        var post = crossbow.addPost("_posts/post2.md", post2, {});
+        crossbow.addPost("_posts/post21.md", post3, {});
 
-        coderBlog.compileOne(post, {siteConfig: {sitename: "(shakyShane)"}}, function (err, out) {
+        crossbow.compileOne(post, {siteConfig: {sitename: "(shakyShane)"}}, function (err, out) {
             var compiled = out.compiled;
             sinon.assert.calledOnce(fsStub);
             assert.include(compiled, "<button class=\"button button--primary\">Sign up</button>");

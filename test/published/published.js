@@ -1,7 +1,5 @@
 var _             = require("lodash");
 var multiline     = require("multiline");
-var sinon         = require("sinon");
-var fs            = require("fs");
 var assert        = require("chai").assert;
 var dust          = require("dustjs-linkedin");
 dust.cache        = {};

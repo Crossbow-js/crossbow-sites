@@ -6,7 +6,7 @@ dust.cache        = {};
 dust.isDebug = true;
 dust.optimizers.format = function(ctx, node) { return node; };
 
-var coderBlog = require("../../index");
+var crossbow = require("../../index");
 
 var postLayout = multiline.stripIndent(function(){/*
  <!DOCTYPE html>
@@ -42,14 +42,14 @@ var post1 = multiline.stripIndent(function(){/*
 describe("API gives meaningfull errors", function(){
 
     beforeEach(function () {
-        coderBlog.clearCache();
+        crossbow.clearCache();
 
         // Add layouts to cache
-        coderBlog.populateCache("_layouts/post-test.html", postLayout);
-        coderBlog.populateCache("_layouts/page-test.html", pageLayout);
+        crossbow.populateCache("_layouts/post-test.html", postLayout);
+        crossbow.populateCache("_layouts/page-test.html", pageLayout);
 
         // Add HEAD section to cache
-        coderBlog.populateCache("_includes/head", "<head><title>{page.title} {site.sitename}</title></head>");
+        crossbow.populateCache("_includes/head", "<head><title>{page.title} {site.sitename}</title></head>");
     });
 
     it("passes error about includes", function(done) {
@@ -67,10 +67,10 @@ describe("API gives meaningfull errors", function(){
 
          */});
 
-        var post = coderBlog.addPost("_posts/post2.md", post2, {});
-        coderBlog.populateCache("_snippets/function2.js", "var name = \"{params.name}\"");
+        var post = crossbow.addPost("_posts/post2.md", post2, {});
+        crossbow.populateCache("_snippets/function2.js", "var name = \"{params.name}\"");
 
-        coderBlog.compileOne(post, {siteConfig: {sitename: "(shakyShane)"}}, function (err, out) {
+        crossbow.compileOne(post, {siteConfig: {sitename: "(shakyShane)"}}, function (err, out) {
             assert.equal(err, "Error: Template Not Found: includes/buttonss.html");
             done();
         });
@@ -90,11 +90,11 @@ describe("API gives meaningfull errors", function(){
 
          */});
 
-        var post = coderBlog.addPost("_posts/post2.md", post2, {});
+        var post = crossbow.addPost("_posts/post2.md", post2, {});
 
-        coderBlog.populateCache("_snippets/function2.js", "var name = \"{params.name}\"");
+        crossbow.populateCache("_snippets/function2.js", "var name = \"{params.name}\"");
 
-        coderBlog.compileOne(post, {siteConfig: {sitename: "(shakyShane)"}}, function (err, out) {
+        crossbow.compileOne(post, {siteConfig: {sitename: "(shakyShane)"}}, function (err, out) {
             assert.equal(err, "Error: Template Not Found: snippets/butnsdsd.html");
             done();
         });

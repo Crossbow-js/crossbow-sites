@@ -8,7 +8,7 @@ dust.cache        = {};
 dust.isDebug = true;
 dust.optimizers.format = function(ctx, node) { return node; };
 
-var coderBlog = require("../../index");
+var crossbow = require("../../index");
 
 var layout = multiline.stripIndent(function(){/*
 {#content /}
@@ -39,10 +39,10 @@ describe("Processing a DATA", function(){
 
     beforeEach(function () {
 
-        coderBlog.clearCache();
+        crossbow.clearCache();
 
         // Add layouts to cache
-        coderBlog.populateCache("_layouts/test.html", layout);
+        crossbow.populateCache("_layouts/test.html", layout);
     });
 
     it("Can use site variables", function(done) {
@@ -60,11 +60,11 @@ describe("Processing a DATA", function(){
 
          */});
 
-        coderBlog.addPage("index.html", page1, {});
+        crossbow.addPage("index.html", page1, {});
 
-        coderBlog.populateCache("_data/members.yml", yml, "data");
+        crossbow.populateCache("_data/members.yml", yml, "data");
 
-        coderBlog.compileOne("index.html", {siteConfig: {}}, function (err, out) {
+        crossbow.compileOne("index.html", {siteConfig: {}}, function (err, out) {
             assert.include(out.compiled, "Parker Moore");
             assert.include(out.compiled, "Liu Fengyun");
             done();

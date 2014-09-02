@@ -6,8 +6,8 @@ dust.cache        = {};
 dust.isDebug = true;
 dust.optimizers.format = function(ctx, node) { return node; };
 
-var coderBlog = require("../../index");
-//coderBlog.setLogLevel("debug");
+var crossbow = require("../../index");
+//crossbow.setLogLevel("debug");
 
 var postLayout = multiline.stripIndent(function(){/*
  <!DOCTYPE html>
@@ -23,13 +23,13 @@ describe("Ordering posts by date", function(){
 
     beforeEach(function () {
 
-        coderBlog.clearCache();
+        crossbow.clearCache();
 
         // Add layouts to cache
-        coderBlog.populateCache("_layouts/post-test.html", postLayout);
+        crossbow.populateCache("_layouts/post-test.html", postLayout);
 
         // Add HEAD section to cache
-        coderBlog.populateCache("_includes/head.html", "<head><title>{page.title} {site.sitename}</title></head>");
+        crossbow.populateCache("_includes/head.html", "<head><title>{page.title} {site.sitename}</title></head>");
     });
 
     it("Should have newest posts first", function(done) {
@@ -68,14 +68,14 @@ describe("Ordering posts by date", function(){
 
          */});
 
-        coderBlog.addPost("_posts/post1.md", post1, {});
-        coderBlog.addPost("_posts/post2.md", post2, {});
+        crossbow.addPost("_posts/post1.md", post1, {});
+        crossbow.addPost("_posts/post2.md", post2, {});
 
         // NO POSTS ADDED
-        var page = coderBlog.addPage("index.html", index, {});
+        var page = crossbow.addPage("index.html", index, {});
 
-        coderBlog.compileOne(page, {}, function (err, out) {
-            var posts = coderBlog.getCache().posts();
+        crossbow.compileOne(page, {}, function (err, out) {
+            var posts = crossbow.getCache().posts();
             assert.equal(posts[0].front.title, "Post 2");
             assert.equal(posts[1].front.title, "Post 1");
             done();

@@ -8,8 +8,8 @@ dust.cache        = {};
 dust.isDebug = true;
 dust.optimizers.format = function(ctx, node) { return node; };
 
-var coderBlog = require("../../index");
-//coderBlog.setLogLevel("debug");
+var crossbow = require("../../index");
+//crossbow.setLogLevel("debug");
 
 var defaultLayout = multiline.stripIndent(function(){/*
 <!DOCTYPE html>
@@ -49,14 +49,14 @@ describe("Creating a pagination index", function(){
 
     beforeEach(function () {
 
-        coderBlog.clearCache();
+        crossbow.clearCache();
 
         // Add layouts to cache
-        coderBlog.populateCache("_layouts/post-test.html", postLayout);
-        coderBlog.populateCache("_layouts/default.html", defaultLayout);
+        crossbow.populateCache("_layouts/post-test.html", postLayout);
+        crossbow.populateCache("_layouts/default.html", defaultLayout);
 
         // Add HEAD section to cache
-        coderBlog.populateCache("_includes/head.html", "<head><title>{page.title} {site.sitename}</title></head>");
+        crossbow.populateCache("_includes/head.html", "<head><title>{page.title} {site.sitename}</title></head>");
     });
 
     it("Can use site variables", function(done) {
@@ -151,16 +151,16 @@ describe("Creating a pagination index", function(){
 
          */});
 
-        coderBlog.addPost("_posts/post1.md", post1, {});
-        coderBlog.addPost("_posts/post2.md", post2, {});
-        coderBlog.addPost("_posts/post3.md", post3, {});
-        coderBlog.addPost("_posts/post4.md", post4, {});
-        coderBlog.addPost("_posts/post5.md", post5, {});
-        coderBlog.addPost("_posts/post6.md", post6, {});
+        crossbow.addPost("_posts/post1.md", post1, {});
+        crossbow.addPost("_posts/post2.md", post2, {});
+        crossbow.addPost("_posts/post3.md", post3, {});
+        crossbow.addPost("_posts/post4.md", post4, {});
+        crossbow.addPost("_posts/post5.md", post5, {});
+        crossbow.addPost("_posts/post6.md", post6, {});
 
-        var page = coderBlog.addPage("blog/posts/index.html", page1, {prettyUrls: true});
+        var page = crossbow.addPage("blog/posts/index.html", page1, {prettyUrls: true});
 
-        coderBlog.compileOne(page, {siteConfig: {"site-name": "shane - test"}}, function (err, out) {
+        crossbow.compileOne(page, {siteConfig: {"site-name": "shane - test"}}, function (err, out) {
 
             assert.equal(out[0].url, "/blog/posts");
 

@@ -8,8 +8,8 @@ dust.cache        = {};
 dust.isDebug = true;
 dust.optimizers.format = function(ctx, node) { return node; };
 
-var coderBlog = require("../../index");
-//coderBlog.setLogLevel("debug");
+var crossbow = require("../../index");
+//crossbow.setLogLevel("debug");
 
 var postLayout = multiline.stripIndent(function(){/*
  <!DOCTYPE html>
@@ -47,13 +47,13 @@ describe("Processing a Markdown file", function(){
 
     beforeEach(function () {
 
-        coderBlog.clearCache();
+        crossbow.clearCache();
 
         // Add layouts to cache
-        coderBlog.populateCache("_layouts/post-test.html", postLayout);
+        crossbow.populateCache("_layouts/post-test.html", postLayout);
 
         // Add HEAD section to cache
-        coderBlog.populateCache("_includes/head.html", "<head><title>{page.title} {site.sitename}</title></head>");
+        crossbow.populateCache("_includes/head.html", "<head><title>{page.title} {site.sitename}</title></head>");
     });
 
     it("Can use site variables", function(done) {
@@ -91,11 +91,11 @@ describe("Processing a Markdown file", function(){
 
          */});
 
-        coderBlog.addPost("_posts/post1.md", post1, {});
-        coderBlog.addPost("_posts/post2.md", post2, {});
-        coderBlog.addPost("_posts/post3.md", post3, {});
+        crossbow.addPost("_posts/post1.md", post1, {});
+        crossbow.addPost("_posts/post2.md", post2, {});
+        crossbow.addPost("_posts/post3.md", post3, {});
 
-        coderBlog.compileOne("_posts/post2.md", {}, function (err, out) {
+        crossbow.compileOne("_posts/post2.md", {}, function (err, out) {
             var compiled = out.compiled;
             assert.include(compiled, "<p>Prev - /post1.html</p>");
             assert.include(compiled, "<p>Next - /post3.html</p>");
