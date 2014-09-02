@@ -73,7 +73,7 @@ dust.optimizers.format = function (ctx, node) {
     return node;
 };
 dust.isDebug = true;
-//_.extend(dust.filters, {zws: function(value){ return value + "-filtered"} });
+_.extend(dust.filters, {ucfirst: function(value){ return utils.ucfirst(value)} });
 
 /**
  * Default configuration
@@ -258,7 +258,7 @@ function getData(item, data, config) {
     var includeResolver = getCacheResolver(data, "include");
     var snippetResolver = getCacheResolver(data, "snippet");
 
-    data.item  = utils.prepareFrontVars(item, config);
+    data.item = utils.prepareFrontVars(item, config);
 
     // Add related posts
     data.item.related  = utils.addRelated(item.categories, item.key, cache.posts());
@@ -386,7 +386,7 @@ function getSnippetInclude(filePath, data, chunk, params) {
  */
 function getInclude(path, data, chunk) {
 
-    getFile(path);
+    var data = getFile(path);
 
     return chunk.partial(
         path,
@@ -463,8 +463,8 @@ function compileOne(item, config, cb) {
     var match = getMatch(item);
 
     /**
-     * Don't continue if there's no match or frontmatter.
-     * Posts & Pages should've already been added with .addPost or .addPage
+     * Don't continue if there's no match or front-matter.
+     * Posts & Pages should have already been added with .addPost or .addPage
      */
     if (!match || !match.front) {
         return cb(null, item);
@@ -476,7 +476,7 @@ function compileOne(item, config, cb) {
     if (match.front.paginate) {
         doPagination(match, data, config, cb);
     } else {
-        construct(match, data, config, function (err, item) {
+        constructItem(match, data, config, function (err, item) {
             if (err) {
                 return cb(err);
             } else {
@@ -514,20 +514,32 @@ function compileMany(items, config, cb) {
     });
 }
 
-
+/**
+ * Convenience method to compile all posts & pages in cache
+ * @param config
+ * @param cb
+ * @returns {*}
+ */
 function compileAll(config, cb) {
-
     var items = cache.posts().concat(cache.pages());
-
-    items.forEach(function (item) {
-//        console.log(item.key);
-    });
-
     return compileMany(items, config, cb);
 }
+/**
+ * Convenience method to compile all posts in the cache
+ * @param config
+ * @param cb
+ * @returns {*}
+ */
 function compilePosts(config, cb) {
     return compileMany(cache.posts(), config, cb);
 }
+
+/**
+ * Convenience method to compile all pages in the cache
+ * @param config
+ * @param cb
+ * @returns {*}
+ */
 function compilePages(config, cb) {
     return compileMany(cache.pages(), config, cb);
 }
@@ -535,21 +547,21 @@ function compilePages(config, cb) {
 /**
  *
  */
-function doPagination(match, data, config, cb) {
+function doPagination(item, data, config, cb) {
 
-    var meta        = utils.splitMeta(match.front.paginate);
-    var collection  = cache.getCollection(meta[0]);
+    var meta       = utils.splitMeta(item.front.paginate);
+    var collection = cache.getCollection(meta[0]);
 
-    var paginator       = new Paginator(collection, match, meta[1], config);
-    var paginatorPages  = paginator.pages();
+    var paginator      = new Paginator(collection, item, meta[1], config);
+    var paginatorPages = paginator.pages();
 
-    var compiledItems   = [];
+    var compiledItems  = [];
 
     paginatorPages.forEach(function (item, i) {
 
         data.paged = paginator.getMetaData(item, data.config, i);
 
-        construct(item.page, data, config, function (err, item) {
+        constructItem(item.page, data, config, function (err, item) {
             if (err) {
                 return cb(err);
             } else {
@@ -568,7 +580,7 @@ function doPagination(match, data, config, cb) {
  * @param config
  * @param cb
  */
-function construct(item, data, config, cb) {
+function constructItem(item, data, config, cb) {
 
     data = getData(item, data, config);
 
@@ -620,8 +632,8 @@ function populateCache(key, value, type) {
     if (partial = cache.find(url.makeShortKey(key), "partials")){
 
         partial.content = value;
-        shortKey         = partial.shortKey;
-        partialKey       = partial.partialKey;
+        shortKey        = partial.shortKey;
+        partialKey      = partial.partialKey;
 
     } else {
 
@@ -638,6 +650,13 @@ function populateCache(key, value, type) {
     return cache;
 }
 
+/**
+ * Load partials into Dust's internal cache
+ * @param key
+ * @param value
+ * @param shortKey
+ * @param partialKey
+ */
 function addToDust(key, value, shortKey, partialKey) {
     if (shortKey) {
 

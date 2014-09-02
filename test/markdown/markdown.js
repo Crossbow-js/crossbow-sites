@@ -281,7 +281,32 @@ zoom: 1;
         crossbow.populateCache("_layouts/test.html", "<body>{#content /}</body>");
         crossbow.addPage("docs/layouts.md", index);
         crossbow.compileOne("docs/layouts.md", {},  function (err, out) {
+            assert.equal(out.filePath, "docs/layouts.html");
+            assert.equal(out.url, "/docs/layouts.html");
             assert.include(out.compiled, "<h1 id=\"homepage\">Homepage</h1>");
+            done();
+        }); // Good if no error thrown
+    });
+    it("Can render any file with index.md or index.markdown extension + Pretty urls", function(done) {
+
+        var index = multiline.stripIndent(function(){/*
+         ---
+         layout: test
+         title: "Homepage"
+         ---
+
+         #{page.title}
+
+         */});
+
+
+        // NO POSTS ADDED
+        crossbow.populateCache("_layouts/test.html", "<body>{#content /}</body>");
+        crossbow.addPage("/docs/index.md", index, {prettyUrls: true});
+        crossbow.compileOne("/docs/index.md", {},  function (err, out) {
+
+            assert.equal(out.filePath, "docs/index.html");
+            assert.equal(out.url, "/docs");
             done();
         }); // Good if no error thrown
     });
