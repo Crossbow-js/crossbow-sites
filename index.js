@@ -386,7 +386,7 @@ function getSnippetInclude(filePath, data, chunk, params) {
  */
 function getInclude(path, data, chunk) {
 
-    var data = getFile(path);
+    getFile(path);
 
     return chunk.partial(
         path,
