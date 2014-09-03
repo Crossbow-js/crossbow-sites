@@ -3,13 +3,7 @@ var multiline     = require("multiline");
 var fs            = require("fs");
 var sinon         = require("sinon");
 var assert        = require("chai").assert;
-var dust          = require("dustjs-linkedin");
-dust.cache        = {};
-dust.isDebug = true;
-dust.optimizers.format = function(ctx, node) { return node; };
-
 var crossbow = require("../../index");
-//crossbow.setLogLevel("debug");
 
 var postLayout = multiline.stripIndent(function(){/*
 <!DOCTYPE html>
@@ -66,81 +60,31 @@ describe("Processing a file", function(){
         crossbow.populateCache("_includes/head.html", "<head><title>{page.title} {site.sitename}</title></head>");
     });
 
-    it("Uses layout", function(done) {
-
-        var post = crossbow.addPost("_posts/post2.md", post1, {});
-        crossbow.compileOne(post, {siteConfig: {sitename: "({shakyShane})"}}, function (err, out) {
-            var compiled = out.compiled;
-            assert.include(compiled, "Function Composition in Javascript");
-            assert.include(compiled, "({shakyShane})");
-            done();
-        });
-    });
-
-    it("Knows about posts", function(done) {
+    it("Can do simple includes", function(done) {
 
         var index = multiline.stripIndent(function(){/*
-         ---
-         layout: page-test
-         title: "Homepage"
-         date: 2014-04-10
-         ---
-
-         {#posts}{url}{/posts}
-
-         #Welcome to my blog. {?posts}I have written before..{/posts}
-
-         */});
-
-        var page = crossbow.addPage("index.html", index, {});
-        crossbow.compileOne(page, {}, function (err, out) {
-            var compiled = out.compiled;
-            assert.include(compiled, "#Welcome to my blog.");
-            assert.notInclude(compiled, "I have written before..");
-            done();
-        });
-    });
-    it("Knows about posts and pages (when they are added)", function(done) {
-
-        var post2 = multiline.stripIndent(function(){/*
          ---
          layout: post-test
          title: "Blogging is coolio"
-         date: 2013-11-13
+         date: 2013-11-13 20:51:39
          ---
 
-         #{page.title}
+         {#inc src="button.tmpl.html" /}
+
          */});
-
-        var index = multiline.stripIndent(function(){/*
-         ---
-         layout: page-test
-         title: "Homepage"
-         date: 2014-04-10
-         ---
-
-         #Welcome to my blog
-
-         {#posts}
-         {title}
-         {/posts}
-         */});
-
 
         // NO POSTS ADDED
-        crossbow.addPost("_posts/post1.html", post1, {});
-        crossbow.addPost("_posts/post2.html", post2, {});
+        crossbow.populateCache("/_includes/button.tmpl.html", "<button>Sign Up</button>");
+
         var page = crossbow.addPage("index.html", index, {});
+
         crossbow.compileOne(page, {}, function (err, out) {
             var compiled = out.compiled;
-
-            assert.include(compiled, "Welcome to my blog");
-            assert.include(compiled, "Function Composition in Javascript.");
-            assert.include(compiled, "Blogging is coolio");
-
+            assert.include(compiled, "<button>Sign Up</button>");
             done();
         });
     });
+
     it("Setting short keys for includes in cache", function(done) {
 
         var index = multiline.stripIndent(function(){/*
@@ -150,12 +94,12 @@ describe("Processing a file", function(){
          date: 2013-11-13 20:51:39
          ---
 
-         {>"includes/button.tmpl.html" text="Sign Up" /}
+         {>"includes/button.tmpl.html" /}
 
          */});
 
         // NO POSTS ADDED
-        crossbow.populateCache("/_includes/button.tmpl.html", "<button>{text}</button>");
+        crossbow.populateCache("/_includes/button.tmpl.html", "<button>Sign Up</button>");
 
         var page = crossbow.addPage("index.html", index, {});
 
@@ -196,15 +140,15 @@ describe("Processing a file", function(){
          date: 2013-11-13 20:51:39
          ---
 
-         {#inc src="button" text="Sign up"/}
+         {#inc src="button.html" /}
 
          */});
 
         // NO POSTS ADDED
         var post = crossbow.addPage("wef/_posts/post2.md", post2, {});
-        crossbow.populateCache("some/Random/path/_includes/button.html", "<button>{params.text}</button>");
+        crossbow.populateCache("some/Random/path/_includes/button.html", "<button>Sign Up</button>");
         crossbow.compileOne(post, {}, function (err, out) {
-            assert.include(out.compiled, "<button>Sign up</button>");
+            assert.include(out.compiled, "<button>Sign Up</button>");
             done();
         });
     });
@@ -245,7 +189,7 @@ describe("Processing a file", function(){
          date: 2013-11-13 20:51:39
          ---
 
-         {#inc src="includes/snippet.html" name="Title: " /}
+         {#inc src="includes/snippet.html" /}
 
          */});
 

@@ -388,10 +388,12 @@ function getInclude(path, data, chunk) {
 
     getFile(path);
 
-    return chunk.partial(
+    var rendered = chunk.partial(
         path,
         dust.makeBase(data)
     );
+
+    return rendered;
 }
 
 /**
