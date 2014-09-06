@@ -69,7 +69,7 @@ dust.optimizers.format = function (ctx, node) {
     return node;
 };
 dust.isDebug = true;
-_.extend(dust.filters, {ucfirst: function(value){ return utils.ucfirst(value)} });
+_.extend(dust.filters, {ucfirst: function(value){ return utils.ucfirst(value); } });
 
 var sections = {};
 
