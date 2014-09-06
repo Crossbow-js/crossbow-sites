@@ -38,15 +38,18 @@ Hi there {page.title}
 
 describe("Processing a file", function(){
 
-    var fsStub;
+    var fsStub, existsStub;
     before(function () {
-        fsStub = sinon.stub(fs, "readFileSync");
+        fsStub     = sinon.stub(fs, "readFileSync");
+        existsStub = sinon.stub(fs, "existsSync");
     });
     after(function () {
         fsStub.restore();
+        existsStub.restore();
     });
     afterEach(function () {
         fsStub.reset();
+        existsStub.reset();
     });
     beforeEach(function () {
 
@@ -180,6 +183,7 @@ describe("Processing a file", function(){
     });
     it("Allows includes that are not in the cache", function(done) {
 
+        existsStub.returns(true);
         fsStub.returns("<p>crossbow.js is awesome</p>");
 
         var post2 = multiline.stripIndent(function(){/*

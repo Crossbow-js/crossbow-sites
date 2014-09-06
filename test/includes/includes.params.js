@@ -93,7 +93,7 @@ describe("Processing Inline params with includes", function(){
 
 
          {#page.buttons}
-         {#inc src="button.tmpl.html" text=name class=class /}
+         {#inc src="button.tmpl.html" text=name class=class/}
          {/page.buttons}
 
          */});
@@ -124,13 +124,13 @@ describe("Processing Inline params with includes", function(){
 
 
          {#page.buttons}
-         {#inc src="button.tmpl.html" text=name type=class /}
+         {#inc src="button.tmpl.html" text=name type=class index=$idx/}
          {/page.buttons}
 
          */});
 
         // NO POSTS ADDED
-        crossbow.populateCache("_includes/button.tmpl.html", "<button class=\"button button--{type}\">{text} - {$idx}</button>", "partials");
+        crossbow.populateCache("_includes/button.tmpl.html", "<button class=\"button button--{type}\">{text} - {index}</button>", "partials");
         crossbow.addPage("_posts/post2.md", post2, {});
         crossbow.compileOne("posts/post2.md", {siteConfig: {title: "Blog Name"}}, function (err, out) {
             var compiled = out.compiled;
@@ -155,15 +155,14 @@ describe("Processing Inline params with includes", function(){
 
 
          {#page.buttons}
-         {#inc src="button.tmpl.html" item=. /}
+         {#inc src="button.tmpl.html" item=. idx=$idx/}
          {/page.buttons}
 
          */});
 
         // NO POSTS ADDED
         crossbow.populateCache("_includes/button.tmpl.html",
-            "<button class=\"button button--{item.class}\">{item.name} - {$idx}</button>",
-            "partials");
+            "<button class=\"button button--{item.class}\">{item.name} - {idx}</button>", "partials");
         crossbow.addPage("_posts/post2.md", post2, {});
         crossbow.compileOne("posts/post2.md", {siteConfig: {title: "Blog Name"}}, function (err, out) {
             var compiled = out.compiled;

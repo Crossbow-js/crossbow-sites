@@ -41,6 +41,7 @@ describe("Yielding sections ", function(){
         crossbow.addPage("projects/about-us.html", page1);
 
         crossbow.compileOne("projects/about-us.html", {}, function (err, out) {
+            console.log(out.compiled);
             assert.include(out.compiled, ".body { background: red }");
             assert.notInclude(out.compiled, "<script>alert(\"hey yo\");</script>");
             done();

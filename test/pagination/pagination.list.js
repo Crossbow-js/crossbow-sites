@@ -59,7 +59,7 @@ describe("Creating a pagination index", function(){
         crossbow.populateCache("_includes/head.html", "<head><title>{page.title} {site.sitename}</title></head>");
     });
 
-    it("Can use site variables", function(done) {
+    it.skip("Can use site variables", function(done) {
 
         var post1 = multiline.stripIndent(function(){/*
          ---

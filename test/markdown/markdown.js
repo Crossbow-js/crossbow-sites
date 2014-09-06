@@ -44,16 +44,18 @@ Hi there {page.title}
 
 describe("Processing a Markdown file", function(){
 
-    var fsStub;
-
+    var fsStub, existsStub;
     before(function () {
-        fsStub = sinon.stub(fs, "readFileSync");
+        fsStub     = sinon.stub(fs, "readFileSync");
+        existsStub = sinon.stub(fs, "existsSync").returns(true);
     });
     after(function () {
         fsStub.restore();
+        existsStub.restore();
     });
     afterEach(function () {
         fsStub.reset();
+        existsStub.reset();
     });
 
     beforeEach(function () {

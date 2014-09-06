@@ -25,7 +25,7 @@ describe("Filtering published", function(){
          #{page.title}
 
          */});
-        crossbow.addPost("_posts/post1", post);
+        crossbow.addPost("_posts/post1.md", post);
 
         var actual = crossbow.getCache().posts().length;
         assert.equal(actual, 0);

@@ -40,10 +40,6 @@ var defaultPlugins = {
     "code fences": {
         when: "before item parsed",
         fn: codeFences
-    },
-    "drafts": {
-        when: "before item added",
-        fn: drafts
     }
 };
 
@@ -74,6 +70,50 @@ dust.optimizers.format = function (ctx, node) {
 };
 dust.isDebug = true;
 _.extend(dust.filters, {ucfirst: function(value){ return utils.ucfirst(value)} });
+
+var sections = {};
+
+/**
+ * @type {{sections: {when: string, fn: fn}}}
+ */
+var dataTransforms = {
+    "drafts": {
+        when: "before item added",
+        fn: drafts
+    },
+    "sections": {
+        when: "before item parsed",
+        fn: function (data) {
+            data.section   = getSectionHelper(sections);
+            data["yield"]  = getYieldHelper(sections);
+            return data;
+        }
+    },
+    "includes": {
+        when: "before item parsed",
+        fn: function (data) {
+            var includeResolver = getCacheResolver(data, "include");
+            data.inc       = includeResolver;
+            data.include   = includeResolver;
+            return data;
+        }
+    },
+    "snippet": {
+        when: "before item parsed",
+        fn: function (data) {
+            data.snippet = getCacheResolver(data, "snippet");
+            return data;
+        }
+    },
+    "highlight": {
+        when: "before item parsed",
+        fn: function (data) {
+            data.highlight = snippetHelper;
+            data.hl        = snippetHelper;
+            return data;
+        }
+    }
+};
 
 /**
  * Default configuration
@@ -108,8 +148,26 @@ var defaults = {
      */
     prettyUrls: true
 };
+
 module.exports.defaults = defaults;
 
+/**
+ * @param filep
+ * @param transform
+ * @returns {Buffer|string|*}
+ */
+function getOneFromFileSytem(filep, transform) {
+
+    var content = fs.readFileSync(filep, "utf-8");
+
+    populateCache(filep,
+        _.isFunction(transform)
+            ? transform(content)
+            : content
+    );
+
+    return content;
+}
 /**
  * Get a file from the cache, or alternative look it up on FS from CWD as base
  * @param {String} filePath - {short-key from cache}
@@ -135,13 +193,17 @@ function getFile(filePath, transform, allowEmpty) {
 
     try {
         log("debug", "%Cyellow:File System access%R for: %s", filePath);
-        content = fs.readFileSync(utils.makeFsPath(filePath), "utf-8");
-        populateCache(filePath,
-            _.isFunction(transform)
-                ? transform(content)
-                : content
-        );
-        return content;
+        var filep = utils.makeFsPath(filePath);
+        if (!fs.existsSync(filep)) {
+            filep = utils.makeFsPath(utils.getIncludePath(filePath));
+            if (fs.existsSync(filep)) {
+                return getOneFromFileSytem(filep, transform);
+            } else {
+                     return false;
+            }
+        } else {
+            return getOneFromFileSytem(filep, transform);
+        }
     } catch (e) {
         log("warn", "Could not access:%Cred: %s", e.path);
         return allowEmpty
@@ -255,9 +317,6 @@ function getYieldHelper(sections) {
  */
 function getData(item, data, config) {
 
-    var includeResolver = getCacheResolver(data, "include");
-    var snippetResolver = getCacheResolver(data, "snippet");
-
     data.item = utils.prepareFrontVars(item, config);
 
     // Add related posts
@@ -275,19 +334,6 @@ function getData(item, data, config) {
     if (item.type === "post") {
         addPostMeta(data.post, item);
     }
-
-    // Helper functions
-    data.inc       = includeResolver;
-    data.include   = includeResolver;
-    data.snippet   = snippetResolver;
-
-    data.highlight = snippetHelper;
-    data.hl        = snippetHelper;
-
-    data.sections  = {};
-
-    data.section   = getSectionHelper(data.sections);
-    data["yield"]  = getYieldHelper(data.sections);
 
     return data;
 }
@@ -335,15 +381,15 @@ function applyContentTransforms(scope, out, data, config) {
  * @param config
  * @returns {*}
  */
-function applyItemTransforms(scope, item, config) {
+function applyDataTransforms(scope, data, config) {
 
-    _.each(defaultPlugins, function (plugin) {
+    _.each(dataTransforms, function (plugin) {
         if (plugin.when === scope) {
-            item = plugin.fn(item, config);
+            data = plugin.fn(data, config);
         }
     });
 
-    return item;
+    return data;
 }
 
 /**
@@ -586,6 +632,8 @@ function constructItem(item, data, config, cb) {
 
     data = getData(item, data, config);
 
+    data = applyDataTransforms("before item parsed", data, config);
+
     var escapedContent = applyContentTransforms("before item parsed", item.content, data, config);
 
     renderTemplate(escapedContent, data, function (err, out) {
@@ -715,7 +763,7 @@ function addPost(key, string, config) {
      */
     post = new Post(key, string, config);
 
-    var filtered = applyItemTransforms("before item added", post, config);
+    var filtered = applyDataTransforms("before item added", post, config);
 
     if (filtered) {
         cache.addPost(filtered);

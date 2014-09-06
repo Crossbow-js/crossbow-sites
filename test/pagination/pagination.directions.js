@@ -75,9 +75,7 @@ describe("Processing a Markdown file", function(){
          ---
 
          Prev - {post.prev.url}
-
          Next - {post.next.url}
-
 
          */});
         var post3 = multiline.stripIndent(function(){/*
@@ -97,8 +95,8 @@ describe("Processing a Markdown file", function(){
 
         crossbow.compileOne("_posts/post2.md", {}, function (err, out) {
             var compiled = out.compiled;
-            assert.include(compiled, "<p>Prev - /post1.html</p>");
-            assert.include(compiled, "<p>Next - /post3.html</p>");
+            assert.include(compiled, "Prev - /post1.html");
+            assert.include(compiled, "Next - /post3.html");
             done();
         });
     });
