@@ -38,7 +38,7 @@ var drafts     = require("./lib/plugins/drafts");
 var compiler   = require("./lib/plugins/dust")(getFile, cache, log);
 
 /**
- * @type {{sections: {when: string, fn: fn}}}
+ * Default Data Transforms
  */
 var dataTransforms = {
     "drafts": {
@@ -48,9 +48,9 @@ var dataTransforms = {
 };
 
 /**
- * Load default plugins
+ * Default Content transforms
  */
-var defaultPlugins = {
+var contentTransforms = {
     "markdown": {
         when: "before item render",
         fn: markdown
@@ -67,29 +67,6 @@ var defaultPlugins = {
 if (compiler["dataTransforms"]) {
     dataTransforms = _.merge(dataTransforms, compiler["dataTransforms"]);
 }
-
-module.exports.clearCache = function () {
-    log("debug", "Clearing all caches, (posts, pages, includes, partials)");
-    cache.reset();
-};
-
-module.exports.log = log;
-module.exports.utils = utils;
-module.exports.setLogLevel = log.setLogLevel;
-
-
-/**
- * Templates use dust.
- * @type {exports}
- */
-var dust        = require("dustjs-helpers");
-dust.optimizers.format = function (ctx, node) {
-    return node;
-};
-dust.isDebug = true;
-_.extend(dust.filters, {ucfirst: function(value){ return utils.ucfirst(value); } });
-
-var sections = {};
 
 /**
  * Default configuration
@@ -125,18 +102,16 @@ var defaults = {
     prettyUrls: true
 };
 
-module.exports.defaults = defaults;
-
 /**
- * @param filep
+ * @param filepath
  * @param transform
  * @returns {Buffer|string|*}
  */
-function getOneFromFileSytem(filep, transform) {
+function getOneFromFileSystem(filepath, transform) {
 
-    var content = fs.readFileSync(filep, "utf-8");
+    var content = fs.readFileSync(filepath, "utf-8");
 
-    populateCache(filep,
+    populateCache(filepath,
         _.isFunction(transform)
             ? transform(content)
             : content
@@ -174,12 +149,12 @@ function getFile(filePath, transform, allowEmpty) {
         if (!fs.existsSync(filep)) {
             filep = utils.makeFsPath(utils.getIncludePath(filePath));
             if (fs.existsSync(filep)) {
-                return getOneFromFileSytem(filep, transform);
+                return getOneFromFileSystem(filep, transform);
             } else {
                      return false;
             }
         } else {
-            return getOneFromFileSytem(filep, transform);
+            return getOneFromFileSystem(filep, transform);
         }
     } catch (e) {
         log("warn", "Could not access:%Cred: %s", e.path);
@@ -206,23 +181,15 @@ function addLayout(layout, data, cb) {
         // nested layout
         var _data   = yaml.readFrontMatter(current);
 
-        renderTemplate(_data.content, data, function (err, out) {
+        return renderTemplate(_data.content, data, function (err, out) {
 
-            data.content = function (chunk) {
-                return chunk.write(out);
-            };
+            data = compiler.addContent(data, out);
 
             addLayout(_data.front.layout, data, cb);
         });
-
-    } else {
-
-        if (!current) {
-            return cb("file not found");
-        }
-
-        return renderTemplate(current, data, cb);
     }
+
+    return renderTemplate(current, data, cb);
 }
 
 /**
@@ -280,7 +247,7 @@ function addItemData(item, data, config) {
  */
 function applyContentTransforms(scope, out, data, config) {
 
-    _.each(defaultPlugins, function (plugin) {
+    _.each(contentTransforms, function (plugin) {
         if (plugin.when === scope) {
             out = plugin.fn(out, data, config);
         }
@@ -410,17 +377,16 @@ function compileMany(items, config, cb) {
  * Convenience method to compile all posts & pages in cache
  * @param config
  * @param cb
- * @returns {*}
  */
 function compileAll(config, cb) {
     var items = cache.posts().concat(cache.pages());
     return compileMany(items, config, cb);
 }
+
 /**
  * Convenience method to compile all posts in the cache
  * @param config
  * @param cb
- * @returns {*}
  */
 function compilePosts(config, cb) {
     return compileMany(cache.posts(), config, cb);
@@ -430,19 +396,21 @@ function compilePosts(config, cb) {
  * Convenience method to compile all pages in the cache
  * @param config
  * @param cb
- * @returns {*}
  */
 function compilePages(config, cb) {
     return compileMany(cache.pages(), config, cb);
 }
 
 /**
- *
+ * @param {Post|Page} item
+ * @param {Object} data
+ * @param {Object} config
+ * @param {Function} cb
  */
 function doPagination(item, data, config, cb) {
 
-    var meta       = utils.splitMeta(item.front.paginate);
-    var collection = cache.getCollection(meta[0]);
+    var meta           = utils.splitMeta(item.front.paginate);
+    var collection     = cache.getCollection(meta[0]);
 
     var paginator      = new Paginator(collection, item, meta[1], config);
     var paginatorPages = paginator.pages();
@@ -467,10 +435,10 @@ function doPagination(item, data, config, cb) {
 }
 
 /**
- * @param item
- * @param data
- * @param config
- * @param cb
+ * @param {Post|Page} item
+ * @param {Object} data
+ * @param {Object} config
+ * @param {Function} cb
  */
 function constructItem(item, data, config, cb) {
 
@@ -489,9 +457,7 @@ function constructItem(item, data, config, cb) {
         var fullContent = applyContentTransforms("before item render", out, data, config);
 
         // Just write the cody content without parsing (already done);
-        data.content = function (chunk) {
-            return chunk.write(fullContent);
-        };
+        data = compiler.addContent(data, fullContent);
 
         addLayout(data.page.front.layout, data, function (err, out) {
             if (err) {
@@ -618,6 +584,23 @@ function registerTransform (fn) {
 /*-------------/
  *  Public API
  *------------*/
+
+/**
+ * Cache/Log/Utils
+ * @type {*|exports}
+ */
+module.exports.log = log;
+module.exports.utils = utils;
+module.exports.setLogLevel = log.setLogLevel;
+module.exports.clearCache = function () {
+    log("debug", "Clearing all caches, (posts, pages, includes, partials)");
+    cache.reset();
+};
+
+/**
+ * Default configurations
+ */
+module.exports.defaults = defaults;
 
 /**
  * Populate the cache
