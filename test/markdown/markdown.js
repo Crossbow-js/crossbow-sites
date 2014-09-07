@@ -222,25 +222,51 @@ zoom: 1;
             done();
         }); // Good if no error thrown
     });
-    it.skip("Does not auto-highlight code fences when no language given", function(done) {
+    it("Does not auto-highlight code fences when no language given", function(done) {
+
+        crossbow.clearCache();
 
         var index = multiline.stripIndent(function(){/*
-         ---
-         layout: post-test
-         title: "Homepage"
-         randomVar: "Kittenz"
-         date: 2014-04-10
-         ---
+        ---
+        title: "Homepage"
+        ---
 
-         ```
-         var snippet = "false";
-         ```
+        ```
+        var snippet = "false";
+        ```
+
          */});
 
 
         // NO POSTS ADDED
         crossbow.addPost("_posts/post1.md", index);
-        crossbow.compileOne("_posts/post1.md", {highlight: false}, function (err, out) {
+        crossbow.compileOne("_posts/post1.md", {siteConfig: {defaultLayout: null}, highlight: true}, function (err, out) {
+            assert.notInclude(out.compiled, "<span class=\"hljs-keyword\">");
+            assert.include(out.compiled, "<pre><code>var snippet = &quot;false&quot;;");
+            done();
+        }); // Good if no error thrown
+    });
+    it("Does not auto-highlight indented code-blocks", function(done) {
+
+        crossbow.clearCache();
+
+        var index = multiline.stripIndent(function(){/*
+         ---
+         title: "Homepage"
+         ---
+
+
+             var snippet = "false";
+
+
+         */});
+
+
+        // NO POSTS ADDED
+        crossbow.addPost("_posts/post1.md", index);
+        crossbow.compileOne("_posts/post1.md", {siteConfig: {defaultLayout: null}, highlight: true}, function (err, out) {
+            assert.notInclude(out.compiled, "<span class=\"hljs-keyword\">");
+            assert.include(out.compiled, "<pre><code>var snippet = &quot;false&quot;;");
             done();
         }); // Good if no error thrown
     });
