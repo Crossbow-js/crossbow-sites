@@ -36,6 +36,43 @@ describe("Nested/child layouts", function () {
         crossbow.populateCache("_layouts/child2.html", childLayout2);
     });
 
+    it("Can render with no layout", function (done) {
+
+        var post1 = multiline.stripIndent(function () {/*
+         {site.sitename}
+         */});
+
+        var post = crossbow.addPost("_posts/post2.md", post1, {});
+
+        crossbow.compileOne(post, {siteConfig: {sitename: "({shakyShane})"}}, function (err, out) {
+            var compiled = out.compiled;
+            assert.include(compiled, "({shakyShane})");
+            done();
+        });
+    });
+    it("Can render using a default layout in config", function (done) {
+
+        var post1 = multiline.stripIndent(function () {/*
+         {site.sitename}
+         */});
+
+        var post = crossbow.addPost("_posts/post2.md", post1, {});
+
+        crossbow.populateCache("_layouts/shane.html", ":::{#content /}");
+
+        var config = {
+            siteConfig: {
+                sitename: "({shakyShane})",
+                defaultLayout: "shane.html"
+            }
+        };
+
+        crossbow.compileOne(post, config, function (err, out) {
+            var compiled = out.compiled;
+            assert.include(compiled, ":::<p>({shakyShane})</p>");
+            done();
+        });
+    });
     it("Uses nested layouts 2", function (done) {
 
         var post1 = multiline.stripIndent(function () {/*

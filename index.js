@@ -176,7 +176,7 @@ function addLayout(layout, data, cb) {
 
     var current = getFile(utils.getLayoutPath(layout));
 
-    if (yaml.hasFrontMatter(current)) {
+    if (current && yaml.hasFrontMatter(current)) {
 
         // nested layout
         var _data   = yaml.readFrontMatter(current);
@@ -459,14 +459,32 @@ function constructItem(item, data, config, cb) {
         // Just write the cody content without parsing (already done);
         data = compiler.addContent(data, fullContent);
 
-        addLayout(data.page.front.layout, data, function (err, out) {
-            if (err) {
-                cb(err);
+        if (_.isUndefined(data.page.front.layout)) {
+
+            if (config.siteConfig["defaultLayout"]) {
+
+                addLayout(config.siteConfig["defaultLayout"], data, function (err, out) {
+                    if (err) {
+                        cb(err);
+                    } else {
+                        item.compiled = out;
+                        cb(null, item);
+                    }
+                });
             } else {
-                item.compiled = out;
-                cb(null, item);
+                item.compiled = fullContent;
+                return cb(null, item);
             }
-        });
+        } else {
+            addLayout(data.page.front.layout, data, function (err, out) {
+                if (err) {
+                    cb(err);
+                } else {
+                    item.compiled = out;
+                    cb(null, item);
+                }
+            });
+        }
     });
 }
 
