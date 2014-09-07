@@ -182,14 +182,14 @@ function addLayout(layout, data, cb) {
     var layoutFile = getFile(layoutPath);
 
     if (!layoutFile) {
-        log("warn", "layout file: %s does not exist", layoutPath);
+        log("warn", "The layout file %Cred:_%s%R does not exist", layoutPath);
         return cb(null, data.item.content);
     }
 
     if (layoutFile && yaml.hasFrontMatter(layoutFile)) {
 
         // nested layout
-        var _data   = yaml.readFrontMatter(layoutFile);
+        var _data   = yaml.readFrontMatter(layoutFile, data.item, data.item.paths.filePath);
 
         return renderTemplate(_data.content, data, function (err, out) {
 
