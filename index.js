@@ -23,11 +23,29 @@ var Partial     = require("./lib/partial");
 var Cache       = require("./lib/cache");
 
 /**
+ * Global cache
+ * @type {Cache}
+ * @private
+ */
+var cache     = new Cache();
+
+/**
  * Plugins
  */
 var markdown   = require("./lib/plugins/markdown");
 var codeFences = require("./lib/plugins/code-fences");
 var drafts     = require("./lib/plugins/drafts");
+var compiler   = require("./lib/plugins/dust")(getFile, cache, log);
+
+/**
+ * @type {{sections: {when: string, fn: fn}}}
+ */
+var dataTransforms = {
+    "drafts": {
+        when: "before item added",
+        fn: drafts
+    }
+};
 
 /**
  * Load default plugins
@@ -44,11 +62,11 @@ var defaultPlugins = {
 };
 
 /**
- * Global cache
- * @type {Cache}
- * @private
+ * Merge data transforms
  */
-var cache     = new Cache();
+if (compiler["dataTransforms"]) {
+    dataTransforms = _.merge(dataTransforms, compiler["dataTransforms"]);
+}
 
 module.exports.clearCache = function () {
     log("debug", "Clearing all caches, (posts, pages, includes, partials)");
@@ -72,48 +90,6 @@ dust.isDebug = true;
 _.extend(dust.filters, {ucfirst: function(value){ return utils.ucfirst(value); } });
 
 var sections = {};
-
-/**
- * @type {{sections: {when: string, fn: fn}}}
- */
-var dataTransforms = {
-    "drafts": {
-        when: "before item added",
-        fn: drafts
-    },
-    "sections": {
-        when: "before item parsed",
-        fn: function (data) {
-            data.section   = getSectionHelper(sections);
-            data["yield"]  = getYieldHelper(sections);
-            return data;
-        }
-    },
-    "includes": {
-        when: "before item parsed",
-        fn: function (data) {
-            var includeResolver = getCacheResolver(data, "include");
-            data.inc       = includeResolver;
-            data.include   = includeResolver;
-            return data;
-        }
-    },
-    "snippet": {
-        when: "before item parsed",
-        fn: function (data) {
-            data.snippet = getCacheResolver(data, "snippet");
-            return data;
-        }
-    },
-    "highlight": {
-        when: "before item parsed",
-        fn: function (data) {
-            data.highlight = snippetHelper;
-            data.hl        = snippetHelper;
-            return data;
-        }
-    }
-};
 
 /**
  * Default configuration
@@ -168,6 +144,7 @@ function getOneFromFileSytem(filep, transform) {
 
     return content;
 }
+
 /**
  * Get a file from the cache, or alternative look it up on FS from CWD as base
  * @param {String} filePath - {short-key from cache}
@@ -254,18 +231,7 @@ function addLayout(layout, data, cb) {
  * @param cb
  */
 function renderTemplate(template, data, cb) {
-
-    var id = _.uniqueId();
-
-    dust.compileFn(template, id, false);
-
-    dust.render(id, data, function (err, out) {
-        if (err) {
-            cb(err);
-        } else {
-            cb(null, out);
-        }
-    });
+    compiler.renderTemplate(template, data, cb);
 }
 
 /**
@@ -278,44 +244,12 @@ function addPostMeta(data, item) {
 }
 
 /**
- * @param sections
- * @returns {Function}
- */
-function getSectionHelper(sections) {
-    return function (chunk, context, bodies, params) {
-        var output = "";
-        chunk.tap(function (data) {
-            output += data;
-            return "";
-        }).render(bodies.block, context).untap();
-        if (!sections[params.name]) {
-            sections[params.name] = [];
-        }
-        sections[params.name].push(output);
-        return chunk;
-    };
-}
-
-/**
- * @param sections
- * @returns {Function}
- */
-function getYieldHelper(sections) {
-    return function (chunk, context, bodies, params) {
-        var sec = sections[params.name];
-        if (sec && sec.length) {
-            return chunk.write(sec.join(""));
-        }
-        return chunk;
-    };
-}
-/**
  * This set's up the 'data' object with all the info any templates/includes might need.
  * @param {Object} item
  * @param {Object} config - Site config
  * @param {Object} data - Any initial data
  */
-function getData(item, data, config) {
+function addItemData(item, data, config) {
 
     data.item = utils.prepareFrontVars(item, config);
 
@@ -337,27 +271,6 @@ function getData(item, data, config) {
 
     return data;
 }
-
-/**
- * Snippet helper
- * @param chunk
- * @param context
- * @param bodies
- * @param params
- * @returns {*}
- */
-function snippetHelper(chunk, context, bodies, params) {
-    if (bodies.block) {
-        return chunk.capture(bodies.block, context, function (string, chunk) {
-            chunk.end(
-                utils.wrapCode(markdown.highlight(string, params.lang), params.lang)
-            );
-        });
-    }
-    // If there's no block, just return the chunk
-    return chunk;
-}
-
 /**
  *
  * @param out
@@ -390,75 +303,6 @@ function applyDataTransforms(scope, data, config) {
     });
 
     return data;
-}
-
-/**
- * @param filePath
- * @param data
- * @param chunk
- * @param params
- * @returns {*}
- */
-function getSnippetInclude(filePath, data, chunk, params) {
-
-    var file = getFile(filePath, null, false);
-    var lang = params.lang
-        ? params.lang
-        : path.extname(filePath).replace(".", "");
-
-    if (!file) {
-        return chunk.partial( // hack to force a template error
-            filePath,
-            dust.makeBase(data)
-        );
-    } else {
-        return chunk.map(function (chunk) {
-            return renderTemplate(utils.wrapSnippet(file, lang), data, function (err, out) {
-                if (err) {
-                    chunk.end("");
-                } else {
-                    chunk.end(out);
-                }
-            });
-        });
-    }
-}
-
-/**
- * @param path
- * @param data
- * @param chunk
- * @returns {*}
- */
-function getInclude(path, data, chunk) {
-
-    getFile(path);
-
-    var rendered = chunk.partial(
-        path,
-        dust.makeBase(data)
-    );
-
-    return rendered;
-}
-
-/**
- * @returns {Function}
- */
-function getCacheResolver(data, type) {
-
-    return function (chunk, context, bodies, params) {
-
-        params = params || {};
-
-        log("debug", "Looking for %s in the cache.", params.src);
-
-        var sandBox = utils.prepareSandbox(params, data);
-
-        return type === "include"
-            ? getInclude(utils.getIncludePath(params.src), sandBox, chunk)
-            : getSnippetInclude(utils.getSnippetPath(params.src), sandBox, chunk, params);
-    };
 }
 
 /**
@@ -630,7 +474,7 @@ function doPagination(item, data, config, cb) {
  */
 function constructItem(item, data, config, cb) {
 
-    data = getData(item, data, config);
+    data = addItemData(item, data, config);
 
     data = applyDataTransforms("before item parsed", data, config);
 
@@ -695,40 +539,9 @@ function populateCache(key, value, type) {
         partialKey = partial.partialKey;
     }
 
-    addToDust(key, value, shortKey, partialKey);
+    compiler.addToTemplateCache(key, value, shortKey, partialKey);
 
     return cache;
-}
-
-/**
- * Load partials into Dust's internal cache
- * @param key
- * @param value
- * @param shortKey
- * @param partialKey
- */
-function addToDust(key, value, shortKey, partialKey) {
-    if (shortKey) {
-
-        log("debug", "Adding to cache: %s", shortKey);
-
-        dust.loadSource(dust.compile(value, shortKey));
-
-        if (isInclude(shortKey) && partialKey) {
-            dust.loadSource(dust.compile(value, partialKey));
-        }
-
-    } else {
-        log("debug", "Adding to cache: %s", key);
-        dust.loadSource(dust.compile(value, key));
-    }
-}
-
-/**
- *
- */
-function isInclude(path) {
-    return path.match(/^includes/);
 }
 
 /**

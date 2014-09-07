@@ -228,9 +228,9 @@ describe("Processing a file", function(){
             done();
         });
     });
-
     it("Allows highlighting via a helper", function(done) {
 
+        existsStub.returns(true);
         fsStub.returns("<button class=\"button button--{type}\">{params.text}</button>");
 
         var post2 = multiline.stripIndent(function(){/*
@@ -260,7 +260,7 @@ describe("Processing a file", function(){
 
          {#inc src="button" type="primary" text="Sign up"/}
 
-         {#snippet src="function2.js" name="shane"/}
+         {#snippet src="snippets/function2.js" name="shane"/}
 
          {post.date}
 
