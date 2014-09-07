@@ -99,7 +99,11 @@ var defaults = {
     /**
      * Instead of `blog/post1.html,` you can have `blog/post1` instead
      */
-    prettyUrls: true
+    prettyUrls: true,
+    /**
+     * No layouts by default.
+     */
+    defaultLayout: false
 };
 
 /**
@@ -174,12 +178,18 @@ function getFile(filePath, transform, allowEmpty) {
  */
 function addLayout(layout, data, cb) {
 
-    var current = getFile(utils.getLayoutPath(layout));
+    var layoutPath = utils.getLayoutPath(layout);
+    var layoutFile = getFile(layoutPath);
 
-    if (current && yaml.hasFrontMatter(current)) {
+    if (!layoutFile) {
+        log("warn", "layout file: %s does not exist", layoutPath);
+        return cb(null, data.item.content);
+    }
+
+    if (layoutFile && yaml.hasFrontMatter(layoutFile)) {
 
         // nested layout
-        var _data   = yaml.readFrontMatter(current);
+        var _data   = yaml.readFrontMatter(layoutFile);
 
         return renderTemplate(_data.content, data, function (err, out) {
 
@@ -189,7 +199,7 @@ function addLayout(layout, data, cb) {
         });
     }
 
-    return renderTemplate(current, data, cb);
+    return renderTemplate(layoutFile, data, cb);
 }
 
 /**
@@ -633,3 +643,9 @@ module.exports.getCache      = getCache;
 module.exports.addPost       = addPost;
 module.exports.addPage       = addPage;
 module.exports.registerTransform = registerTransform;
+
+/**
+ * @type {getFile}
+ * @private
+ */
+module.exports._getFile = getFile;
