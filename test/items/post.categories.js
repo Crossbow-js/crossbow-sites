@@ -10,7 +10,7 @@ var post1 = multiline.stripIndent(function(){/*
 layout: post-test
 title: "Post 1"
 date: 2014-01-01
-categories: javascript
+categories: javascript, node-js
 ---
 
 {#post.related}
@@ -22,7 +22,7 @@ var post2 = multiline.stripIndent(function(){/*
 layout: post-test
 title: "Post 2"
 date: 2014-01-01
-categories: javascript
+categories: javascript, node-js
 ---
 
 Post 2
@@ -44,8 +44,9 @@ describe("Creating a Post that knows about others in the same category", functio
         var postItem2 = crossbow.addPost("_posts/post2.md", post2);
 
         crossbow.compileOne(postItem, {}, function (err, out) {
+            console.log(out.compiled);
             assert.include(out.compiled, "<p>Post 2</p>");
-            assert.notInclude(out.compiled, "<p>Post 1</p>");
+            assert.notInclude(out.compiled, "<p>Post 2</p>\n<p>Post 2</p>");
         });
     });
 });
