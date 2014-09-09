@@ -9,7 +9,7 @@ describe("@inc helper", function(){
         crossbow.clearCache();
     });
 
-    it("Can do simple includes", function(done) {
+    it("Can do simple includes with file extension", function(done) {
 
         var index = multiline.stripIndent(function(){/*
 
@@ -26,52 +26,15 @@ describe("@inc helper", function(){
             done();
         });
     });
-    it("Can do simple includes with params", function(done) {
+    it("Can do simple includes with NO file extension", function(done) {
 
         var index = multiline.stripIndent(function(){/*
 
-         Button: {@inc src="button.html" text="Cancel" /}
+         Button: {@inc src="button" /}
 
          */});
 
-        crossbow.populateCache("_includes/button.html", "<button>{text}</button>");
-
-        var page = crossbow.addPage("index.html", index, {});
-
-        crossbow.compileOne(page, {siteConfig:{}}, function (err, out) {
-            assert.include(out.compiled, "<button>Cancel</button>");
-            done();
-        });
-    });
-    it("Can do simple includes with interpolated params in config", function(done) {
-
-        var index = multiline.stripIndent(function(){/*
-
-         Button: {@inc src="button.html" text="{site.text}" /}
-
-         */});
-
-        crossbow.populateCache("_includes/button.html", "<button>{text}</button>");
-
-        var page = crossbow.addPage("index.html", index, {});
-
-        crossbow.compileOne(page, {siteConfig:{text:"Cancel"}}, function (err, out) {
-            assert.include(out.compiled, "<button>Cancel</button>");
-            done();
-        });
-    });
-    it("Can do simple includes with interpolated params front Front Matter", function(done) {
-
-        var index = multiline.stripIndent(function(){/*
-         ---
-         text: "Sign up"
-         ---
-
-         Button: {@inc src="button.html" text="{page.text}" /}
-
-         */});
-
-        crossbow.populateCache("_includes/button.html", "<button>{text}</button>");
+        crossbow.populateCache("_includes/button.html", "<button>Sign up</button>");
 
         var page = crossbow.addPage("index.html", index, {});
 
@@ -80,22 +43,57 @@ describe("@inc helper", function(){
             done();
         });
     });
-    it("Can do simple includes with a filter", function(done) {
+    it("Can do simple includes in nested dirs", function(done) {
 
         var index = multiline.stripIndent(function(){/*
 
-         {@inc src="button" text="Unfiltered"/}
-         {@inc src="button" text="Filtered" filter="h"/}
+         Button: {@inc src="elems/button" /}
 
          */});
 
-        crossbow.populateCache("_includes/button.html", "<button>{text}</button>");
+        crossbow.populateCache("_includes/elems/button.html", "<button>Sign up</button>");
 
         var page = crossbow.addPage("index.html", index, {});
 
         crossbow.compileOne(page, {siteConfig:{}}, function (err, out) {
-            assert.include(out.compiled, "<button>Unfiltered</button>");
-            assert.include(out.compiled, "&lt;button&gt;Filtered&lt;/button&gt;");
+            assert.include(out.compiled, "<button>Sign up</button>");
+            done();
+        });
+    });
+    it("Can do simple includes in nested dirs (2)", function(done) {
+
+        var index = multiline.stripIndent(function(){/*
+
+         Button: {@inc src="elems/1/2/3/4/5/button" /}
+
+         */});
+
+        crossbow.populateCache("_includes/elems/1/2/3/4/5/button.html", "<button>Sign up</button>");
+
+        var page = crossbow.addPage("index.html", index, {});
+
+        crossbow.compileOne(page, {siteConfig:{}}, function (err, out) {
+            assert.include(out.compiled, "<button>Sign up</button>");
+            done();
+        });
+    });
+    it("Can do simple includes in separate DIRS", function(done) {
+
+        var index = multiline.stripIndent(function(){/*
+
+         Button: {@inc src="elems/button" /}
+         Button: {@inc src="button" /}
+
+         */});
+
+        crossbow.populateCache("_includes/elems/button.html", "<button>Sub Dir</button>");
+        crossbow.populateCache("_includes/button.html", "<button>Top level</button>");
+
+        var page = crossbow.addPage("index.html", index, {});
+
+        crossbow.compileOne(page, {siteConfig:{}}, function (err, out) {
+            assert.include(out.compiled, "<button>Sub Dir</button>");
+            assert.include(out.compiled, "<button>Top level</button>");
             done();
         });
     });
