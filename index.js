@@ -1,8 +1,10 @@
 /**
  * Core modules
  */
-var fs = require("fs");
-var path = require("path");
+var fs      = require("fs");
+var path    = require("path");
+var events  = require("events");
+var emitter = new events.EventEmitter();
 
 /**
  * 3rd Party Modules
@@ -15,12 +17,14 @@ var _           = require("lodash");
  */
 var utils       = require("./lib/utils");
 var yaml        = require("./lib/yaml");
-var log         = require("./lib/logger");
+var logger      = require("./lib/logger")(emitter);
 var Post        = require("./lib/post");
 var Page        = require("./lib/page");
 var Paginator   = require("./lib/paginator");
 var Partial     = require("./lib/partial");
 var Cache       = require("./lib/cache");
+
+
 
 /**
  * Global cache
@@ -35,7 +39,7 @@ var cache     = new Cache();
 var markdown   = require("./lib/plugins/markdown");
 var codeFences = require("./lib/plugins/code-fences");
 var drafts     = require("./lib/plugins/drafts");
-var compiler   = require("./lib/plugins/dust")(getFile, cache, log);
+var compiler   = require("./lib/plugins/dust")(getFile, emitter);
 
 /**
  * Default Data Transforms
@@ -132,7 +136,7 @@ function getOneFromFileSystem(filepath, transform) {
  */
 function getFile(filePath, transform, allowEmpty) {
 
-    log("debug", "Getting file: %s", filePath);
+    logger.log("debug", "Getting file: %s", filePath);
 
     if (_.isUndefined(allowEmpty)) {
         allowEmpty = true;
@@ -141,14 +145,14 @@ function getFile(filePath, transform, allowEmpty) {
     var content;
 
     if (content = cache.find(filePath, "partials")) {
-        log("debug", "%Cgreen:Cache access%R for: %s", filePath);
+        logger.log("debug", "%Cgreen:Cache access%R for: %s", filePath);
         return content.content;
     } else {
-        log("debug", "Not found in cache: %s", filePath);
+        logger.log("debug", "Not found in cache: %s", filePath);
     }
 
     try {
-        log("debug", "%Cyellow:File System access%R for: %s", filePath);
+        logger.log("debug", "%Cyellow:File System access%R for: %s", filePath);
         var filep = utils.makeFsPath(filePath);
         if (!fs.existsSync(filep)) {
             filep = utils.makeFsPath(utils.getIncludePath(filePath));
@@ -161,7 +165,7 @@ function getFile(filePath, transform, allowEmpty) {
             return getOneFromFileSystem(filep, transform);
         }
     } catch (e) {
-        log("warn", "Could not access:%Cred: %s", e.path);
+        logger.log("warn", "Could not access:%Cred: %s", e.path);
         return allowEmpty
             ? ""
             : false;
@@ -182,7 +186,7 @@ function addLayout(layout, data, cb) {
     var layoutFile = getFile(layoutPath);
 
     if (!layoutFile) {
-        log("warn", "The layout file %Cred:_%s%R does not exist", layoutPath);
+        logger.log("warn", "The layout file %Cred:_%s%R does not exist", layoutPath);
         return cb(null, data.item.content);
     }
 
@@ -617,11 +621,12 @@ function registerTransform (fn) {
  * Cache/Log/Utils
  * @type {*|exports}
  */
-module.exports.log = log;
+module.exports.log = logger.log;
+module.exports.logger = logger;
 module.exports.utils = utils;
-module.exports.setLogLevel = log.setLogLevel;
 module.exports.clearCache = function () {
-    log("debug", "Clearing all caches, (posts, pages, includes, partials)");
+    logger.log("debug", "Clearing all caches, (posts, pages, includes, partials)");
+    emitter.removeAllListeners();
     cache.reset();
 };
 
@@ -643,6 +648,7 @@ module.exports.getCache      = getCache;
 module.exports.addPost       = addPost;
 module.exports.addPage       = addPage;
 module.exports.registerTransform = registerTransform;
+module.exports.emitter       = emitter;
 
 /**
  * @type {getFile}
