@@ -97,4 +97,31 @@ describe("@inc helper", function(){
             done();
         });
     });
+    it("Can do simple includes in loops", function(done) {
+
+        var index = multiline.stripIndent(function(){/*
+
+         {#site.names}
+            {@inc src="button" name=. prefix="btn" /}{@sep}<br/>{/sep}{/site.names}
+
+         */});
+
+        crossbow.populateCache("_includes/button.html", "<button>{prefix}-{name}</button>");
+
+        var page = crossbow.addPage("index.html", index, {});
+
+        var config = {
+            siteConfig: {
+                names: ['shane', 'kittie'],
+                title: "oh yeah"
+            }
+        };
+
+        crossbow.compileOne(page, config, function (err, out) {
+            assert.include(out.compiled, "<button>btn-shane</button><br/>");
+            assert.include(out.compiled, "<button>btn-kittie</button>");
+            assert.notInclude(out.compiled, "<button>btn-kittie</button><br/>");
+            done();
+        });
+    });
 });

@@ -1,24 +1,15 @@
-var dust = require("dustjs-helpers");
+var Handbars  = require("handlebars");
+var multiline = require("multiline");
 
-var fs   = require("fs");
+var string = multiline(function () {/*
+<ul>
+    <li>Link</li>
+    {{> link_to}}
+</ul>
+*/});
 
-var count = 0;
-
-dust.optimizers.format = function (ctx, node) {
-
-    count = count += 1;
-
-};
-
-dust.loadSource(dust.compile(fs.readFileSync("./_fixtures/syntax-2.md", "utf-8"), "test"));
-
-dust.render("test", {}, function (err, out) {
-    console.log(count);
-    if (err) {
-        console.log(err);
-    } else {
-        fs.writeFileSync("./_fixtures/syntax-2.html", out);
-//        console.log(out);
-//        cb(null, out);
-    }
+Handbars.registerPartial('link_to', function() {
+    return "<li><a href='/posts'>Just a link</a></li>";
 });
+
+console.log(Handbars.compile(string)({}));
