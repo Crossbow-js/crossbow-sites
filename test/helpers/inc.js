@@ -1,7 +1,9 @@
-var _             = require("lodash");
-var multiline     = require("multiline");
-var assert        = require("chai").assert;
-var crossbow = require("../../index");
+var _           = require("lodash");
+var multiline   = require("multiline");
+var sinon       = require("sinon");
+var fs          = require("fs");
+var assert      = require("chai").assert;
+var crossbow    = require("../../index");
 
 describe("@inc helper", function(){
 
@@ -94,6 +96,33 @@ describe("@inc helper", function(){
         crossbow.compileOne(page, {siteConfig:{}}, function (err, out) {
             assert.include(out.compiled, "<button>Sub Dir</button>");
             assert.include(out.compiled, "<button>Top level</button>");
+            done();
+        });
+    });
+    it("Can do simple includes in other DIRS", function(done) {
+
+        var existsStub = sinon.stub(fs, "existsSync");
+        var fsStub     = sinon.stub(fs, "readFileSync").returns("hi");
+        existsStub.withArgs("_scss/main.scss").returns(true);
+
+
+        var index = multiline.stripIndent(function(){/*
+
+         {@inc src="_scss/main.scss" /}
+
+         */});
+
+        crossbow.emitter.on("log", function (err) {
+            console.log(err);
+        });
+
+        var page = crossbow.addPage("index.html", index, {});
+
+        crossbow.compileOne(page, {}, function (err, out) {
+
+            existsStub.reset();
+            fsStub.restore();
+            assert.include(out.compiled, "hi");
             done();
         });
     });

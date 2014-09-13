@@ -24,8 +24,6 @@ var Paginator   = require("./lib/paginator");
 var Partial     = require("./lib/partial");
 var Cache       = require("./lib/cache");
 
-
-
 /**
  * Global cache
  * @type {Cache}
@@ -107,7 +105,11 @@ var defaults = {
     /**
      * No layouts by default.
      */
-    defaultLayout: false
+    defaultLayout: false,
+    /**
+     * Initial Site config
+     */
+    siteConfig: {}
 };
 
 /**
@@ -153,13 +155,27 @@ function getFile(filePath, transform, allowEmpty) {
 
     try {
         logger.log("debug", "%Cyellow:File System access%R for: %s", filePath);
+
         var filep = utils.makeFsPath(filePath);
+
         if (!fs.existsSync(filep)) {
-            filep = utils.makeFsPath(utils.getIncludePath(filePath));
-            if (fs.existsSync(filep)) {
-                return getOneFromFileSystem(filep, transform);
+
+            // try relative path
+            if (fs.existsSync(filePath)) {
+
+                return getOneFromFileSystem(filePath, transform);
+
             } else {
-                     return false;
+
+                filep = utils.makeFsPath(utils.getIncludePath(filePath));
+
+                if (fs.existsSync(filep)) {
+
+                    return getOneFromFileSystem(filePath, transform);
+
+                } else {
+                    return false;
+                }
             }
         } else {
             return getOneFromFileSystem(filep, transform);
