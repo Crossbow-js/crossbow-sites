@@ -119,15 +119,19 @@ var defaults = {
  */
 function getOneFromFileSystem(filepath, transform) {
 
-    var content = fs.readFileSync(filepath, "utf-8");
+    var file = fs.readFileSync(filepath, "utf-8");
+    file = _.isFunction(transform) ? transform(file) : file;
 
-    populateCache(filepath,
-        _.isFunction(transform)
-            ? transform(content)
-            : content
-    );
+    var isdata = path.extname(filepath).match(/(yml|json)$/);
 
-    return content;
+    if (isdata) {
+        var data = populateCache(filepath, file, "data").find(filepath, "data");
+        return data;
+    }
+
+    populateCache(filepath, file);
+
+    return file;
 }
 
 /**
@@ -146,9 +150,21 @@ function getFile(filePath, transform, allowEmpty) {
 
     var content;
 
-    if (content = cache.find(filePath, "partials")) {
+    var others = ["partials", "data"];
+
+    _.each(others, function (other) {
+
+        var match = cache.find(filePath, other);
+
+        if (match) {
+            content = match;
+            return false;
+        }
+    });
+
+    if (content) {
         logger.log("debug", "{green:Cache access} for: %s", filePath);
-        return content.content;
+        return content.content || content;
     } else {
         logger.log("debug", "Not found in cache: %s", filePath);
     }
