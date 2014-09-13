@@ -147,14 +147,14 @@ function getFile(filePath, transform, allowEmpty) {
     var content;
 
     if (content = cache.find(filePath, "partials")) {
-        logger.log("debug", "%Cgreen:Cache access%R for: %s", filePath);
+        logger.log("debug", "{green:Cache access} for: %s", filePath);
         return content.content;
     } else {
         logger.log("debug", "Not found in cache: %s", filePath);
     }
 
     try {
-        logger.log("debug", "%Cyellow:File System access%R for: %s", filePath);
+        logger.log("debug", "{yellow:File System access} for: %s", filePath);
 
         var filep = utils.makeFsPath(filePath);
 
@@ -181,7 +181,7 @@ function getFile(filePath, transform, allowEmpty) {
             return getOneFromFileSystem(filep, transform);
         }
     } catch (e) {
-        logger.log("warn", "Could not access:%Cred: %s", e.path);
+        logger.log("warn", "Could not access:{red: %s", e.path);
         return allowEmpty
             ? ""
             : false;
@@ -202,7 +202,7 @@ function addLayout(layout, data, cb) {
     var layoutFile = getFile(layoutPath);
 
     if (!layoutFile) {
-        logger.log("warn", "The layout file %Cred:_%s%R does not exist", layoutPath);
+        logger.log("warn", "The layout file {red:_%s} does not exist", layoutPath);
         return cb(null, data.item.content);
     }
 
