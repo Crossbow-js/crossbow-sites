@@ -13,11 +13,16 @@ var merge       = require("opt-merger").merge;
 var _           = require("lodash");
 
 /**
+ * @type {exports}
+ */
+var logger      = require("./lib/logger")(emitter);
+var log         = logger.log;
+
+/**
  * Lib
  */
 var utils       = require("./lib/utils");
 var yaml        = require("./lib/yaml");
-var logger      = require("./lib/logger")(emitter);
 var Post        = require("./lib/post");
 var Page        = require("./lib/page");
 var Paginator   = require("./lib/paginator");
@@ -142,7 +147,7 @@ function getOneFromFileSystem(filepath, transform) {
  */
 function getFile(filePath, transform, allowEmpty) {
 
-    logger.log("debug", "Getting file: %s", filePath);
+    log("debug", "Getting file: %s", filePath);
 
     if (_.isUndefined(allowEmpty)) {
         allowEmpty = true;
@@ -163,14 +168,14 @@ function getFile(filePath, transform, allowEmpty) {
     });
 
     if (content) {
-        logger.log("debug", "{green:Cache access} for: %s", filePath);
+        log("debug", "{green:Cache access} for: %s", filePath);
         return content.content || content;
     } else {
-        logger.log("debug", "Not found in cache: %s", filePath);
+        log("debug", "Not found in cache: %s", filePath);
     }
 
     try {
-        logger.log("debug", "{yellow:File System access} for: %s", filePath);
+        log("debug", "{yellow:File System access} for: %s", filePath);
 
         var filep = utils.makeFsPath(filePath);
 
@@ -197,7 +202,7 @@ function getFile(filePath, transform, allowEmpty) {
             return getOneFromFileSystem(filep, transform);
         }
     } catch (e) {
-        logger.log("warn", "Could not access:{red: %s", e.path);
+        log("warn", "Could not access:{red: %s", e.path);
         return allowEmpty
             ? ""
             : false;
@@ -218,7 +223,7 @@ function addLayout(layout, data, cb) {
     var layoutFile = getFile(layoutPath);
 
     if (!layoutFile) {
-        logger.log("warn", "The layout file {red:_%s} does not exist", layoutPath);
+        log("warn", "The layout file {red:_%s} does not exist", layoutPath);
         return cb(null, data.item.content);
     }
 
@@ -653,11 +658,11 @@ function registerTransform (fn) {
  * Cache/Log/Utils
  * @type {*|exports}
  */
-module.exports.log = logger.log;
+module.exports.log = log;
 module.exports.logger = logger;
 module.exports.utils = utils;
 module.exports.clearCache = function () {
-    logger.log("debug", "Clearing all caches, (posts, pages, includes, partials)");
+    log("debug", "Clearing all caches, (posts, pages, includes, partials)");
     emitter.removeAllListeners();
     cache.reset();
 };

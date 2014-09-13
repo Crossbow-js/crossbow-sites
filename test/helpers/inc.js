@@ -113,7 +113,7 @@ describe("@inc helper", function(){
          */});
 
         crossbow.emitter.on("log", function (err) {
-            console.log(err);
+//            console.log(err);
         });
 
         var page = crossbow.addPage("index.html", index, {});

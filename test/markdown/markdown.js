@@ -169,7 +169,6 @@ describe("Processing a Markdown file", function(){
         // NO POSTS ADDED
         crossbow.addPost("_posts/index.markdown", index);
         crossbow.compileOne("_posts/index.markdown", {}, function (err, out) {
-            console.log(out.compiled);
             var compiled = out.compiled;
             assert.include(compiled, "<code class=\"js\">");
             done();
