@@ -13,6 +13,7 @@ var merge       = require("opt-merger").merge;
 var _           = require("lodash");
 
 /**
+ * Logging
  * @type {exports}
  */
 var logger      = require("./lib/logger")(emitter);
@@ -27,46 +28,34 @@ var Post        = require("./lib/post");
 var Page        = require("./lib/page");
 var Paginator   = require("./lib/paginator");
 var Partial     = require("./lib/partial");
-var Cache       = require("./lib/cache");
 
 /**
  * Global cache
  * @type {Cache}
  * @private
  */
-var cache     = new Cache();
+var Cache       = require("./lib/cache");
+var cache       = new Cache(populateCache);
 
 /**
- * Plugins
+ * Get a file from cache/FS - ALL methods/plugins use this.
  */
-var markdown   = require("./lib/plugins/markdown");
-var codeFences = require("./lib/plugins/code-fences");
-var drafts     = require("./lib/plugins/drafts");
-var compiler   = require("./lib/plugins/dust")(getFile, emitter);
+var getFile           = require("./lib/file")(cache);
+
+/**
+ * Template compiler
+ */
+var compiler          = require("./lib/plugins/dust")(getFile, emitter);
 
 /**
  * Default Data Transforms
  */
-var dataTransforms = {
-    "drafts": {
-        when: "before item added",
-        fn: drafts
-    }
-};
+var dataTransforms    = require("./lib/plugins/dataTransforms")(cache);
 
 /**
- * Default Content transforms
+ * Default content Transforms
  */
-var contentTransforms = {
-    "markdown": {
-        when: "before item render",
-        fn: markdown
-    },
-    "code fences": {
-        when: "before item parsed",
-        fn: codeFences
-    }
-};
+var contentTransforms = require("./lib/plugins/contentTransforms")(cache);
 
 /**
  * Merge data transforms
@@ -118,98 +107,6 @@ var defaults = {
 };
 
 /**
- * @param filepath
- * @param transform
- * @returns {Buffer|string|*}
- */
-function getOneFromFileSystem(filepath, transform) {
-
-    var file = fs.readFileSync(filepath, "utf-8");
-    file = _.isFunction(transform) ? transform(file) : file;
-
-    var isdata = path.extname(filepath).match(/(yml|json)$/);
-
-    if (isdata) {
-        var data = populateCache(filepath, file, "data").find(filepath, "data");
-        return data;
-    }
-
-    populateCache(filepath, file);
-
-    return file;
-}
-
-/**
- * Get a file from the cache, or alternative look it up on FS from CWD as base
- * @param {String} filePath - {short-key from cache}
- * @param {Function} [transform]
- * @param {Boolean} [allowEmpty] - should file look ups be allowed to return an empty string?
- */
-function getFile(filePath, transform, allowEmpty) {
-
-    log("debug", "Getting file: %s", filePath);
-
-    if (_.isUndefined(allowEmpty)) {
-        allowEmpty = true;
-    }
-
-    var content;
-
-    var others = ["partials", "data"];
-
-    _.each(others, function (other) {
-
-        var match = cache.find(filePath, other);
-
-        if (match) {
-            content = match;
-            return false;
-        }
-    });
-
-    if (content) {
-        log("debug", "{green:Cache access} for: %s", filePath);
-        return content.content || content;
-    } else {
-        log("debug", "Not found in cache: %s", filePath);
-    }
-
-    try {
-        log("debug", "{yellow:File System access} for: %s", filePath);
-
-        var filep = utils.makeFsPath(filePath);
-
-        if (!fs.existsSync(filep)) {
-
-            // try relative path
-            if (fs.existsSync(filePath)) {
-
-                return getOneFromFileSystem(filePath, transform);
-
-            } else {
-
-                filep = utils.makeFsPath(utils.getIncludePath(filePath));
-
-                if (fs.existsSync(filep)) {
-
-                    return getOneFromFileSystem(filePath, transform);
-
-                } else {
-                    return false;
-                }
-            }
-        } else {
-            return getOneFromFileSystem(filep, transform);
-        }
-    } catch (e) {
-        log("warn", "Could not access:{red: %s", e.path);
-        return allowEmpty
-            ? ""
-            : false;
-    }
-}
-
-/**
  * Allow layouts to have layouts.
  * Recursively render layout from the inside out (allows any number of nested layouts until the current
  * one does not specify a layout)
@@ -252,45 +149,8 @@ function renderTemplate(template, data, cb) {
     compiler.renderTemplate(template, data, cb);
 }
 
-/**
- * @param data
- * @param item
- */
-function addPostMeta(data, item) {
-    data.next = cache.nextPost(item);
-    data.prev = cache.prevPost(item);
-}
 
 /**
- * This set's up the 'data' object with all the info any templates/includes might need.
- * @param {Object} item
- * @param {Object} config - Site config
- * @param {Object} data - Any initial data
- */
-function addItemData(item, data, config) {
-
-    data.item = utils.prepareFrontVars(item, config);
-
-    // Add related posts
-    data.item.related  = utils.addRelated(item.categories, item.key, cache.posts());
-
-    data.page  = data.item;
-    data.post  = data.item;
-    data.posts = utils.prepareFrontVars(cache.posts(), config);
-    data.pages = cache.pages();
-
-    // Site Data
-    data.site.data = cache.convertKeys("data", {});
-
-    // Add meta data if it's a post
-    if (item.type === "post") {
-        addPostMeta(data.post, item);
-    }
-
-    return data;
-}
-/**
- *
  * @param out
  * @param config
  * @param data
@@ -306,17 +166,19 @@ function applyContentTransforms(scope, out, data, config) {
 
     return out;
 }
+
 /**
  * @param scope
  * @param item
  * @param config
+ * @param data
  * @returns {*}
  */
-function applyDataTransforms(scope, data, config) {
+function applyDataTransforms(scope, item, data, config) {
 
     _.each(dataTransforms, function (plugin) {
         if (plugin.when === scope) {
-            data = plugin.fn(data, config);
+            data = plugin.fn(item || {}, data || {}, config);
         }
     });
 
@@ -406,7 +268,7 @@ function compileMany(items, config, cb) {
     var compiled = [];
     var count    = 0;
 
-    items.forEach(function (post, i) {
+    items.forEach(function (post) {
         compileOne(post, config, function (err, out) {
             if (err) {
                 cb(err);
@@ -493,48 +355,70 @@ function doPagination(item, data, config, cb) {
  */
 function constructItem(item, data, config, cb) {
 
-    data = addItemData(item, data, config);
+    data = applyDataTransforms("before item parsed", item, data, config);
 
-    data = applyDataTransforms("before item parsed", data, config);
+    renderTemplate(
+        applyContentTransforms("before item parsed", item.content, data, config),
+        data,
+        handleSuccess.bind(null, item, data, config, cb));
+}
 
-    var escapedContent = applyContentTransforms("before item parsed", item.content, data, config);
+/**
+ * @param err
+ * @param out
+ * @param data
+ * @param item
+ * @param config
+ * @param cb
+ * @returns {*}
+ */
+function handleSuccess(item, data, config, cb, err, out) {
 
-    renderTemplate(escapedContent, data, function (err, out) {
+    if (err) {
+        return cb(err);
+    }
 
+    var fullContent = applyContentTransforms("before item render", out, data, config);
+
+    // Just write the body content without parsing (already done);
+    data = compiler.addContent(data, fullContent);
+
+    var layout = getLayoutName(data.page.front.layout, config);
+
+    if (layout) {
+        return appendLayout(layout, item, data, cb);
+    }
+
+    item.compiled = fullContent;
+
+    return cb(null, item);
+}
+
+/**
+ * @param layout
+ * @param config
+ * @returns {*}
+ */
+function getLayoutName(layout, config) {
+    if (_.isUndefined(layout)) {
+        return config.siteConfig["defaultLayout"];
+    }
+    return layout;
+}
+
+/**
+ * @param layout
+ * @param item
+ * @param data
+ * @param cb
+ */
+function appendLayout(layout, item, data, cb) {
+    addLayout(layout, data, function (err, out) {
         if (err) {
-            return cb(err);
-        }
-
-        var fullContent = applyContentTransforms("before item render", out, data, config);
-
-        // Just write the cody content without parsing (already done);
-        data = compiler.addContent(data, fullContent);
-
-        if (_.isUndefined(data.page.front.layout)) {
-
-            if (config.siteConfig["defaultLayout"]) {
-
-                addLayout(config.siteConfig["defaultLayout"], data, function (err, out) {
-                    if (err) {
-                        cb(err);
-                    } else {
-                        item.compiled = out;
-                        cb(null, item);
-                    }
-                });
-            } else {
-                item.compiled = fullContent;
-                return cb(null, item);
-            }
+            cb(err);
         } else {
-            addLayout(data.page.front.layout, data, function (err, out) {
-                if (err) {
-                    cb(err);
-                } else {
-                    item.compiled = out;
-                    cb(null, item);
-                }
-            });
+            item.compiled = out;
+            cb(null, item);
         }
     });
 }
@@ -611,7 +495,7 @@ function addPost(key, string, config) {
      */
     post = new Post(key, string, config);
 
-    var filtered = applyDataTransforms("before item added", post, config);
+    var filtered = applyDataTransforms("before item added", post, {}, config);
 
     if (filtered) {
         cache.addPost(filtered);
@@ -658,11 +542,11 @@ function registerTransform (fn) {
  * Cache/Log/Utils
  * @type {*|exports}
  */
-module.exports.log = log;
+module.exports.log = logger.log;
 module.exports.logger = logger;
 module.exports.utils = utils;
 module.exports.clearCache = function () {
-    log("debug", "Clearing all caches, (posts, pages, includes, partials)");
+    logger.log("debug", "Clearing all caches, (posts, pages, includes, partials)");
     emitter.removeAllListeners();
     cache.reset();
 };
