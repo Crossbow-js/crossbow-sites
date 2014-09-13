@@ -16,7 +16,7 @@ describe("@data helper", function(){
         var index = multiline.stripIndent(function(){/*
         Before:
         {@data src="data/author.yml"}
-        {name} - {site.title}
+        {author.name} - {site.title}
         {/data}
         :After
 
@@ -34,6 +34,30 @@ describe("@data helper", function(){
 
         crossbow.compileOne(page, {siteConfig:{title: "shakyshane"}}, function (err, out) {
             assert.include(out.compiled, "Shane Osbourne - shakyshane");
+            done();
+        });
+    });
+    it("can use an external data file with scope set to file basename", function(done) {
+
+        var index = multiline.stripIndent(function(){/*
+         Before:
+         {@data src="data/author.yml"}
+         {author.name}
+         {/data}
+         :After
+
+         */});
+
+        var data = multiline.stripIndent(function(){/*
+         name: Shane Osbourne
+         */});
+
+        var page = crossbow.addPage("index.html", index, {});
+
+        crossbow.populateCache("data/author.yml", data, "data");
+
+        crossbow.compileOne(page, {siteConfig:{title: "shakyshane"}}, function (err, out) {
+            assert.include(out.compiled, "Shane Osbourne");
             done();
         });
     });
