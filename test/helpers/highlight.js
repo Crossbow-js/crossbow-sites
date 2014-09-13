@@ -31,6 +31,41 @@ describe("@highlight + @hl", function(){
             done();
         });
     });
+    it("escapes output when no lang given", function(done){
+
+        var page1 = multiline.stripIndent(function(){/*
+
+         {@hl}
+         <button></button>
+         {/hl}
+
+         */});
+
+        crossbow.addPage("projects/about-us.html", page1);
+
+        crossbow.compileOne("projects/about-us.html", {siteConfig:{}}, function (err, out) {
+            assert.include(out.compiled, "<pre><code>&lt;button&gt;&lt;/button&gt;");
+            done();
+        });
+    });
+    it("escapes output from include inside block", function(done){
+
+        var page1 = multiline.stripIndent(function(){/*
+
+         {@hl}
+         {@inc src="button.html" /}
+         {/hl}
+
+         */});
+
+        crossbow.addPage("projects/about-us.html", page1);
+        crossbow.populateCache("button.html", "<button></button>");
+
+        crossbow.compileOne("projects/about-us.html", {siteConfig:{}}, function (err, out) {
+            assert.include(out.compiled, "<pre><code>&lt;button&gt;&lt;/button&gt;");
+            done();
+        });
+    });
     it("highlights a block of code using lang param", function(done){
 
         var page1 = multiline.stripIndent(function(){/*
@@ -48,7 +83,7 @@ describe("@highlight + @hl", function(){
             done();
         });
     });
-    it("just wraps block when `lang` not given", function(done){
+    it("just wraps block (and escapes) when `lang` not given", function(done){
 
         var page1 = multiline.stripIndent(function(){/*
 
@@ -61,7 +96,7 @@ describe("@highlight + @hl", function(){
         crossbow.addPage("projects/about-us.html", page1);
 
         crossbow.compileOne("projects/about-us.html", {siteConfig:{}}, function (err, out) {
-            assert.include(out.compiled, "<pre><code>var shane = \"awesome\";");
+            assert.include(out.compiled, "<pre><code>var shane = &quot;awesome&quot;;");
             done();
         });
     });
