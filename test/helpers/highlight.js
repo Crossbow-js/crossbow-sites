@@ -48,12 +48,12 @@ describe("@highlight + @hl", function(){
             done();
         });
     });
-    it("escapes output from include inside block", function(done){
+    it("ignores `{` tag inside highlights", function(done){
 
         var page1 = multiline.stripIndent(function(){/*
 
          {@hl}
-         {@inc src="button.html" /}
+         {hi}{@hit}
          {/hl}
 
          */});
@@ -62,7 +62,7 @@ describe("@highlight + @hl", function(){
         crossbow.populateCache("button.html", "<button></button>");
 
         crossbow.compileOne("projects/about-us.html", {siteConfig:{}}, function (err, out) {
-            assert.include(out.compiled, "<pre><code>&lt;button&gt;&lt;/button&gt;");
+            assert.include(out.compiled, "{hi}{@hit}");
             done();
         });
     });
