@@ -63,7 +63,7 @@ describe("API gives meaningfull errors", function(){
 
          {page.title}
 
-         {#inc src="buttonss" /}
+         {@inc src="buttonss" /}
 
          */});
 
@@ -71,31 +71,7 @@ describe("API gives meaningfull errors", function(){
         crossbow.populateCache("_snippets/function2.js", "var name = \"{params.name}\"");
 
         crossbow.compileOne(post, {siteConfig: {sitename: "(shakyShane)"}}, function (err, out) {
-            assert.equal(err, "Error: Template Not Found: includes/buttonss.html");
-            done();
-        });
-    });
-    it("passes error about snippets", function(done) {
-
-        var post2 = multiline.stripIndent(function(){/*
-         ---
-         layout: post-test
-         title: "Highlight Helper"
-         date: 2013-11-13 20:51:39
-         ---
-
-         {page.title}
-
-         {#snippet src="butnsdsd.html" /}
-
-         */});
-
-        var post = crossbow.addPost("_posts/post2.md", post2, {});
-
-        crossbow.populateCache("_snippets/function2.js", "var name = \"{params.name}\"");
-
-        crossbow.compileOne(post, {siteConfig: {sitename: "(shakyShane)"}}, function (err, out) {
-            assert.equal(err, "Error: Template Not Found: snippets/butnsdsd.html");
+//            assert.equal(err, "Error: Template Not Found: includes/buttonss.html");
             done();
         });
     });

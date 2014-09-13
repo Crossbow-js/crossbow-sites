@@ -24,7 +24,7 @@ var postLayout = multiline.stripIndent(function(){/*
 var pageLayout = multiline.stripIndent(function(){/*
 <!DOCTYPE html>
 <html>
-{#inc src="head.html" /}
+{@inc src="head.html" /}
 <body class="page">
 {#content /}
 </body>
@@ -161,7 +161,7 @@ describe("Processing a Markdown file", function(){
          date: 2014-04-10
          ---
 
-         {#snippet src="function.js" lang=page.lang/}
+         {@hl src="function.js" lang=page.lang /}
 
          */});
 
@@ -169,8 +169,9 @@ describe("Processing a Markdown file", function(){
         // NO POSTS ADDED
         crossbow.addPost("_posts/index.markdown", index);
         crossbow.compileOne("_posts/index.markdown", {}, function (err, out) {
+            console.log(out.compiled);
             var compiled = out.compiled;
-            assert.include(compiled, "<code class=\"lang-js\">");
+            assert.include(compiled, "<code class=\"js\">");
             done();
         });
     });

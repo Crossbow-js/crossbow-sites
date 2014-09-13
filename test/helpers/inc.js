@@ -120,7 +120,7 @@ describe("@inc helper", function(){
 
         crossbow.compileOne(page, {}, function (err, out) {
 
-            existsStub.reset();
+            existsStub.restore();
             fsStub.restore();
             assert.include(out.compiled, "hi");
             done();
@@ -141,7 +141,7 @@ describe("@inc helper", function(){
 
         var config = {
             siteConfig: {
-                names: ['shane', 'kittie'],
+                names: ["shane", "kittie"],
                 title: "oh yeah"
             }
         };

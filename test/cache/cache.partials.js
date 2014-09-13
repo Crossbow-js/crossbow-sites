@@ -34,15 +34,15 @@ describe("Adding Partials to the Cache", function(){
          {>head /}
          <body class="post">
 
-         {#inc src="date" /}
+         {@inc src="date" /}
 
-         {#inc src="partials/footer.html" url="http://shakyshane.com" /}
+         {@inc src="partials/footer.html" url="http://shakyshane.com" /}
 
          {#posts}
-            {#inc src="title" title=title /}
+            {@inc src="title" title=title /}
          {/posts}
 
-         {#inc src="title2" title=title post="Clashing namespace" /}
+         {@inc src="title2" title=title post="Clashing namespace" /}
 
          {#content /}
 
@@ -113,7 +113,7 @@ describe("Adding Partials to the Cache", function(){
          date: 2014-04-10
          ---
 
-         {#inc src="button" text="Sign up" /}
+         {@inc src="button" text="Sign up" /}
 
          */});
 

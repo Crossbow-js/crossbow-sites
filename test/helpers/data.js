@@ -32,7 +32,7 @@ describe("@data helper", function(){
 
         crossbow.populateCache("data/author.yml", data, "data");
 
-        crossbow.compileOne(page, {siteConfig:{title: 'shakyshane'}}, function (err, out) {
+        crossbow.compileOne(page, {siteConfig:{title: "shakyshane"}}, function (err, out) {
             assert.include(out.compiled, "Shane Osbourne - shakyshane");
             done();
         });
@@ -60,7 +60,7 @@ describe("@data helper", function(){
 
         crossbow.populateCache("data/author.yml", data, "data");
 
-        crossbow.compileOne(page, {siteConfig:{title: 'shakyshane'}}, function (err, out) {
+        crossbow.compileOne(page, {siteConfig:{title: "shakyshane"}}, function (err, out) {
             assert.include(out.compiled, "Shane Osbourne - shakyshane - Data test - primary");
             done();
         });
@@ -88,7 +88,7 @@ describe("@data helper", function(){
 
         var page = crossbow.addPage("index.html", index, {});
 
-        crossbow.compileOne(page, {siteConfig:{title: 'shakyshane'}}, function (err, out) {
+        crossbow.compileOne(page, {siteConfig:{title: "shakyshane"}}, function (err, out) {
             assert.include(out.compiled, "Shane Osbourne - shakyshane");
             existsStub.restore();
             fsStub.restore();

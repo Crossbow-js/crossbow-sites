@@ -38,11 +38,6 @@ var tests = [
         message:    "includes: two levels deep"
     },
     {
-        key:        "_snippets/func.js",
-        expected:   "snippets/func.js",
-        message:    "includes: default snippet dir"
-    },
-    {
         key:        "_snippets/js/func.js",
         expected:   "snippets/js/func.js",
         message:    "includes: default snippet dir"
