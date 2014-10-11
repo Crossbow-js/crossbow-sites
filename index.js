@@ -17,7 +17,6 @@ var _           = require("lodash");
  * @type {exports}
  */
 var logger      = require("./lib/logger")(emitter);
-var log         = logger.log;
 
 /**
  * Lib
@@ -120,7 +119,7 @@ function addLayout(layout, data, cb) {
     var layoutFile = getFile(layoutPath);
 
     if (!layoutFile) {
-        log("warn", "The layout file {red:_%s} does not exist", layoutPath);
+        logger.warn("The layout file {red:_%s} does not exist", layoutPath);
         return cb(null, data.item.content);
     }
 
@@ -542,11 +541,10 @@ function registerTransform (fn) {
  * Cache/Log/Utils
  * @type {*|exports}
  */
-module.exports.log = logger.log;
 module.exports.logger = logger;
 module.exports.utils = utils;
 module.exports.clearCache = function () {
-    logger.log("debug", "Clearing all caches, (posts, pages, includes, partials)");
+    logger.debug("Clearing all caches, (posts, pages, includes, partials)");
     emitter.removeAllListeners();
     cache.reset();
 };
@@ -559,17 +557,17 @@ module.exports.defaults = defaults;
 /**
  * Populate the cache
  */
-module.exports.populateCache = populateCache;
-module.exports.compileOne    = compileOne;
-module.exports.compilePosts  = compilePosts;
-module.exports.compilePages  = compilePages;
-module.exports.compileAll    = compileAll;
-module.exports.compileMany   = compileMany;
-module.exports.getCache      = getCache;
-module.exports.addPost       = addPost;
-module.exports.addPage       = addPage;
-module.exports.registerTransform = registerTransform;
-module.exports.emitter       = emitter;
+module.exports.populateCache        = populateCache;
+module.exports.compileOne           = compileOne;
+module.exports.compilePosts         = compilePosts;
+module.exports.compilePages         = compilePages;
+module.exports.compileAll           = compileAll;
+module.exports.compileMany          = compileMany;
+module.exports.getCache             = getCache;
+module.exports.addPost              = addPost;
+module.exports.addPage              = addPage;
+module.exports.registerTransform    = registerTransform;
+module.exports.emitter              = emitter;
 
 /**
  * @type {getFile}

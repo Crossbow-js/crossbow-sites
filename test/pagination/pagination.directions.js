@@ -3,10 +3,6 @@ var multiline     = require("multiline");
 var sinon         = require("sinon");
 var fs            = require("fs");
 var assert        = require("chai").assert;
-var dust          = require("dustjs-linkedin");
-dust.cache        = {};
-dust.isDebug = true;
-dust.optimizers.format = function(ctx, node) { return node; };
 
 var crossbow = require("../../index");
 //crossbow.setLogLevel("debug");

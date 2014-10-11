@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "",
   "main": "index.js",
+  "description": "Static Site Generator API - built for speed & extendibility",
   "scripts": {
     "test": "gulp lint && mocha --recursive test/"
   },
@@ -32,7 +33,9 @@
     "gulp-util": "^3.0.0"
   },
   "dependencies": {
-    "dustjs-helpers": "^1.2.0",
+    "crossbow-helpers": "^1.0.0",
+    "crossbow-lang": "^1.0.0",
+    "easy-extender": "^2.0.0",
     "eazy-logger": "^1.4.0",
     "highlight.js": "^8.1.0",
     "js-yaml": "^3.1.0",
