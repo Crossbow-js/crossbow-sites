@@ -447,7 +447,7 @@ function populateCache(key, value, type) {
     if (type === "data") {
         return cache.addData(key, value);
     }
-
+    
     if (partial = cache.find(url.makeShortKey(key, file.config.cwd), "partials")){
 
         partial.content = value;
@@ -462,7 +462,6 @@ function populateCache(key, value, type) {
 
         shortKey   = partial.shortKey;
         partialKey = partial.partialKey;
-        
     }
 
     compiler.addToTemplateCache(key, value, shortKey, partialKey);

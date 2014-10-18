@@ -6,7 +6,7 @@ var fs          = require("fs");
 var assert      = require("chai").assert;
 var crossbow    = require("../../../index");
 
-describe.skip("@inc helper", function(){
+describe("@inc helper", function(){
 
     beforeEach(function () {
         crossbow.clearCache();
@@ -16,7 +16,7 @@ describe.skip("@inc helper", function(){
 
         var index = "Button: {@inc src=\"button.html\" /}";
 
-        crossbow.populateCache("_includes/button.html", "<button>Sign up</button>");
+        crossbow.populateCache("button.html", "<button>Sign up</button>");
 
         var page = crossbow.addPage("index.html", index, {});
 

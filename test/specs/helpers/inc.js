@@ -105,7 +105,7 @@ describe("@inc helper", function(){
             done();
         });
     });
-    it.skip("Can do simple includes with any random files", function(done) {
+    it("Can do simple includes with any random files", function(done) {
 
         var index = multiline.stripIndent(function(){/*
 
@@ -119,7 +119,7 @@ describe("@inc helper", function(){
             if (err) {
                 done(err);
             }
-            assert.include(out.compiled, "Button: name: shane");
+            assert.include(out.compiled, "s3prefix");
             done();
         });
     });
