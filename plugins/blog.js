@@ -36,11 +36,12 @@ module.exports = function (config) {
         var contents    = file._contents.toString();
         var relFilePath = file.path.replace(file.cwd, "");
 
-        if (config.cwd) {
-            var fullPath = path.resolve(file.cwd, config.cwd);
-            relFilePath = file.path.replace(fullPath, "");
-        }
-
+        
+        //if (config.cwd) {
+        //    var fullPath = path.resolve(file.cwd, config.cwd);
+        //    relFilePath = file.path.replace(fullPath, "");
+        //}
+        
         relFilePath = relFilePath.replace(/^\//, "");
         
         files[relFilePath] = contents;
@@ -73,9 +74,8 @@ module.exports = function (config) {
         });
 
         if (!queue.length && partials.length) {
-
+            
             crossbow.compileAll(config, function (err, out) {
-
                 _.each(out, function (item) {
                     stream.push(new File({
                         cwd:  "./",

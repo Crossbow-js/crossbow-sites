@@ -33,6 +33,8 @@
     "sinon": "^1.10.3"
   },
   "dependencies": {
+    "browser-sync": "^1.5.8",
+    "bs-html-injector": "^1.1.0",
     "crossbow-helpers": "^1.0.0",
     "crossbow-lang": "^1.0.0",
     "easy-extender": "^2.0.0",

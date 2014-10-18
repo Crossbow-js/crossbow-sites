@@ -525,7 +525,7 @@ function addPage(key, string, config) {
         utils.prepareFrontVars(page, config, true);
         return page;
     }
-
+    
     page = new Page(key, string, config);
 
     cache.addPage(page);
