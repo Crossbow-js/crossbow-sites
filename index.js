@@ -219,6 +219,13 @@ function compileOne(item, config, cb) {
     config = merge(_.cloneDeep(defaults), config, true);
 
     /**
+     * Set CWD on the fly
+     */
+    if (_.isString(config.cwd)) {
+        file.config.cwd = config.cwd;
+    }
+
+    /**
      * Setup data + look for _config.yml if needed
      * @type {{site: (siteConfig|*), config: *}}
      */
