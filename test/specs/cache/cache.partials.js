@@ -5,23 +5,30 @@ var sinon         = require("sinon");
 var fs            = require("fs");
 
 var Cache     = require("../../../lib/cache");
-var crossbow = require("../../../index");
+var crossbow  = require("../../../index");
 var Partial   = require("../../../lib/partial");
 
 describe("Adding Partials to the Cache", function(){
     var _cache;
+    var config;
     beforeEach(function () {
         _cache    = new Cache();
+        config = {
+            config: {
+                cwd: ""
+            }
+        };
     });
     it("Should add an item", function(){
-        var partial = new Partial("_snippets/function.js", "content");
+        config.config.cwd = "test/fixtures";
+        var partial = new Partial("test/fixtures/snippets/function.js", "content", config);
         var cache   = _cache.addPartial(partial);
         assert.equal(cache.partials().length, 1);
     });
     it("retrieve items from a given key", function(){
 
-        var partial1 = new Partial("_snippets/function.js", "content");
-        var partial2 = new Partial("_snippets/styles.css", "CSS content");
+        var partial1 = new Partial("_snippets/function.js", "content", config);
+        var partial2 = new Partial("_snippets/styles.css", "CSS content", config);
 
         var item     = _cache.addPartial([partial1, partial2]).find("styles");
         assert.equal(item.content, "CSS content");

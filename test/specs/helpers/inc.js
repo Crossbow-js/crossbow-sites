@@ -31,23 +31,23 @@ describe("@inc helper", function(){
             done();
         });
     });
-    it.skip("Can do simple includes with NO file extension", function(done) {
-
-        var index = multiline.stripIndent(function(){/*
-
-         Button: {@inc src="button" /}
-
-         */});
-
-        crossbow.populateCache("_includes/button.html", "<button>Sign up</button>");
-
-        var page = crossbow.addPage("index.html", index, {});
-
-        crossbow.compileOne(page, {siteConfig:{}}, function (err, out) {
-            assert.include(out.compiled, "<button>Sign up</button>");
-            done();
-        });
-    });
+    //it.skip("Can do simple includes with NO file extension", function(done) {
+    //
+    //    var index = multiline.stripIndent(function(){/*
+    //
+    //     Button: {@inc src="button" /}
+    //
+    //     */});
+    //
+    //    crossbow.populateCache("_includes/button.html", "<button>Sign up</button>");
+    //
+    //    var page = crossbow.addPage("index.html", index, {});
+    //
+    //    crossbow.compileOne(page, {siteConfig:{}}, function (err, out) {
+    //        assert.include(out.compiled, "<button>Sign up</button>");
+    //        done();
+    //    });
+    //});
     it("Can do simple includes in nested dirs", function(done) {
 
         var index = multiline.stripIndent(function(){/*

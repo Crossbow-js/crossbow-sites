@@ -455,8 +455,8 @@ function populateCache(key, value, type) {
         partialKey      = partial.partialKey;
 
     } else {
-                
-        partial = new Partial(key, value);
+        
+        partial = new Partial(key, value, file);
 
         cache.addPartial(partial);
 
@@ -503,7 +503,6 @@ function addPost(key, string, config) {
     post = new Post(key, string, config);
 
     var filtered = applyDataTransforms("before item added", post, {}, config);
-    console.log(filtered);
 
     if (filtered) {
         cache.addPost(filtered);

@@ -75,7 +75,6 @@ describe("Adding Posts to the Cache", function(){
          tags: code, jquery-ui, how to guide
          ---
 
-
          {post.title}
          */});
 

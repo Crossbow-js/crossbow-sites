@@ -40,6 +40,8 @@ module.exports = function (config) {
             var fullPath = path.resolve(file.cwd, config.cwd);
             relFilePath = file.path.replace(fullPath, "");
         }
+
+        relFilePath = relFilePath.replace(/^\//, "");
         
         files[relFilePath] = contents;
 
