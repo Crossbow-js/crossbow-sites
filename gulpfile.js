@@ -13,6 +13,16 @@ gulp.task("lint", function () {
     .pipe(jshint.reporter("fail"));
 });
 
+var blogconfig = {
+    env: "dev",
+    highlight: true,
+    markdown: true,
+    logLevel: "debug",
+    postUrlFormat: "/blog/:title",
+    prettyUrls: true,
+    cwd: "test/fixtures"
+};
+
 /**
  * Default task
  */
@@ -21,6 +31,6 @@ gulp.task("build-blog", function () {
     return gulp.src([
         "test/fixtures/*.html"
     ])
-        .pipe(coderBlog({cwd: "test/fixtures"}))
+        .pipe(coderBlog(blogconfig))
         .pipe(gulp.dest("_site"));
 });
