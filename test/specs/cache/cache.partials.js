@@ -90,6 +90,9 @@ describe("Adding Partials to the Cache", function(){
         crossbow.addPost("_posts/post2.md", post2, {});
 
         crossbow.compileOne("posts/post2.md", {}, function (err, out) {
+            if (err) {
+                done(err);
+            }
             var compiled = out.compiled;
             assert.include(compiled, "<head><title>Homepage 2</title></head>");
             assert.include(compiled, "<footer>Date: April 10, 2014</footer>");

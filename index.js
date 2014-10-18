@@ -39,12 +39,12 @@ var cache       = new Cache(populateCache);
 /**
  * Get a file from cache/FS - ALL methods/plugins use this.
  */
-var getFile           = require("./lib/file")(cache);
+var file              = require("./lib/file")(cache, logger);
 
 /**
  * Template compiler
  */
-var compiler          = require("./lib/plugins/dust")(getFile, emitter);
+var compiler          = require("./lib/plugins/dust")(file, emitter);
 
 /**
  * Default Data Transforms
@@ -116,7 +116,7 @@ var defaults = {
 function addLayout(layout, data, cb) {
 
     var layoutPath = utils.getLayoutPath(layout);
-    var layoutFile = getFile(layoutPath);
+    var layoutFile = file.getFile(layoutPath);
 
     if (!layoutFile) {
         logger.warn("The layout file {red:_%s} does not exist", layoutPath);
@@ -573,4 +573,4 @@ module.exports.emitter              = emitter;
  * @type {getFile}
  * @private
  */
-module.exports._getFile = getFile;
+module.exports._getFile = file.getFile;

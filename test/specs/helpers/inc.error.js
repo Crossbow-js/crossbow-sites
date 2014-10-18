@@ -46,6 +46,9 @@ describe("@inc helper errors", function(){
         var page = crossbow.addPage("index.html", index, {});
 
         crossbow.compileOne(page, {siteConfig:{}}, function (err, out) {
+            if (err) {
+                done(err);
+            }
             assert.include(out.compiled, "Before After");
         });
     });
