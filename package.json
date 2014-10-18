@@ -1,9 +1,8 @@
 {
   "name": "crossbow",
   "version": "0.0.1",
-  "description": "",
-  "main": "index.js",
   "description": "Static Site Generator API - built for speed & extendibility",
+  "main": "index.js",
   "scripts": {
     "test": "gulp lint && mocha --recursive test/"
   },
@@ -23,14 +22,15 @@
     "browser-sync": "^1.3.5",
     "bs-html-injector": "^1.0.0",
     "chai": "^1.9.1",
+    "d-logger": "^1.0.0",
     "gulp": "^3.8.8",
     "gulp-autoprefixer": "0.0.8",
     "gulp-jscs": "^1.1.2",
     "gulp-jshint": "^1.8.4",
+    "gulp-util": "^3.0.0",
     "mocha": "*",
     "multiline": "^1.0.1",
-    "sinon": "^1.10.3",
-    "gulp-util": "^3.0.0"
+    "sinon": "^1.10.3"
   },
   "dependencies": {
     "crossbow-helpers": "^1.0.0",
