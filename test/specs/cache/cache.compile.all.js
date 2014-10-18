@@ -2,7 +2,7 @@ var _             = require("lodash");
 var assert        = require("chai").assert;
 var multiline     = require("multiline");
 
-var crossbow  = require("../../index");
+var crossbow  = require("../../../index");
 
 var content1 = multiline.stripIndent(function(){/*
  ---

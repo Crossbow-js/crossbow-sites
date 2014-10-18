@@ -5,8 +5,8 @@ var multiline = require("multiline");
 var sinon     = require("sinon");
 var fs        = require("fs");
 
-var Post     = require("../../lib/post");
-var crossbow = require("../../index");
+var Post     = require("../../../lib/post");
+var crossbow = require("../../../index");
 
 describe("@highlight + @hl", function(){
 

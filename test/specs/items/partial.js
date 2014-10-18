@@ -2,7 +2,7 @@ var _             = require("lodash");
 var assert        = require("chai").assert;
 var multiline     = require("multiline");
 
-var Partial = require("../../lib/partial");
+var Partial = require("../../../lib/partial");
 
 describe("Creating a Partial", function(){
     it("returns an instance", function() {

@@ -1,5 +1,5 @@
 var assert      = require("chai").assert;
-var url         = require("../../lib/url");
+var url         = require("../../../lib/url");
 var makePostUrl = url.makePostUrl;
 
 describe("Creating Post URLS from keys + categories & tags", function () {

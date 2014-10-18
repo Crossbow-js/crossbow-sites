@@ -2,11 +2,11 @@ var _             = require("lodash");
 var assert        = require("chai").assert;
 var multiline     = require("multiline");
 
-var Post      = require("../../lib/post");
-var Page      = require("../../lib/page");
-var Paginator = require("../../lib/paginator");
-var Cache     = require("../../lib/cache");
-var crossbow = require("../../index");
+var Post      = require("../../../lib/post");
+var Page      = require("../../../lib/page");
+var Paginator = require("../../../lib/paginator");
+var Cache     = require("../../../lib/cache");
+var crossbow = require("../../../index");
 
 var content1 = multiline.stripIndent(function(){/*
  ---

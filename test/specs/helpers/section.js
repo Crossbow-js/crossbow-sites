@@ -2,8 +2,8 @@ var _             = require("lodash");
 var assert        = require("chai").assert;
 var multiline     = require("multiline");
 
-var Post     = require("../../lib/post");
-var crossbow = require("../../index");
+var Post     = require("../../../lib/post");
+var crossbow = require("../../../index");
 
 describe("@section + @yield", function(){
 

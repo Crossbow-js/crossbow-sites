@@ -4,7 +4,7 @@ var sinon         = require("sinon");
 var fs            = require("fs");
 var assert        = require("chai").assert;
 
-var crossbow = require("../../index");
+var crossbow = require("../../../index");
 //crossbow.setLogLevel("debug");
 
 var postLayout = multiline.stripIndent(function(){/*

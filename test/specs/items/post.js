@@ -2,7 +2,7 @@ var _             = require("lodash");
 var assert        = require("chai").assert;
 var multiline     = require("multiline");
 
-var Post = require("../../lib/post");
+var Post = require("../../../lib/post");
 
 var post1 = multiline.stripIndent(function(){/*
 ---

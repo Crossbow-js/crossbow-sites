@@ -4,7 +4,7 @@ var dlog        = require("d-logger");
 var sinon       = require("sinon");
 var fs          = require("fs");
 var assert      = require("chai").assert;
-var crossbow    = require("../../index");
+var crossbow    = require("../../../index");
 
 describe("@inc helper", function(){
 

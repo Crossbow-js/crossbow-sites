@@ -1,7 +1,7 @@
 var _             = require("lodash");
 var multiline     = require("multiline");
 var assert        = require("chai").assert;
-var crossbow = require("../../index");
+var crossbow = require("../../../index");
 
 describe("@inc helper + params", function(){
 

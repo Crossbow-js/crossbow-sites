@@ -100,7 +100,8 @@ module.exports = function (config) {
                 cb();
             }).catch(function (err) {
                 err = err.toString();
-                crossbow.log("warn", err);
+                console.log(err);
+                //crossbow.log("warn", err);
                 cb();
             })
         }

@@ -2,8 +2,8 @@ var _             = require("lodash");
 var assert        = require("chai").assert;
 var multiline     = require("multiline");
 
-var Page     = require("../../lib/page");
-var crossbow = require("../../index");
+var Page     = require("../../../lib/page");
+var crossbow = require("../../../index");
 
 var page1 = multiline.stripIndent(function(){/*
 ---

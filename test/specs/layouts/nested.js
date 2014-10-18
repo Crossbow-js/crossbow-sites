@@ -1,6 +1,6 @@
 var multiline = require("multiline");
 var assert    = require("chai").assert;
-var crossbow  = require("../../index");
+var crossbow  = require("../../../index");
 
 var parentLayout = multiline.stripIndent(function () {/*
 <!DOCTYPE html>

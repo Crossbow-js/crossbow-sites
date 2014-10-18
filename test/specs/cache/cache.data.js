@@ -2,7 +2,7 @@ var _             = require("lodash");
 var assert        = require("chai").assert;
 var multiline     = require("multiline");
 
-var Cache         = require("../../lib/cache");
+var Cache         = require("../../../lib/cache");
 
 var ymlArray = multiline.stripIndent(function(){/*
 - name: Parker Moore

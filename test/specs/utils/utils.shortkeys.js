@@ -1,6 +1,6 @@
 var assert      = require("chai").assert;
 var _           = require("lodash");
-var makeShortKey = require("../../lib/url").makeShortKey;
+var makeShortKey = require("../../../lib/url").makeShortKey;
 var tests = [
     {
         key:        "posts/post1.md",

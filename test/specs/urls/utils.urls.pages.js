@@ -1,5 +1,5 @@
 var assert = require("chai").assert;
-var url = require("../../lib/url");
+var url = require("../../../lib/url");
 var makePageUrl = url.makePageUrl;
 
 describe("Creating Page URLS from keys", function () {
