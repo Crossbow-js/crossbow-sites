@@ -10,7 +10,6 @@ var crossbow = require("../../../index");
 var defaultLayout = multiline.stripIndent(function(){/*
 <!DOCTYPE html>
 <html>
-{>head /}
 <body>
 {#content /}
 </body>
@@ -20,7 +19,6 @@ var defaultLayout = multiline.stripIndent(function(){/*
 var postLayout = multiline.stripIndent(function(){/*
 <!DOCTYPE html>
 <html>
-{>head /}
 <body class="post">
 {#content /}
 </body>
@@ -52,7 +50,7 @@ describe("Creating a pagination index", function(){
         crossbow.populateCache("_layouts/default.html", defaultLayout);
 
         // Add HEAD section to cache
-        crossbow.populateCache("_includes/head.html", "<head><title>{page.title} {site.sitename}</title></head>");
+        crossbow.populateCache("head.html", "<head><title>{page.title} {site.sitename}</title></head>");
     });
 
     it("Can use site variables", function(done) {
@@ -157,6 +155,10 @@ describe("Creating a pagination index", function(){
         var page = crossbow.addPage("blog/posts/index.html", page1, {prettyUrls: true});
 
         crossbow.compileOne(page, {siteConfig: {"site-name": "shane - test"}}, function (err, out) {
+            
+            if (err) {
+                return done(err);
+            }
 
             assert.equal(out[0].url, "/blog/posts");
 

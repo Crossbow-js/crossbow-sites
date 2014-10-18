@@ -13,7 +13,7 @@ describe("Creating a Partial", function(){
 
         var partial = new Partial("_includes/blog/head.html", "content");
 
-        assert.equal(partial.shortKey,   "includes/blog/head.html");
+        assert.equal(partial.shortKey,   "_includes/blog/head.html");
         assert.equal(partial.partialKey, "head");
         assert.equal(partial.content,    "content");
     });

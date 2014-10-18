@@ -19,16 +19,19 @@ describe("@inc helper", function(){
 
          */});
 
-        crossbow.populateCache("_includes/button.html", "<button>Sign up</button>");
+        crossbow.populateCache("button.html", "<button>Sign up</button>");
 
         var page = crossbow.addPage("index.html", index, {});
 
         crossbow.compileOne(page, {siteConfig:{}}, function (err, out) {
+            if (err) {
+                done(err);
+            }
             assert.include(out.compiled, "<button>Sign up</button>");
             done();
         });
     });
-    it("Can do simple includes with NO file extension", function(done) {
+    it.skip("Can do simple includes with NO file extension", function(done) {
 
         var index = multiline.stripIndent(function(){/*
 
@@ -49,11 +52,11 @@ describe("@inc helper", function(){
 
         var index = multiline.stripIndent(function(){/*
 
-         Button: {@inc src="elems/button" /}
+         Button: {@inc src="elems/button.html" /}
 
          */});
 
-        crossbow.populateCache("_includes/elems/button.html", "<button>Sign up</button>");
+        crossbow.populateCache("elems/button.html", "<button>Sign up</button>");
 
         var page = crossbow.addPage("index.html", index, {});
 
@@ -66,11 +69,11 @@ describe("@inc helper", function(){
 
         var index = multiline.stripIndent(function(){/*
 
-         Button: {@inc src="elems/1/2/3/4/5/button" /}
+         Button: {@inc src="elems/1/2/3/4/5/button.html" /}
 
          */});
 
-        crossbow.populateCache("_includes/elems/1/2/3/4/5/button.html", "<button>Sign up</button>");
+        crossbow.populateCache("elems/1/2/3/4/5/button.html", "<button>Sign up</button>");
 
         var page = crossbow.addPage("index.html", index, {});
 
@@ -83,19 +86,40 @@ describe("@inc helper", function(){
 
         var index = multiline.stripIndent(function(){/*
 
-         Button: {@inc src="elems/button" /}
-         Button: {@inc src="button" /}
+         Button: {@inc src="elems/button.html" /}
+         Button: {@inc src="button2.html" /}
 
          */});
 
-        crossbow.populateCache("_includes/elems/button.html", "<button>Sub Dir</button>");
-        crossbow.populateCache("_includes/button.html", "<button>Top level</button>");
+        crossbow.populateCache("elems/button.html", "<button>Sub Dir</button>");
+        crossbow.populateCache("button2.html", "<button>Top level</button>");
 
         var page = crossbow.addPage("index.html", index, {});
 
         crossbow.compileOne(page, {siteConfig:{}}, function (err, out) {
+            if (err) {
+                done(err);
+            }
             assert.include(out.compiled, "<button>Sub Dir</button>");
             assert.include(out.compiled, "<button>Top level</button>");
+            done();
+        });
+    });
+    it.skip("Can do simple includes with any random files", function(done) {
+
+        var index = multiline.stripIndent(function(){/*
+
+         Button: {@inc src="_config.yml" /}
+
+         */});
+
+        var page = crossbow.addPage("index.html", index, {});
+
+        crossbow.compileOne(page, {siteConfig:{}}, function (err, out) {
+            if (err) {
+                done(err);
+            }
+            assert.include(out.compiled, "Button: name: shane");
             done();
         });
     });
@@ -131,11 +155,11 @@ describe("@inc helper", function(){
         var index = multiline.stripIndent(function(){/*
 
          {#site.names}
-            {@inc src="button" name=. prefix="btn" /}{@sep}<br/>{/sep}{/site.names}
+            {@inc src="button.html" name=. prefix="btn" /}{@sep}<br/>{/sep}{/site.names}
 
          */});
 
-        crossbow.populateCache("_includes/button.html", "<button>{prefix}-{name}</button>");
+        crossbow.populateCache("button.html", "<button>{prefix}-{name}</button>");
 
         var page = crossbow.addPage("index.html", index, {});
 
@@ -147,6 +171,9 @@ describe("@inc helper", function(){
         };
 
         crossbow.compileOne(page, config, function (err, out) {
+            if (err) {
+                done(err);
+            }
             assert.include(out.compiled, "<button>btn-shane</button><br/>");
             assert.include(out.compiled, "<button>btn-kittie</button>");
             assert.notInclude(out.compiled, "<button>btn-kittie</button><br/>");

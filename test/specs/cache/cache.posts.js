@@ -55,7 +55,7 @@ describe("Adding Posts to the Cache", function(){
     });
     it("Should find posts by key", function(){
 
-        var post = _cache.addPost([post1, post2]).find("posts/post1.md");
+        var post = _cache.addPost([post1, post2]).find("_posts/post1.md");
 
         assert.isTrue(post instanceof Post);
         assert.equal(post.front.title, "Blog 1");

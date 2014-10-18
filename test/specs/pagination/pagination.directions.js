@@ -10,7 +10,6 @@ var crossbow = require("../../../index");
 var postLayout = multiline.stripIndent(function(){/*
  <!DOCTYPE html>
  <html>
- {>head /}
  <body class="post">
  {#content /}
  </body>
@@ -49,7 +48,7 @@ describe("Processing a Markdown file", function(){
         crossbow.populateCache("_layouts/post-test.html", postLayout);
 
         // Add HEAD section to cache
-        crossbow.populateCache("_includes/head.html", "<head><title>{page.title} {site.sitename}</title></head>");
+        crossbow.populateCache("head.html", "<head><title>{page.title} {site.sitename}</title></head>");
     });
 
     it("Can use site variables", function(done) {
@@ -90,9 +89,11 @@ describe("Processing a Markdown file", function(){
         crossbow.addPost("_posts/post3.md", post3, {});
 
         crossbow.compileOne("_posts/post2.md", {}, function (err, out) {
-            var compiled = out.compiled;
-            assert.include(compiled, "Prev - /post1.html");
-            assert.include(compiled, "Next - /post3.html");
+            if (err) {
+                done(err);
+            }
+            assert.include(out.compiled, "Prev - /post1.html");
+            assert.include(out.compiled, "Next - /post3.html");
             done();
         });
     });

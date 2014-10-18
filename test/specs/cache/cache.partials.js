@@ -31,19 +31,17 @@ describe("Adding Partials to the Cache", function(){
         var layout = multiline.stripIndent(function(){/*
          <!DOCTYPE html>
          <html>
-         {>head /}
+         
          <body class="post">
 
-         {@inc src="date" /}
+         {@inc src="_includes/date.html" /}
 
-         {@inc src="partials/footer.html" url="http://shakyshane.com" /}
+         {@inc src="_includes/partials/footer.html" url="http://shakyshane.com" /}
 
          {#posts}
-            {@inc src="title" title=title /}
+            {@inc src="_includes/title.html" title=title /}
          {/posts}
-
-         {@inc src="title2" title=title post="Clashing namespace" /}
-
+         
          {#content /}
 
          </body>
@@ -72,8 +70,7 @@ describe("Adding Partials to the Cache", function(){
 
          Content
 
-         {#snippet src="styles.css" lang="scss" /}
-         {#snippet src="func.js" /}
+
 
          */});
 
@@ -89,12 +86,11 @@ describe("Adding Partials to the Cache", function(){
         crossbow.addPost("_posts/post1.md", post1, {});
         crossbow.addPost("_posts/post2.md", post2, {});
 
-        crossbow.compileOne("posts/post2.md", {}, function (err, out) {
+        crossbow.compileOne("_posts/post2.md", {}, function (err, out) {
             if (err) {
                 done(err);
             }
             var compiled = out.compiled;
-            assert.include(compiled, "<head><title>Homepage 2</title></head>");
             assert.include(compiled, "<footer>Date: April 10, 2014</footer>");
             assert.include(compiled, "<li>Homepage</li>");
             assert.include(compiled, "<li>Homepage 2</li>");
@@ -116,7 +112,7 @@ describe("Adding Partials to the Cache", function(){
          date: 2014-04-10
          ---
 
-         {@inc src="button" text="Sign up" /}
+         {@inc src="button.html" text="Sign up" /}
 
          */});
 
@@ -124,7 +120,7 @@ describe("Adding Partials to the Cache", function(){
 
         crossbow.populateCache("_layouts/post-test.html", layout);
 
-        var cache = crossbow.populateCache("_includes/button.html", "<button>{text}</button>");
+        var cache = crossbow.populateCache("button.html", "<button>{text}</button>");
 
         crossbow.addPage("projects/shane.html", page1, {});
 
@@ -132,7 +128,7 @@ describe("Adding Partials to the Cache", function(){
 
             assert.include(out.compiled, "<button>Sign up</button>");
 
-            crossbow.populateCache("_includes/button.html", "<button class=\"button\">{text}</button>");
+            crossbow.populateCache("button.html", "<button class=\"button\">{text}</button>");
 
             assert.equal(cache.partials().length, 2);
 

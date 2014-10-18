@@ -23,7 +23,7 @@ describe("Creating a POST with maximum info", function(){
     });
     it("sets expected data", function() {
 
-        var postItem = new Post("_posts/post1.md", post1);
+        var postItem = new Post("posts/post1.md", post1);
 
         assert.deepEqual(postItem.front.title,  "Homepage",          "Adds title from front");
         assert.deepEqual(postItem.front.layout, "post-test",         "Adds layout from front");

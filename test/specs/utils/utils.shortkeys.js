@@ -8,8 +8,8 @@ var tests = [
         message:    "from relative"
     },
     {
-        key:        "/posts/post1.md",
-        expected:   "/posts/post1.md",
+        key:        "posts/post1.md",
+        expected:   "posts/post1.md",
         message:    "from relative"
     },
     {
@@ -28,27 +28,27 @@ var tests = [
         message:    "with sub-dir"
     },
     {
-        key:        "_includes/head.html",
+        key:        "includes/head.html",
         expected:   "includes/head.html",
         message:    "includes: default dir"
     },
     {
-        key:        "_includes/more/head.html",
+        key:        "includes/more/head.html",
         expected:   "includes/more/head.html",
         message:    "includes: two levels deep"
     },
     {
-        key:        "_snippets/js/func.js",
+        key:        "snippets/js/func.js",
         expected:   "snippets/js/func.js",
         message:    "includes: default snippet dir"
     },
     {
-        key:        "_posts/post_de_.md",
+        key:        "posts/post_de_.md",
         expected:   "posts/post_de_.md",
         message:    "post in default dir"
     },
     {
-        key:        "_posts/js/post.md",
+        key:        "posts/js/post.md",
         expected:   "posts/js/post.md",
         message:    "post in sub-dir"
     }

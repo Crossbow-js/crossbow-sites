@@ -22,7 +22,7 @@ describe("Adding data to the cache", function(){
         _cache    = new Cache();
     });
     it("Should add YML data", function(){
-        var data = _cache.addData("_data/members.yml", ymlArray, {}).data();
+        var data = _cache.addData("data/members.yml", ymlArray, {}).data();
         assert.equal(data["data/members.yml"].length, 2);
     });
     it("Should add YML data & convert to keys", function(){
@@ -65,7 +65,7 @@ describe("Adding data to the cache", function(){
         assert.equal(data.members2.github, "shakyshane");
     });
     it("Should add JSON data", function(){
-        var data = _cache.addData("_data/animals.json", {name: "kittie"}, {}).data();
+        var data = _cache.addData("data/animals.json", {name: "kittie"}, {}).data();
         assert.equal(data["data/animals.json"].name, "kittie");
     });
     it("Should convert keys to usage paths (obj)", function(){

@@ -360,7 +360,7 @@ function doPagination(item, data, config, cb) {
  * @param {Function} cb
  */
 function constructItem(item, data, config, cb) {
-
+    
     data = applyDataTransforms("before item parsed", item, data, config);
 
     renderTemplate(
@@ -448,20 +448,21 @@ function populateCache(key, value, type) {
         return cache.addData(key, value);
     }
 
-    if (partial = cache.find(url.makeShortKey(key), "partials")){
+    if (partial = cache.find(url.makeShortKey(key, file.config.cwd), "partials")){
 
         partial.content = value;
         shortKey        = partial.shortKey;
         partialKey      = partial.partialKey;
 
     } else {
-
+                
         partial = new Partial(key, value);
 
         cache.addPartial(partial);
 
         shortKey   = partial.shortKey;
         partialKey = partial.partialKey;
+        
     }
 
     compiler.addToTemplateCache(key, value, shortKey, partialKey);
@@ -502,6 +503,7 @@ function addPost(key, string, config) {
     post = new Post(key, string, config);
 
     var filtered = applyDataTransforms("before item added", post, {}, config);
+    console.log(filtered);
 
     if (filtered) {
         cache.addPost(filtered);
@@ -553,6 +555,7 @@ module.exports.utils = utils;
 module.exports.clearCache = function () {
     logger.debug("Clearing all caches, (posts, pages, includes, partials)");
     emitter.removeAllListeners();
+    file.reset();
     cache.reset();
 };
 
@@ -575,6 +578,7 @@ module.exports.addPost              = addPost;
 module.exports.addPage              = addPage;
 module.exports.registerTransform    = registerTransform;
 module.exports.emitter              = emitter;
+module.exports.file                 = file;
 
 /**
  * @type {getFile}

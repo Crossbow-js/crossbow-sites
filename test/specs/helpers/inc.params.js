@@ -17,7 +17,7 @@ describe("@inc helper + params", function(){
 
          */});
 
-        crossbow.populateCache("_includes/button.html", "<button>{text}</button>");
+        crossbow.populateCache("button.html", "<button>{text}</button>");
 
         var page = crossbow.addPage("index.html", index, {});
 
@@ -34,7 +34,7 @@ describe("@inc helper + params", function(){
 
          */});
 
-        crossbow.populateCache("_includes/button.html", "<button>{text}</button>");
+        crossbow.populateCache("button.html", "<button>{text}</button>");
 
         var page = crossbow.addPage("index.html", index, {});
 
@@ -54,7 +54,7 @@ describe("@inc helper + params", function(){
 
          */});
 
-        crossbow.populateCache("_includes/button.html", "<button>{text}</button>");
+        crossbow.populateCache("button.html", "<button>{text}</button>");
 
         var page = crossbow.addPage("index.html", index, {});
 
@@ -67,16 +67,19 @@ describe("@inc helper + params", function(){
 
         var index = multiline.stripIndent(function(){/*
 
-         {@inc src="button" text="Unfiltered"/}
-         {@inc src="button" text="Filtered" filter="h"/}
+         {@inc src="button.html" text="Unfiltered"/}
+         {@inc src="button.html" text="Filtered" filter="h"/}
 
          */});
 
-        crossbow.populateCache("_includes/button.html", "<button>{text}</button>");
+        crossbow.populateCache("button.html", "<button>{text}</button>");
 
         var page = crossbow.addPage("index.html", index, {});
 
         crossbow.compileOne(page, {siteConfig:{}}, function (err, out) {
+            if (err) {
+                done(err);
+            }
             assert.include(out.compiled, "<button>Unfiltered</button>");
             assert.include(out.compiled, "&lt;button&gt;Filtered&lt;/button&gt;");
             done();

@@ -23,7 +23,7 @@ describe("Creating a Post date from the filename", function(){
 
     it("uses date from the filename if not available in front-matter", function() {
 
-        var postItem = new Post("_posts/2013-11-13-this-post-is-great.md", post1, {
+        var postItem = new Post("posts/2013-11-13-this-post-is-great.md", post1, {
             postUrlFormat: "/blog/:month/:title"
         });
 
@@ -33,7 +33,7 @@ describe("Creating a Post date from the filename", function(){
 
     it("uses the filename as title if no title available in front-matter (e2e)", function() {
 
-        var post = crossbow.addPost("_posts/2013-11-13-this-post-is-great.md", post1, {
+        var post = crossbow.addPost("posts/2013-11-13-this-post-is-great.md", post1, {
             postUrlFormat: "/blog/:month/:title"
         });
 

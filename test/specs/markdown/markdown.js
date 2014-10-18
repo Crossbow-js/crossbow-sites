@@ -10,7 +10,6 @@ var crossbow = require("../../../index");
 var postLayout = multiline.stripIndent(function(){/*
 <!DOCTYPE html>
 <html>
-{>head /}
 <body class="post">
 {#content /}
 </body>
@@ -63,7 +62,7 @@ describe("Processing a Markdown file", function(){
         crossbow.populateCache("_layouts/page-test.html", pageLayout);
 
         // Add HEAD section to cache
-        crossbow.populateCache("_includes/head.html", "<head><title>{page.title} {site.sitename}</title></head>");
+        crossbow.populateCache("head.html", "<head><title>{page.title} {site.sitename}</title></head>");
     });
 
     it("Does not use markdown + still have vars", function(done) {
@@ -82,6 +81,7 @@ describe("Processing a Markdown file", function(){
         // NO POSTS ADDED
         crossbow.addPage("index.html", index);
         crossbow.compileOne("index.html", {}, function (err, out) {
+            
             var compiled = out.compiled;
             assert.include(compiled, "#Welcome to my blog.");
             assert.notInclude(compiled, "I have written before..");
@@ -117,6 +117,9 @@ describe("Processing a Markdown file", function(){
         // NO POSTS ADDED
         crossbow.addPost("_posts/post1.md", index);
         crossbow.compileOne("_posts/post1.md", {}, function (err, out) {
+            if (err) {
+                done(err);
+            }
             assert.include(out.compiled, "<p>Kittenz</p>");
             done();
         });
@@ -326,8 +329,8 @@ zoom: 1;
 
         // NO POSTS ADDED
         crossbow.populateCache("_layouts/test.html", "<body>{#content /}</body>");
-        crossbow.addPage("/docs/index.md", index, {prettyUrls: true});
-        crossbow.compileOne("/docs/index.md", {},  function (err, out) {
+        crossbow.addPage("docs/index.md", index, {prettyUrls: true});
+        crossbow.compileOne("docs/index.md", {},  function (err, out) {
 
             assert.equal(out.filePath, "docs/index.html");
             assert.equal(out.url, "/docs");
