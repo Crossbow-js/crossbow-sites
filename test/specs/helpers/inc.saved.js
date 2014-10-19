@@ -11,14 +11,15 @@ describe("@inc helper", function(){
         crossbow.clearCache();
     });
 
-    it("Can do simple includes with file extension", function(done) {
+    it("Can save a rendered include", function(done) {
 
         var index = multiline.stripIndent(function(){/*
 
+        before save
         {@save src="button.html" name="shane"/}
+        After save
         
         {@inc src="saved:button.html" /}
-        
          */});
 
         crossbow.populateCache("button.html", "<button>{name}</button>");
