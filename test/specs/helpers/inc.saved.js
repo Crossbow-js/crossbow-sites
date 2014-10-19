@@ -34,4 +34,27 @@ describe("@inc helper", function(){
             done();
         });
     });
+    it("Can save an include @hl it later", function(done) {
+
+        var index = multiline.stripIndent(function(){/*
+
+         before save
+         {@save src="button.html" name="shane"/}
+         After save
+
+         {@hl src="saved:button.html" /}
+         */});
+
+        crossbow.populateCache("button.html", "<button>{name}</button>");
+
+        var page = crossbow.addPage("index.html", index, {});
+
+        crossbow.compileOne(page, {siteConfig:{}}, function (err, out) {
+            if (err) {
+                done(err);
+            }
+            assert.include(out.compiled, "</span>shane<span");
+            done();
+        });
+    });
 });
