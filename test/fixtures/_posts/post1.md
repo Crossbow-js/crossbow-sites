@@ -1,1 +1,4 @@
-##Here's a page that's awesome
+---
+layout: "post.html"
+title: "Test post"
+---

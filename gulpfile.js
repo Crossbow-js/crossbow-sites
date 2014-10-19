@@ -20,7 +20,7 @@ gulp.task("lint", function () {
  */
 gulp.task("browserSync", function () {
     browserSync.use(htmlInjector, {
-        excludedTags: ["BODY"], 
+        //excludedTags: ["BODY"], 
         logLevel: "debug"
     });
     browserSync({

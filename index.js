@@ -525,7 +525,7 @@ function addPost(key, string, config) {
 function addPage(key, string, config) {
 
     var page;
-
+    
     if (page = cache.find(key, "pages")) {
         page.addData(key, string);
         utils.prepareFrontVars(page, config, true);
@@ -568,7 +568,7 @@ module.exports.clearCache = function () {
  */
 module.exports.setCwd = function (cwd) {
     file.config.cwd = cwd;
-}
+};
 
 /**
  * Default configurations

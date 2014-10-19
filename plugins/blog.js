@@ -37,14 +37,13 @@ module.exports = function (config) {
 
     return through2.obj(function (file, enc, cb) {
         
-        stream          = this;
-        var contents    = file._contents.toString();
-        var relFilePath = file.path.replace(file.cwd, "");
+        stream              = this;
+        var contents        = file._contents.toString();
+        var relFilePath     = file.path.replace(file.cwd, "");
         
-        relFilePath     = relFilePath.replace(/^\//, "");
+        relFilePath         = relFilePath.replace(/^\//, "");
         
-        
-        files[relFilePath] = contents;
+        files[relFilePath]  = contents;
 
         cb();
 
