@@ -28,10 +28,11 @@ gulp.task("browserSync", function () {
             baseDir: "_site",
             routes: {
                 "/img": "./img",
-                "/js": "./js"
+                "/css": "test/fixtures/css"
             }
         },
-        open: false
+        open: false,
+        online: false
     });
 });
 

@@ -1,18 +1,10 @@
 ---
 layout: default
-title: "Shane"
-buttons: ["Primary", "Secondary"]
+title: "Crossbow"
+markdown: true
 ---
 
-<h1>Buttons</h1>
+#{page.title}
 
-{#page.buttons}
-        
-<h2>{.} - Button</h2>
-        
-{@save src="_includes/button.html" name=. /}
-{@inc  src="saved:_includes/button.html"  /}
-{@hl   src="saved:_includes/button.html"  /}
-
-{/page.buttons}
+- [Layouts](/docs/layouts)
 
