@@ -39,16 +39,14 @@ describe("Creating a POST with maximum info", function(){
         assert.isTrue(postItem.dateObj instanceof Date);
     });
     it("Uses Config for urls", function() {
-
-        var postItem = new Post("_posts/post1.md", post1, {
-            postUrlFormat: "/blog/:categories/:title",
-            prettyUrls: true
+        var postItem = new Post("test/fixtures/_posts/post1.md", post1, {
+            postUrlFormat:  "/blog/:categories/:title",
+            prettyUrls:     true,
+            cwd:            "test/fixtures"
         });
         assert.deepEqual(postItem.url, "/blog/javascript/node-js/post1", "Adds URL + categories");
     });
     it("Uses Config for urls", function() {
-
-
         var postItem = new Post("_posts/post1.md", post1, {
             postUrlFormat: "/blog/:categories/:title",
             prettyUrls: false

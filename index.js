@@ -484,7 +484,13 @@ function getCache() {
  */
 function addPost(key, string, config) {
 
+    config = config || {};
+    
     var post;
+    
+    if (!config.cwd) {
+        config.cwd = file.config.cwd;
+    } 
 
     /**
      * Update a cached post
@@ -556,6 +562,13 @@ module.exports.clearCache = function () {
     file.reset();
     cache.reset();
 };
+
+/**
+ * @param {String} cwd
+ */
+module.exports.setCwd = function (cwd) {
+    file.config.cwd = cwd;
+}
 
 /**
  * Default configurations

@@ -27,22 +27,22 @@ module.exports = function (config) {
     config = merge(defaults, config || {}, true);
 
     config.siteConfig = config.transformSiteConfig(yaml.getYaml(config.configFile), config);
+    
+    if (config.cwd) {
+        crossbow.setCwd(config.cwd);
+    }
 
     var files = {};
     var stream;
 
     return through2.obj(function (file, enc, cb) {
+        
         stream          = this;
         var contents    = file._contents.toString();
         var relFilePath = file.path.replace(file.cwd, "");
-
         
-        //if (config.cwd) {
-        //    var fullPath = path.resolve(file.cwd, config.cwd);
-        //    relFilePath = file.path.replace(fullPath, "");
-        //}
+        relFilePath     = relFilePath.replace(/^\//, "");
         
-        relFilePath = relFilePath.replace(/^\//, "");
         
         files[relFilePath] = contents;
 

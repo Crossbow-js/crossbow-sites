@@ -40,7 +40,7 @@ var blogconfig = {
     highlight: true,
     markdown: true,
     logLevel: "debug",
-    postUrlFormat: "/blog/:title",
+    postUrlFormat: "/posts/:title",
     prettyUrls: true,
     cwd: "test/fixtures"
 };
@@ -51,7 +51,8 @@ var blogconfig = {
 gulp.task("build-blog", function () {
 
     return gulp.src([
-        "test/fixtures/*.html"
+        "test/fixtures/**/*.html",
+        "test/fixtures/_posts/*.md"
     ])
         .pipe(coderBlog(blogconfig))
         .pipe(gulp.dest("_site"));
