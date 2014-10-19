@@ -1,8 +1,20 @@
 ---
 layout: default
 title: "Shane"
+buttons: ["Primary", "Secondary"]
 ---
 
-{#posts}
-    {title}
-{/posts}
+<h1>Buttons</h1>
+{#page.buttons}
+<h2>{.} - Button</h2>
+        
+{@inc src="_includes/button.html" name=. /}
+
+<pre><code>
+{@hl lang="html"}
+<button>{text}</button>
+{/hl}
+</code></pre>
+
+{/page.buttons}
+

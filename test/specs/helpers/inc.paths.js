@@ -16,10 +16,8 @@ describe("@inc helper", function(){
         var index = multiline.stripIndent(function(){/*
 
          Button: {@inc src="_includes/button.html" /}
-
+         
          */});
-
-        //crossbow.populateCache("test/fixtures/_includes/button.html", "<button>Sign up</button>");
 
         var page = crossbow.addPage("index.html", index, {});
         
@@ -32,7 +30,7 @@ describe("@inc helper", function(){
             if (err) {
                 done(err);
             }
-            assert.include(out.compiled, "<button>Fixture Button</button>");
+            assert.include(out.compiled, "<button>");
             done();
         });
     });

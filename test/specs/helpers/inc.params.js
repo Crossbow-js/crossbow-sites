@@ -85,4 +85,24 @@ describe("@inc helper + params", function(){
             done();
         });
     });
+    it("Can do includes with params + highlighting", function(done) {
+
+        var index = multiline.stripIndent(function(){/*
+
+        {@inc src="button.html" text="Filtered" filter="hl" /}
+
+         */});
+
+        crossbow.populateCache("button.html", "<button>{text}</button>");
+
+        var page = crossbow.addPage("index.html", index, {});
+        
+        crossbow.compileOne(page, {siteConfig:{}}, function (err, out) {
+            if (err) {
+                done(err);
+            }
+            assert.include(out.compiled, "</span>Filtered<span");
+            done();
+        });
+    });
 });
