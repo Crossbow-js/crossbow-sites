@@ -11,7 +11,7 @@ describe("@inc helper", function(){
         crossbow.clearCache();
     });
 
-    it.only("Can do simple includes with file extension", function(done) {
+    it("Can do simple includes with file extension", function(done) {
 
         var index = multiline.stripIndent(function(){/*
 
