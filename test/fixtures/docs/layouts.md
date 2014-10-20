@@ -17,7 +17,7 @@ Here's a tiny example of a layout file...
 <!DOCTYPE html>
 <html>
     <head>
-        <title>My Website</title>
+        <title>{page.title}</title>
     </head>
     <body>
         {#content /}
@@ -30,7 +30,7 @@ Here's a tiny example of a layout file...
 ```html
 ---
 layout: "default.html"
-title: "Homepage"
+title: "My cool title"
 ---
 
 <p>My awesome website</p>
@@ -45,10 +45,38 @@ the layout file. It would look something like this:
 <!DOCTYPE html>
 <html>
     <head>
-        <title>My Website</title>
+        <title>My cool title</title>
     </head>
     <body>
         <p>My awesome website</p>
     </body>
 </html>
+```
+
+#Nested layouts
+As you can see, the concept of **layouts** is *really* powerful. But we can go 1 step further - 
+with Nested Layouts. 
+
+The idea is simple - Layouts, can also have Layouts. This means you can have a single "master" or 
+"parent" layout that others can inherit from.
+
+<br/>
+
+**_layouts/parent.html**
+```html
+<html>
+    <head></head>
+    {#content /}
+</html>
+```
+
+**_layouts/posts.html**
+
+```html
+---
+layout: parent
+---
+<main class="post">
+    {#content /}
+</main>
 ```
