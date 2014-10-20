@@ -5,3 +5,5 @@ node_modules
 .sass-cache
 bower_components
 _fixtures
+ast.json
+funcs.js

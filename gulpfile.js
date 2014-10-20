@@ -53,7 +53,8 @@ gulp.task("build-blog", function () {
 
     return gulp.src([
         "test/fixtures/**/*.html",
-        "test/fixtures/_posts/*.md"
+        "test/fixtures/_posts/*.md",
+        "test/fixtures/**/*.md",
     ])
         .pipe(coderBlog(blogconfig))
         .pipe(gulp.dest("_site"));

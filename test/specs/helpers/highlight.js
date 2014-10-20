@@ -14,7 +14,7 @@ describe("@highlight + @hl", function(){
         crossbow.clearCache();
     });
 
-    it("highlights a block of code", function(done){
+    it.only("highlights a block of code", function(done){
 
         var page1 = multiline.stripIndent(function(){/*
 
@@ -27,6 +27,9 @@ describe("@highlight + @hl", function(){
         crossbow.addPage("projects/about-us.html", page1);
 
         crossbow.compileOne("projects/about-us.html", {siteConfig:{}}, function (err, out) {
+            if (err) {
+                done(err);
+            }
             assert.include(out.compiled, "<pre><code class=\"js\"><span class=\"hljs-keyword\">var</span>");
             done();
         });
