@@ -15,6 +15,11 @@ var ymlProps = multiline.stripIndent(function(){/*
 name: Shane Osbourne
 github: shakyshane
  */});
+var jsonObj = multiline.stripIndent(function(){/*
+{
+    "name": "shane"
+}
+ */});
 
 describe("Adding data to the cache", function(){
     var _cache;
@@ -23,14 +28,14 @@ describe("Adding data to the cache", function(){
     });
     it("Should add YML data", function(){
         var data = _cache.addData("data/members.yml", ymlArray, {}).data();
-        assert.equal(data["data/members.yml"].length, 2);
+        assert.equal(data["data/members.yml"].data.length, 2);
     });
     it("Should add YML data & convert to keys", function(){
-        var data = _cache
+        var out = _cache
             .addData("_data/members.yml", ymlArray, {})
             .convertKeys("data", {});
 
-        assert.equal(data.members.length, 2);
+        assert.equal(out.members.length, 2);
     });
     it("Should add YML data & convert to keys", function(){
         var data = _cache
@@ -66,7 +71,7 @@ describe("Adding data to the cache", function(){
     });
     it("Should add JSON data", function(){
         var data = _cache.addData("data/animals.json", {name: "kittie"}, {}).data();
-        assert.equal(data["data/animals.json"].name, "kittie");
+        assert.equal(data["data/animals.json"].data.name, "kittie");
     });
     it("Should convert keys to usage paths (obj)", function(){
         var obj = {};
