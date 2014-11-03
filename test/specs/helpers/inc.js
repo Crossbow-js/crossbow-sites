@@ -103,7 +103,7 @@ describe("@inc helper", function(){
             done();
         });
     });
-    it.only("Can do simple includes with any random files", function(done) {
+    it("Can do simple includes with any random files", function(done) {
 
         var index = multiline.stripIndent(function(){/*
 
@@ -130,7 +130,7 @@ describe("@inc helper", function(){
 
         var index = multiline.stripIndent(function(){/*
 
-         {@inc src="_scss/main.scss" /}
+         {{ inc src="_scss/main.scss" }}
 
          */});
 
@@ -150,14 +150,13 @@ describe("@inc helper", function(){
     });
     it("Can do simple includes in loops", function(done) {
 
-        var index = multiline.stripIndent(function(){/*
+        var index = multiline(function(){/*
+{{#site.names}}
+{{ inc src="button.html" name=. prefix="btn" }}
+{{/site.names}}
+*/});
 
-         {#site.names}
-            {@inc src="button.html" name=. prefix="btn" /}{@sep}<br/>{/sep}{/site.names}
-
-         */});
-
-        crossbow.populateCache("button.html", "<button>{prefix}-{name}</button>");
+        crossbow.populateCache("button.html", "<button>{{prefix}}-{{name}}</button>");
 
         var page = crossbow.addPage("index.html", index, {});
 
@@ -172,9 +171,9 @@ describe("@inc helper", function(){
             if (err) {
                 done(err);
             }
-            assert.include(out.compiled, "<button>btn-shane</button><br/>");
+            require("d-logger")(out.compiled);
+            assert.include(out.compiled, "<button>btn-shane</button>");
             assert.include(out.compiled, "<button>btn-kittie</button>");
-            assert.notInclude(out.compiled, "<button>btn-kittie</button><br/>");
             done();
         });
     });
