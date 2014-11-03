@@ -14,9 +14,7 @@ describe("@inc helper", function(){
     it("Can do simple includes with file extension", function(done) {
 
         var index = multiline.stripIndent(function(){/*
-
-        Button: {@inc src="button.html" /}
-
+        Button: {{ inc src="button.html" }}
          */});
 
         crossbow.populateCache("button.html", "<button>Sign up</button>");
@@ -27,6 +25,7 @@ describe("@inc helper", function(){
             if (err) {
                 done(err);
             }
+            require("d-logger")(out.compiled);
             assert.include(out.compiled, "<button>Sign up</button>");
             done();
         });
@@ -52,7 +51,7 @@ describe("@inc helper", function(){
 
         var index = multiline.stripIndent(function(){/*
 
-         Button: {@inc src="elems/button.html" /}
+         Button: {{ inc src="elems/button.html" }}
 
          */});
 
@@ -69,7 +68,7 @@ describe("@inc helper", function(){
 
         var index = multiline.stripIndent(function(){/*
 
-         Button: {@inc src="elems/1/2/3/4/5/button.html" /}
+         Button: {{ inc src="elems/1/2/3/4/5/button.html" }}
 
          */});
 
@@ -85,10 +84,8 @@ describe("@inc helper", function(){
     it("Can do simple includes in separate DIRS", function(done) {
 
         var index = multiline.stripIndent(function(){/*
-
-         Button: {@inc src="elems/button.html" /}
-         Button: {@inc src="button2.html" /}
-
+         Button: {{ inc src="elems/button.html" }}
+         Button: {{ inc src="button2.html" }}
          */});
 
         crossbow.populateCache("elems/button.html", "<button>Sub Dir</button>");
@@ -102,14 +99,15 @@ describe("@inc helper", function(){
             }
             assert.include(out.compiled, "<button>Sub Dir</button>");
             assert.include(out.compiled, "<button>Top level</button>");
+            require("d-logger")(out.compiled);
             done();
         });
     });
-    it("Can do simple includes with any random files", function(done) {
+    it.only("Can do simple includes with any random files", function(done) {
 
         var index = multiline.stripIndent(function(){/*
 
-         Button: {@inc src="_config.yml" /}
+         Button: {{ inc src="_config.yml" }}
 
          */});
 

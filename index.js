@@ -44,7 +44,7 @@ var file              = require("./lib/file")(cache, logger);
 /**
  * Template compiler
  */
-var compiler          = require("./lib/plugins/dust")(file, emitter);
+var compiler          = require("./lib/plugins/handlebars")(file, logger);
 
 /**
  * Default Data Transforms
@@ -360,7 +360,7 @@ function doPagination(item, data, config, cb) {
  * @param {Function} cb
  */
 function constructItem(item, data, config, cb) {
-    
+
     data = applyDataTransforms("before item parsed", item, data, config);
 
     renderTemplate(
@@ -447,7 +447,7 @@ function populateCache(key, value, type) {
     if (type === "data") {
         return cache.addData(key, value);
     }
-    
+
     if (partial = cache.find(url.makeShortKey(key, file.config.cwd), "partials")){
 
         partial.content = value;
@@ -455,7 +455,7 @@ function populateCache(key, value, type) {
         partialKey      = partial.partialKey;
 
     } else {
-        
+
         partial = new Partial(key, value, file);
 
         cache.addPartial(partial);
@@ -464,7 +464,7 @@ function populateCache(key, value, type) {
         partialKey = partial.partialKey;
     }
 
-    compiler.addToTemplateCache(key, value, shortKey, partialKey);
+    //compiler.addToTemplateCache(key, value, shortKey, partialKey);
 
     return cache;
 }
@@ -485,12 +485,12 @@ function getCache() {
 function addPost(key, string, config) {
 
     config = config || {};
-    
+
     var post;
-    
+
     if (!config.cwd) {
         config.cwd = file.config.cwd;
-    } 
+    }
 
     /**
      * Update a cached post
@@ -525,13 +525,13 @@ function addPost(key, string, config) {
 function addPage(key, string, config) {
 
     var page;
-    
+
     if (page = cache.find(key, "pages")) {
         page.addData(key, string);
         utils.prepareFrontVars(page, config, true);
         return page;
     }
-    
+
     page = new Page(key, string, config);
 
     cache.addPage(page);

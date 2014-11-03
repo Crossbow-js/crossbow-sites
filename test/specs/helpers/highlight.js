@@ -14,7 +14,7 @@ describe("@highlight + @hl", function(){
         crossbow.clearCache();
     });
 
-    it.only("highlights a block of code", function(done){
+    it("highlights a block of code", function(done){
 
         var page1 = multiline.stripIndent(function(){/*
 
