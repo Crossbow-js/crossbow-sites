@@ -44,7 +44,7 @@ var file              = require("./lib/file")(cache, logger);
 /**
  * Template compiler
  */
-var compiler          = require("./lib/plugins/handlebars")(file, logger);
+var compiler          = require("./lib/plugins/handlebars")(file, logger, emitter);
 
 /**
  * Default Data Transforms

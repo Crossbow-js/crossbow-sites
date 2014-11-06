@@ -11,15 +11,13 @@ describe("@inc helper errors", function(){
 
     it("emits an error when src missing", function(done) {
 
-        var index = multiline.stripIndent(function(){/*
-
-        Before {@inc /}After
-
-         */});
+        var index = multiline(function(){/*
+Before {{ inc }}After
+*/});
 
         crossbow.emitter.on("log", function (data) {
+            console.log(data);
             assert.equal(data.type, "warn");
-            assert.equal(data.context, "index.html");
             done();
         });
 
@@ -33,13 +31,13 @@ describe("@inc helper errors", function(){
 
         var index = multiline.stripIndent(function(){/*
 
-         Before {@inc src="nothing.html" /}After
+         Before {{ inc src="nothing.html" }}After
 
          */});
 
         crossbow.emitter.on("log", function (data) {
+            console.log(data);
             assert.equal(data.type, "warn");
-            assert.equal(data.context, "index.html");
             done();
         });
 
@@ -52,24 +50,25 @@ describe("@inc helper errors", function(){
             assert.include(out.compiled, "Before After");
         });
     });
-    it("emits an error about missing filter", function(done) {
+    it.only("emits an error about missing filter", function(done) {
 
         var index = multiline.stripIndent(function(){/*
 
-         Button: {@inc src="button.html" text="{page.text}" filter="edede"/}
+         Button: {{ inc src="_includes/button.html" text="{{site.text}}" filter="edede" }}
 
          */});
 
         crossbow.emitter.on("log", function (data) {
             assert.equal(data.type, "warn");
-            assert.equal(data.context, "index.html");
             done();
         });
 
-        crossbow.populateCache("_includes/button.html", "<button>{site.text}</button>");
+        crossbow.populateCache("_includes/button.html", "<button>{{text}}</button>");
 
         var page = crossbow.addPage("index.html", index, {});
 
-        crossbow.compileOne(page, {siteConfig:{text:"'"}}, function () {});
+        crossbow.compileOne(page, {siteConfig:{text:"Hi there"}}, function (err, out) {
+            require("d-logger")(out.compiled);
+        });
     });
 });
