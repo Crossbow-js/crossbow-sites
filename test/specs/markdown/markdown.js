@@ -45,8 +45,9 @@ describe("Processing a Markdown file", function(){
         existsStub = sinon.stub(fs, "existsSync").returns(true);
     });
     after(function () {
-        fsStub.restore();
-        existsStub.restore();
+        //fsStub.restore();
+        fs.readFileSync.restore();
+        fs.existsSync.restore();
     });
     afterEach(function () {
         fsStub.reset();
@@ -81,7 +82,7 @@ describe("Processing a Markdown file", function(){
         // NO POSTS ADDED
         crossbow.addPage("index.html", index);
         crossbow.compileOne("index.html", {}, function (err, out) {
-            
+
             var compiled = out.compiled;
             assert.include(compiled, "#Welcome to my blog.");
             assert.notInclude(compiled, "I have written before..");

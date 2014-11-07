@@ -50,11 +50,11 @@ Before {{ inc }}After
             assert.include(out.compiled, "Before After");
         });
     });
-    it.only("emits an error about missing filter", function(done) {
+    it("emits an error about missing filter", function(done) {
 
         var index = multiline.stripIndent(function(){/*
 
-         Button: {{ inc src="_includes/button.html" text="{{site.text}}" filter="edede" }}
+         Button: {{ inc src="_includes/button.html" text="shane-{{site.text}}" filter="edede" }}
 
          */});
 

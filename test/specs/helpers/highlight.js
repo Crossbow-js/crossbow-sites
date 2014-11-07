@@ -122,8 +122,8 @@ describe("@highlight + @hl", function(){
 
         crossbow.compileOne(page, {}, function (err, out) {
 
-            existsStub.restore();
-            fsStub.restore();
+            fs.existsSync.restore();
+            fs.readFileSync.restore();
 
             assert.include(out.compiled, "<pre><code class=\"scss\"><span class=\"hljs-class\">.body</span>");
             done();
@@ -151,8 +151,8 @@ describe("@highlight + @hl", function(){
         var page = crossbow.addPage("index.html", index, {});
 
         crossbow.compileOne(page, {}, function (err, out) {
-            existsStub.restore();
-            fsStub.restore();
+            fs.existsSync.restore();
+            fs.readFileSync.restore();
         });
     });
     it("uses file extension for highlight lang if params.lang not given", function(done){

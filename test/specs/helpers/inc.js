@@ -30,23 +30,6 @@ describe("@inc helper", function(){
             done();
         });
     });
-    //it.skip("Can do simple includes with NO file extension", function(done) {
-    //
-    //    var index = multiline.stripIndent(function(){/*
-    //
-    //     Button: {@inc src="button" /}
-    //
-    //     */});
-    //
-    //    crossbow.populateCache("_includes/button.html", "<button>Sign up</button>");
-    //
-    //    var page = crossbow.addPage("index.html", index, {});
-    //
-    //    crossbow.compileOne(page, {siteConfig:{}}, function (err, out) {
-    //        assert.include(out.compiled, "<button>Sign up</button>");
-    //        done();
-    //    });
-    //});
     it("Can do simple includes in nested dirs", function(done) {
 
         var index = multiline.stripIndent(function(){/*
@@ -103,24 +86,6 @@ describe("@inc helper", function(){
             done();
         });
     });
-    it("Can do simple includes with any random files", function(done) {
-
-        var index = multiline.stripIndent(function(){/*
-
-         Button: {{ inc src="_config.yml" }}
-
-         */});
-
-        var page = crossbow.addPage("index.html", index, {});
-
-        crossbow.compileOne(page, {siteConfig:{}}, function (err, out) {
-            if (err) {
-                done(err);
-            }
-            assert.include(out.compiled, "s3prefix");
-            done();
-        });
-    });
     it("Can do simple includes in other DIRS", function(done) {
 
         var existsStub = sinon.stub(fs, "existsSync");
@@ -142,9 +107,9 @@ describe("@inc helper", function(){
 
         crossbow.compileOne(page, {}, function (err, out) {
 
-            existsStub.restore();
-            fsStub.restore();
             assert.include(out.compiled, "hi");
+            fs.existsSync.restore();
+            fs.readFileSync.restore();
             done();
         });
     });
