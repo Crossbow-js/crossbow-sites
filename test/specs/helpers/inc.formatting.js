@@ -55,6 +55,34 @@ Before
 
         var index = multiline(function(){/*
 <ul>
+    {{ inc src="list-items.html" }}
+</ul>
+*/});
+        var lists = multiline(function(){/*
+<li>List 1</li>
+<li>List 2</li>
+*/});
+        var expected = multiline(function(){/*
+<ul>
+    <li>List 1</li>
+    <li>List 2</li>
+</ul>
+*/});
+
+        crossbow.populateCache("list-items.html", lists, {});
+        var page = crossbow.addPage("index.html", index, {});
+
+        crossbow.compileOne(page, {siteConfig:{}}, function (err, out) {
+
+            require("d-logger")(out.compiled);
+            assert.equal(out.compiled, expected);
+            done();
+        });
+    });
+    it("Can do simple includes without fucking the formatting", function(done) {
+
+        var index = multiline(function(){/*
+<ul>
     {{#site.links}}
     <li>{{.}}</li>
     {{/site.links}}
