@@ -11,7 +11,7 @@ describe("@inc helper", function() {
         crossbow.clearCache();
     });
 
-    it.only("Can save a rendered include", function(done) {
+    it("Can save a rendered include", function(done) {
 
         var index = multiline.stripIndent(function(){/*
 
