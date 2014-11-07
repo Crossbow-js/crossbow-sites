@@ -6,7 +6,7 @@ var fs          = require("fs");
 var assert      = require("chai").assert;
 var crossbow    = require("../../../index");
 
-describe.only("@inc helper - formatting tests", function() {
+describe("@inc helper - formatting tests", function() {
 
     beforeEach(function () {
         crossbow.clearCache();
