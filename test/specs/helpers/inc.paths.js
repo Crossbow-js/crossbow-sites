@@ -15,12 +15,12 @@ describe("@inc helper", function(){
 
         var index = multiline.stripIndent(function(){/*
 
-         Button: {@inc src="_includes/button.html" /}
-         
+         Button: {{ inc src="_includes/button.html" }}
+
          */});
 
         var page = crossbow.addPage("index.html", index, {});
-        
+
         var config = {
             siteConfig:{},
             cwd: "test/fixtures"

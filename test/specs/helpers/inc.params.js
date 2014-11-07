@@ -3,7 +3,7 @@ var multiline     = require("multiline");
 var assert        = require("chai").assert;
 var crossbow = require("../../../index");
 
-describe.only("@inc helper + params", function(){
+describe("@inc helper + params", function(){
 
     beforeEach(function () {
         crossbow.clearCache();
