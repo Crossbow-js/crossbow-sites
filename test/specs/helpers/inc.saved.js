@@ -13,14 +13,12 @@ describe("@inc helper", function() {
 
     it("Can save a rendered include", function(done) {
 
-        var index = multiline.stripIndent(function(){/*
-
-        before save
-        {{ save src="button.html" name="shane" }}
-        After save
-
-        {{ inc src="saved:button.html" }}
-         */});
+        var index = multiline(function(){/*
+before save
+{{ save src="button.html" name="shane" }}
+After save
+{{ inc src="saved:button.html" }}
+*/});
 
         crossbow.populateCache("button.html", "<button>{{name}}</button>");
 
@@ -30,11 +28,12 @@ describe("@inc helper", function() {
             if (err) {
                 done(err);
             }
+            require("d-logger")(out.compiled);
             assert.include(out.compiled, "<button>shane</button>");
             done();
         });
     });
-    it("Can save an include @hl it later", function(done) {
+    it.skip("Can save an include @hl it later", function(done) {
 
         var index = multiline.stripIndent(function(){/*
 
