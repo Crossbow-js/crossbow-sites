@@ -8,7 +8,7 @@ var fs        = require("fs");
 var Post     = require("../../../lib/post");
 var crossbow = require("../../../index");
 
-describe("@highlight + @hl", function(){
+describe.only("@highlight + @hl", function(){
 
     beforeEach(function () {
         crossbow.clearCache();
@@ -16,13 +16,11 @@ describe("@highlight + @hl", function(){
 
     it("highlights a block of code", function(done){
 
-        var page1 = multiline.stripIndent(function(){/*
-
-         {@hl lang="js"}
-         var shane = "awesome";
-         {/hl}
-
-         */});
+        var page1 = multiline(function(){/*
+{{#hl lang="js"}}
+var shane = "awesome";
+{{/hl}}
+*/});
 
         crossbow.addPage("projects/about-us.html", page1);
 
@@ -30,6 +28,7 @@ describe("@highlight + @hl", function(){
             if (err) {
                 done(err);
             }
+            //require("d-logger")(out.compiled);
             assert.include(out.compiled, "<pre><code class=\"js\"><span class=\"hljs-keyword\">var</span>");
             done();
         });
@@ -37,35 +36,17 @@ describe("@highlight + @hl", function(){
     it("escapes output when no lang given", function(done){
 
         var page1 = multiline.stripIndent(function(){/*
-
-         {@hl}
+         {{#hl}}
          <button></button>
-         {/hl}
-
+         {{/hl}}
          */});
 
         crossbow.addPage("projects/about-us.html", page1);
 
         crossbow.compileOne("projects/about-us.html", {siteConfig:{}}, function (err, out) {
+            //console.log(out);
+            require("d-logger")(out.compiled);
             assert.include(out.compiled, "<pre><code>&lt;button&gt;&lt;/button&gt;");
-            done();
-        });
-    });
-    it("ignores `{` tag inside highlights", function(done){
-
-        var page1 = multiline.stripIndent(function(){/*
-
-         {@hl}
-         {hi}{@hit}
-         {/hl}
-
-         */});
-
-        crossbow.addPage("projects/about-us.html", page1);
-        crossbow.populateCache("button.html", "<button></button>");
-
-        crossbow.compileOne("projects/about-us.html", {siteConfig:{}}, function (err, out) {
-            assert.include(out.compiled, "{hi}{@hit}");
             done();
         });
     });
@@ -73,9 +54,9 @@ describe("@highlight + @hl", function(){
 
         var page1 = multiline.stripIndent(function(){/*
 
-         {@hl lang="ruby"}
+         {{#hl lang="ruby"}}
          var shane = "awesome";
-         {/hl}
+         {{/hl}}
 
          */});
 
@@ -86,36 +67,17 @@ describe("@highlight + @hl", function(){
             done();
         });
     });
-    it("just wraps block (and escapes) when `lang` not given", function(done){
-
-        var page1 = multiline.stripIndent(function(){/*
-
-         {@hl}
-         var shane = "awesome";
-         {/hl}
-
-         */});
-
-        crossbow.addPage("projects/about-us.html", page1);
-
-        crossbow.compileOne("projects/about-us.html", {siteConfig:{}}, function (err, out) {
-            assert.include(out.compiled, "<pre><code>var shane = &quot;awesome&quot;;");
-            done();
-        });
-    });
     it("highlights an external file", function(done) {
 
         var existsStub = sinon.stub(fs, "existsSync");
-        var fsStub     = sinon.stub(fs, "readFileSync").returns(".body { color: red; } ");
+        var fsStub     = sinon.stub(fs, "readFileSync").returns(".body { color: red; }");
         existsStub.withArgs("_scss/main.scss").returns(true);
 
 
         var index = multiline.stripIndent(function(){/*
-
          Before:
-         {@hl lang="scss" src="_scss/main.scss" /}
+         {{ hl lang="scss" src="_scss/main.scss" }}
          :After
-
          */});
 
         var page = crossbow.addPage("index.html", index, {});
@@ -124,42 +86,18 @@ describe("@highlight + @hl", function(){
 
             fs.existsSync.restore();
             fs.readFileSync.restore();
+
+            require("d-logger")(out.compiled);
 
             assert.include(out.compiled, "<pre><code class=\"scss\"><span class=\"hljs-class\">.body</span>");
             done();
-        });
-    });
-    it("gives a good error when an external file not found", function(done) {
-
-        var existsStub = sinon.stub(fs, "existsSync");
-        var fsStub     = sinon.stub(fs, "readFileSync").returns(".body { color: red; } ");
-        existsStub.withArgs("_scss/main.scss").returns(true);
-
-
-        var index = multiline.stripIndent(function(){/*
-
-         {@hl lang="scss" src="_scssss/main.scss" /}
-
-         */});
-
-        crossbow.emitter.on("log", function (msg) {
-            assert.equal(msg.type, "warn");
-            assert.include(msg.msg, "_scssss/main.scss");
-            done();
-        });
-
-        var page = crossbow.addPage("index.html", index, {});
-
-        crossbow.compileOne(page, {}, function (err, out) {
-            fs.existsSync.restore();
-            fs.readFileSync.restore();
         });
     });
     it("uses file extension for highlight lang if params.lang not given", function(done){
 
         var page1 = multiline.stripIndent(function(){/*
 
-         {@hl src="js/function.js" /}
+         {{ hl src="js/function.js" }}
 
          */});
 
@@ -175,7 +113,7 @@ describe("@highlight + @hl", function(){
 
         var page1 = multiline.stripIndent(function(){/*
 
-         {@hl src="js/function.js" lang="ruby" /}
+         {{ hl src="js/function.js" lang="ruby" }}
 
          */});
 
