@@ -1,1 +1,5 @@
-<button>{name} Button</button>
+{{#if name}}
+<button cb-Btn="{{name}}">{{name}} Button</button>
+{{else}}
+<button cb-Btn>Button</button>
+{{/if}}

@@ -7,7 +7,7 @@ title: "Layouts"
 
 Crossbow has been built from the ground to support really powerful layout features.
 Layouts live in the `_layouts` directory and are just regular `html` files that 
-contain the *special* {``{#content /}``} tag.
+contain the *special* `{{ content }}` tag.
 
 Here's a tiny example of a layout file...
 
@@ -17,10 +17,10 @@ Here's a tiny example of a layout file...
 <!DOCTYPE html>
 <html>
     <head>
-        <title>{page.title}</title>
+        <title>{{page.title}}</title>
     </head>
     <body>
-        {#content /}
+        {{content}}
     </body>
 </html>
 ```
@@ -66,7 +66,7 @@ The idea is simple - Layouts, can also have Layouts. This means you can have a s
 ```html
 <html>
     <head></head>
-    {#content /}
+    {{content}}
 </html>
 ```
 
@@ -77,6 +77,6 @@ The idea is simple - Layouts, can also have Layouts. This means you can have a s
 layout: parent
 ---
 <main class="post">
-    {#content /}
+    {{content}}
 </main>
 ```

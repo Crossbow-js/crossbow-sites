@@ -142,4 +142,34 @@ describe("@inc helper", function(){
             done();
         });
     });
+    it("Can do simple includes in loops with $idx", function(done) {
+
+        var index = multiline(function(){/*
+{{#each site.names}}
+{{ inc src="{{tmpl}}.html" name=. prefix="btn" number="Example: {{$idx1}}" }}
+{{/each}}
+*/});
+
+        crossbow.populateCache("button.html", "<button>{{prefix}}-{{name}} {{number}}</button>");
+
+        var page = crossbow.addPage("index.html", index, {});
+
+        var config = {
+            siteConfig: {
+                names: ["shane", "kittie"],
+                title: "oh yeah",
+                tmpl: "button"
+            }
+        };
+
+        crossbow.compileOne(page, config, function (err, out) {
+            if (err) {
+                done(err);
+            }
+            require("d-logger")(out.compiled);
+            assert.include(out.compiled, "<button>btn-shane Example: 1</button>");
+            assert.include(out.compiled, "<button>btn-kittie Example: 2</button>");
+            done();
+        });
+    });
 });

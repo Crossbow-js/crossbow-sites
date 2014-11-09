@@ -1,8 +1,8 @@
 var gulp         = require("gulp");
 var jshint       = require("gulp-jshint");
 var coderBlog    = require("./plugins/blog");
-var browserSync  = require("browser-sync");
-var htmlInjector = require("bs-html-injector");
+var browserSync  = require("/Users/shakyshane/sites/os-browser-sync");
+var htmlInjector = require("/Users/shakyshane/code/bs-plugins/html-injector");
 
 gulp.task("lint", function () {
     gulp.src([
@@ -20,7 +20,7 @@ gulp.task("lint", function () {
  */
 gulp.task("browserSync", function () {
     browserSync.use(htmlInjector, {
-        excludedTags: ["BODY"], 
+        excludedTags: ["BODY"],
         logLevel: "debug"
     });
     browserSync({
