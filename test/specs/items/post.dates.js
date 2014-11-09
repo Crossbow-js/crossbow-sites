@@ -10,7 +10,7 @@ var post1 = multiline.stripIndent(function(){/*
 layout: post-test
 ---
 
-{post.date}
+{{post.date}}
 
  */});
 
@@ -18,7 +18,7 @@ describe("Creating a Post date from the filename", function(){
 
     beforeEach(function () {
         crossbow.clearCache();
-        crossbow.populateCache("_layouts/post-test.html", "{#content /}");
+        crossbow.populateCache("_layouts/post-test.html", "{{ content }}");
     });
 
     it("uses date from the filename if not available in front-matter", function() {

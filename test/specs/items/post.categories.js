@@ -13,11 +13,11 @@ date: 2014-01-01
 categories: javascript, node-js
 ---
 
-{#post.related}
-{title}
-{/post.related}
+{{#post.related}}
+{{title}}
+{{/post.related}}
 
-{#post.categories}{.}{@sep},{/sep}{/post.categories}
+{{#post.categories}}{{.}}{{$sep ","}}{{/post.categories}}
 
  */});
 var post1_alt = multiline.stripIndent(function(){/*
@@ -28,11 +28,11 @@ date: 2014-01-01
 categories: javascript
 ---
 
-{#post.related}
-{title}
-{/post.related}
+{{#post.related}}
+{{title}}
+{{/post.related}}
 
-{#post.categories}{.}{@sep},{/sep}{/post.categories}
+{{#post.categories}}{{.}}{{$sep ","}}{{/post.categories}}
 
  */});
 var post2 = multiline.stripIndent(function(){/*
@@ -45,16 +45,15 @@ categories: javascript, node-js
 
 Post 2
 
-{post.title}
+{{post.title}}
  */});
 
 describe("Creating a Post that knows about others in the same category", function(){
 
     beforeEach(function () {
         crossbow.clearCache();
-        crossbow.populateCache("_layouts/post-test.html", "{#content /}");
+        crossbow.populateCache("_layouts/post-test.html", "{{ content }}");
     });
-
     it("can list the categories with seperator", function() {
 
 
@@ -62,6 +61,7 @@ describe("Creating a Post that knows about others in the same category", functio
         var postItem2 = crossbow.addPost("_posts/post2.md", post2);
 
         crossbow.compileOne(postItem, {}, function (err, out) {
+            require("d-logger")(out.compiled);
             assert.include(out.compiled, "<p>Post 2</p>");
             assert.include(out.compiled, "<p>javascript,node-js</p>");
             assert.notInclude(out.compiled, "<p>Post 2</p>\n<p>Post 2</p>");

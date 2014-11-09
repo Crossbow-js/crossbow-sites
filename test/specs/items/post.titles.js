@@ -11,14 +11,14 @@ layout: post-test
 date: 2013-11-13
 ---
 
-{post.title}
+{{post.title}}
  */});
 
 describe("Creating a Post title from the filename", function(){
 
     beforeEach(function () {
         crossbow.clearCache();
-        crossbow.populateCache("_layouts/post-test.html", "{#content /}");
+        crossbow.populateCache("_layouts/post-test.html", "{{ content }}");
     });
 
     it("uses the filename as title if no title available in front-matter", function() {
