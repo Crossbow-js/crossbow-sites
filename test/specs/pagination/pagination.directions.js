@@ -5,13 +5,12 @@ var fs            = require("fs");
 var assert        = require("chai").assert;
 
 var crossbow = require("../../../index");
-//crossbow.setLogLevel("debug");
 
 var postLayout = multiline.stripIndent(function(){/*
  <!DOCTYPE html>
  <html>
  <body class="post">
- {#content /}
+ {{ content }}
  </body>
  </html>
  */});
@@ -19,9 +18,9 @@ var postLayout = multiline.stripIndent(function(){/*
 var pageLayout = multiline.stripIndent(function(){/*
  <!DOCTYPE html>
  <html>
- {#inc src="head.html" /}
+ {{ inc src="head.html" }}
  <body class="page">
- {#content /}
+ {{ content }}
  </body>
  </html>
  */});
@@ -48,10 +47,10 @@ describe("Processing a Markdown file", function(){
         crossbow.populateCache("_layouts/post-test.html", postLayout);
 
         // Add HEAD section to cache
-        crossbow.populateCache("head.html", "<head><title>{page.title} {site.sitename}</title></head>");
+        crossbow.populateCache("head.html", "<head><title>{{page.title}} {{site.sitename}}</title></head>");
     });
 
-    it("Can use site variables", function(done) {
+    it.only("Can use site variables", function(done) {
 
         var post1 = multiline.stripIndent(function(){/*
          ---
@@ -69,8 +68,8 @@ describe("Processing a Markdown file", function(){
          date: 2013-11-14
          ---
 
-         Prev - {post.prev.url}
-         Next - {post.next.url}
+         Prev - {{post.prev.url}}
+         Next - {{post.next.url}}
 
          */});
         var post3 = multiline.stripIndent(function(){/*
