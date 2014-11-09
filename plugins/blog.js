@@ -16,7 +16,7 @@ var defaults = {
     configFile: "./_config.yml",
     transformSiteConfig: transformSiteConfig,
     env: "production",
-    logLevel: "warn"
+    logLevel: "debug"
 };
 
 /**

@@ -61,7 +61,7 @@ describe("Creating a Post that knows about others in the same category", functio
         var postItem2 = crossbow.addPost("_posts/post2.md", post2);
 
         crossbow.compileOne(postItem, {}, function (err, out) {
-            require("d-logger")(out.compiled);
+            //require("d-logger")(out.compiled);
             assert.include(out.compiled, "<p>Post 2</p>");
             assert.include(out.compiled, "<p>javascript,node-js</p>");
             assert.notInclude(out.compiled, "<p>Post 2</p>\n<p>Post 2</p>");
