@@ -55,7 +55,7 @@ describe("Adding Pages to the Cache", function(){
          title: "Homepage"
          ---
 
-         <h1>{post.title}</h1>
+         <h1>{{post.title}}</h1>
          */});
         var updatedContent = multiline.stripIndent(function(){/*
          ---
@@ -63,12 +63,12 @@ describe("Adding Pages to the Cache", function(){
          title: "Homepage - updated"
          ---
 
-         <h1>{post.title}</h1>
+         <h1>{{post.title}}</h1>
          */});
 
         crossbow.clearCache();
 
-        crossbow.populateCache("_layouts/post.html", "{#content /}");
+        crossbow.populateCache("_layouts/post.html", "{{content}}");
 
         crossbow.addPage("/index.html", initial);
 

@@ -75,12 +75,12 @@ describe("Adding Posts to the Cache", function(){
          tags: code, jquery-ui, how to guide
          ---
 
-         {post.title}
+         {{post.title}}
          */});
 
         crossbow.clearCache();
 
-        crossbow.populateCache("_layouts/post-test.html", "{#content /}");
+        crossbow.populateCache("_layouts/post-test.html", "{{ content }}");
         crossbow.addPost("_posts/1.md", content1);
 
         crossbow.compileOne("_posts/1.md", {}, function (err, out) {

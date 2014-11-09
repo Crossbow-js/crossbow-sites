@@ -38,18 +38,18 @@ describe("Adding Partials to the Cache", function(){
         var layout = multiline.stripIndent(function(){/*
          <!DOCTYPE html>
          <html>
-         
+
          <body class="post">
 
-         {@inc src="_includes/date.html" /}
+         {{ inc src="_includes/date.html" }}
 
-         {@inc src="_includes/partials/footer.html" url="http://shakyshane.com" /}
+         {{ inc src="_includes/partials/footer.html" url="http://shakyshane.com" }}
 
-         {#posts}
-            {@inc src="_includes/title.html" title=title /}
-         {/posts}
-         
-         {#content /}
+         {{#posts}}
+            {{ inc src="_includes/title.html" title=title }}
+         {{/posts}}
+
+         {{ content }}
 
          </body>
          </html>
@@ -77,18 +77,16 @@ describe("Adding Partials to the Cache", function(){
 
          Content
 
-
-
          */});
 
         crossbow.populateCache("_layouts/post-test.html", layout);
-        crossbow.populateCache("_includes/title.html", "<li>{title}</li>");
-        crossbow.populateCache("_includes/title2.html", "<li>{post} - {_post.title}</li>");
-        crossbow.populateCache("_includes/head.html", "<head><title>{post.title}</title></head>");
+        crossbow.populateCache("_includes/title.html", "<li>{{title}}</li>");
+        crossbow.populateCache("_includes/title2.html", "<li>{{post}} - {{_post.title}}</li>");
+        crossbow.populateCache("_includes/head.html", "<head><title>{{post.title}}</title></head>");
         crossbow.populateCache("_snippets/styles.css", ".shane { background: black }");
         crossbow.populateCache("_snippets/func.js", "var shane='kitten'");
-        crossbow.populateCache("_includes/date.html", "<footer>Date: {post.date}</footer>");
-        crossbow.populateCache("_includes/partials/footer.html", "<footer>Alternative links {params.url}</footer>");
+        crossbow.populateCache("_includes/date.html", "<footer>Date: {{post.date}}</footer>");
+        crossbow.populateCache("_includes/partials/footer.html", "<footer>Alternative links {{params.url}}</footer>");
 
         crossbow.addPost("_posts/post1.md", post1, {});
         crossbow.addPost("_posts/post2.md", post2, {});
@@ -108,10 +106,6 @@ describe("Adding Partials to the Cache", function(){
     });
     it("Can update partials in the cache", function(done){
 
-        var layout = multiline.stripIndent(function(){/*
-         {#content /}
-         */});
-
         var page1 = multiline.stripIndent(function(){/*
          ---
          layout: post-test
@@ -119,15 +113,15 @@ describe("Adding Partials to the Cache", function(){
          date: 2014-04-10
          ---
 
-         {@inc src="button.html" text="Sign up" /}
+         {{ inc src="button.html" text="Sign up" }}
 
          */});
 
         crossbow.clearCache();
 
-        crossbow.populateCache("_layouts/post-test.html", layout);
+        crossbow.populateCache("_layouts/post-test.html", "{{content}}");
 
-        var cache = crossbow.populateCache("button.html", "<button>{text}</button>");
+        var cache = crossbow.populateCache("button.html", "<button>{{text}}</button>");
 
         crossbow.addPage("projects/shane.html", page1, {});
 
@@ -135,7 +129,7 @@ describe("Adding Partials to the Cache", function(){
 
             assert.include(out.compiled, "<button>Sign up</button>");
 
-            crossbow.populateCache("button.html", "<button class=\"button\">{text}</button>");
+            crossbow.populateCache("button.html", "<button class=\"button\">{{text}}</button>");
 
             assert.equal(cache.partials().length, 2);
 
