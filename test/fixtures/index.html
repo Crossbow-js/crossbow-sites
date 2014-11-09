@@ -5,13 +5,12 @@ button: "button.html"
 buttons: ["Primary", "Secondary", ""]
 ---
 
-<h1>Buttons</h1>
+<h1>{{page.title}} Buttons</h1>
 
 <!--- [Layouts](/docs/layouts)-->
 
 
 {{#page.buttons}}
-{{@index}}
 {{ save @index src="_includes/button.html" name=. }}
 {{ inc src="saved:_includes/button.html"   }}
 {{ hl  src="saved:_includes/button.html"   }}

@@ -13,46 +13,44 @@ describe("@section + @yield", function(){
 
     it("allows sections with names:", function(done){
 
-        var layout = multiline.stripIndent(function(){/*
-         <html>
-         <head>
-
-         {@yield name="head-css" /}
-         </head>
-
-         </html>
+        var layout = multiline(function(){/*
+<html>
+<head>
+<style>
+{{ $yield name="head-css" }}
+</style>
+</head>
+<body>
+    {{ content }}
+</body>
+</html>
          */});
-        var page1 = multiline.stripIndent(function(){/*
-         ---
-         layout: test
-         title: "Homepage"
-         ---
-
-         Page 1
-
-         {@section name="head-css"}.body { background: red }{/section}
-
-         {@section name="head-js"}<script>alert("hey yo");</script>{/section}
-
-         */});
+        var page1 = multiline(function(){/*
+---
+layout: test
+title: "Homepage"
+---
+{{#section name="head-css" }}
+body { background: red; }
+{{/section}}
+*/});
 
         crossbow.populateCache("_layouts/test.html", layout);
 
         crossbow.addPage("projects/about-us.html", page1);
 
         crossbow.compileOne("projects/about-us.html", {}, function (err, out) {
-            assert.include(out.compiled, ".body { background: red }");
-            assert.notInclude(out.compiled, "<script>alert(\"hey yo\");</script>");
+            assert.include(out.compiled, "body { background: red; }");
             done();
         });
     });
-    it("clears it's cache", function(done){
+    it.only("clears it's cache", function(done){
 
         var layout = multiline.stripIndent(function(){/*
          <html>
          <head>
 
-         {@yield name="head-css2" /}
+         {{ $yield name="head-css2" }}
          </head>
 
          </html>
@@ -63,7 +61,7 @@ describe("@section + @yield", function(){
          title: "Homepage"
          ---
 
-         {@section name="head-css2"}.body { background: red }{/section}
+         {{#section name="head-css2"}}.body { background: red }{{/section}}
 
          */});
         var page1Modified = multiline.stripIndent(function(){/*
@@ -72,7 +70,7 @@ describe("@section + @yield", function(){
          title: "Homepage"
          ---
 
-         {@section name="head-css2"}.body { background: red }{/section}
+         {{#section name="head-css2"}}.body { background: red }{{/section}}
 
          Extra content, but same section
 
@@ -81,7 +79,6 @@ describe("@section + @yield", function(){
         crossbow.populateCache("_layouts/test.html", layout);
 
         crossbow.addPage("projects/about-us.html", page1);
-
 
         crossbow.compileOne("projects/about-us.html", {}, function (err, out) {
 
