@@ -1,6 +1,5 @@
 var _           = require("lodash");
 var multiline   = require("multiline");
-var dlog        = require("d-logger");
 var sinon       = require("sinon");
 var fs          = require("fs");
 var assert      = require("chai").assert;
@@ -74,7 +73,7 @@ Before
 
         crossbow.compileOne(page, {siteConfig:{}}, function (err, out) {
 
-            require("d-logger")(out.compiled);
+            //require("d-logger")(out.compiled);
             assert.equal(out.compiled, expected);
             done();
         });
@@ -99,7 +98,6 @@ Before
         var links = ["Link 1", "Link 2"];
 
         crossbow.compileOne(page, {siteConfig: {links: links}}, function (err, out) {
-            dlog(out.compiled);
             assert.equal(out.compiled, expected);
             done();
         });

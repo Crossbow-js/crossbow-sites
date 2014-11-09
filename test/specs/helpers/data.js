@@ -15,9 +15,9 @@ describe("@data helper", function(){
 
         var index = multiline.stripIndent(function(){/*
         Before:
-        {@data src="data/author.yml"}
-        {author.name} - {site.title}
-        {/data}
+        {{#data src="data/author.yml" }}
+        {{author.name}} - {{site.title}}
+        {{/data}}
         :After
 
          */});
@@ -25,8 +25,6 @@ describe("@data helper", function(){
         var data = multiline.stripIndent(function(){/*
         name: Shane Osbourne
          */});
-
-
 
         var page = crossbow.addPage("index.html", index, {});
 
@@ -41,9 +39,9 @@ describe("@data helper", function(){
 
         var index = multiline.stripIndent(function(){/*
          Before:
-         {@data src="data/author.yml"}
-         {author.name}
-         {/data}
+         {{#data src="data/author.yml" }}
+         {{author.name}}
+         {{/data}}
          :After
 
          */});
@@ -69,9 +67,9 @@ describe("@data helper", function(){
         button: "primary"
         ---
         Before:
-        {@data src="data/author.yml" as="author"}
-        {author.name} - {site.title} - {page.title} - {page.button}
-        {/data}
+        {{#data src="data/author.yml" as="person" }}
+        {{person.name}} - {{site.title}} - {{page.title}} - {{page.button}}
+        {{/data}}
         :After
 
          */});
@@ -85,6 +83,7 @@ describe("@data helper", function(){
         crossbow.populateCache("data/author.yml", data, "data");
 
         crossbow.compileOne(page, {siteConfig:{title: "shakyshane"}}, function (err, out) {
+            //require("d-logger")(out.compiled);
             assert.include(out.compiled, "Shane Osbourne - shakyshane - Data test - primary");
             done();
         });
@@ -94,9 +93,9 @@ describe("@data helper", function(){
 
         var index = multiline.stripIndent(function(){/*
          Before:
-         {@data src="_data/author.yml"}
-         {name} - {site.title}
-         {/data}
+         {{#data src="_data/author.yml"}}
+         {{name}} - {{site.title}}
+         {{/data}}
          :After
 
          */});

@@ -123,10 +123,10 @@ function addLayout(layout, data, cb) {
         return cb(null, data.item.content);
     }
 
-    if (layoutFile && yaml.hasFrontMatter(layoutFile)) {
+    if (layoutFile && yaml.hasFrontMatter(layoutFile.content)) {
 
         // nested layout
-        var _data   = yaml.readFrontMatter(layoutFile, data.item, data.item.paths.filePath);
+        var _data   = yaml.readFrontMatter(layoutFile.content, data.item, data.item.paths.filePath);
 
         return renderTemplate(_data.content, data, function (err, out) {
 
@@ -136,7 +136,7 @@ function addLayout(layout, data, cb) {
         });
     }
 
-    return renderTemplate(layoutFile, data, cb);
+    return renderTemplate(layoutFile.content, data, cb);
 }
 
 /**

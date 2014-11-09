@@ -44,8 +44,7 @@ var shane = "awesome";
         crossbow.addPage("projects/about-us.html", page1);
 
         crossbow.compileOne("projects/about-us.html", {siteConfig:{}}, function (err, out) {
-            //console.log(out);
-            require("d-logger")(out.compiled);
+            //require("d-logger")(out.compiled);
             assert.include(out.compiled, "<pre><code>&lt;button&gt;&lt;/button&gt;");
             done();
         });
@@ -87,7 +86,7 @@ var shane = "awesome";
             fs.existsSync.restore();
             fs.readFileSync.restore();
 
-            require("d-logger")(out.compiled);
+            //require("d-logger")(out.compiled);
 
             assert.include(out.compiled, "<pre><code class=\"scss\"><span class=\"hljs-class\">.body</span>");
             done();

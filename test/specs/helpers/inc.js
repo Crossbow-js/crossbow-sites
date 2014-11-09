@@ -25,7 +25,7 @@ describe("@inc helper", function(){
             if (err) {
                 done(err);
             }
-            require("d-logger")(out.compiled);
+            //require("d-logger")(out.compiled);
             assert.include(out.compiled, "<button>Sign up</button>");
             done();
         });
@@ -82,7 +82,7 @@ describe("@inc helper", function(){
             }
             assert.include(out.compiled, "<button>Sub Dir</button>");
             assert.include(out.compiled, "<button>Top level</button>");
-            require("d-logger")(out.compiled);
+            //require("d-logger")(out.compiled);
             done();
         });
     });
@@ -136,7 +136,7 @@ describe("@inc helper", function(){
             if (err) {
                 done(err);
             }
-            require("d-logger")(out.compiled);
+            //require("d-logger")(out.compiled);
             assert.include(out.compiled, "<button>btn-shane</button>");
             assert.include(out.compiled, "<button>btn-kittie</button>");
             done();
@@ -166,7 +166,7 @@ describe("@inc helper", function(){
             if (err) {
                 done(err);
             }
-            require("d-logger")(out.compiled);
+            //require("d-logger")(out.compiled);
             assert.include(out.compiled, "<button>btn-shane Example: 1</button>");
             assert.include(out.compiled, "<button>btn-kittie Example: 2</button>");
             done();

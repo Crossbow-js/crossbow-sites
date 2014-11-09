@@ -16,7 +16,6 @@ Before {{ inc }}After
 */});
 
         crossbow.emitter.on("log", function (data) {
-            console.log(data);
             assert.equal(data.type, "warn");
             done();
         });
@@ -36,7 +35,6 @@ Before {{ inc }}After
          */});
 
         crossbow.emitter.on("log", function (data) {
-            console.log(data);
             assert.equal(data.type, "warn");
             done();
         });
@@ -68,7 +66,7 @@ Before {{ inc }}After
         var page = crossbow.addPage("index.html", index, {});
 
         crossbow.compileOne(page, {siteConfig:{text:"Hi there"}}, function (err, out) {
-            require("d-logger")(out.compiled);
+            //require("d-logger")(out.compiled);
         });
     });
 });

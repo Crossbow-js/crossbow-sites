@@ -28,20 +28,18 @@ After save
             if (err) {
                 done(err);
             }
-            require("d-logger")(out.compiled);
+            //require("d-logger")(out.compiled);
             assert.include(out.compiled, "<button>shane</button>");
             done();
         });
     });
-    it.skip("Can save an include @hl it later", function(done) {
+    it("Can save an include @hl it later", function(done) {
 
         var index = multiline.stripIndent(function(){/*
-
          before save
-         {@save src="button.html" name="shane"/}
+         {{ save src="button.html" name="shane" }}
          After save
-
-         {@hl src="saved:button.html" /}
+         {{ hl src="saved:button.html" }}
          */});
 
         crossbow.populateCache("button.html", "<button>{name}</button>");
@@ -52,7 +50,8 @@ After save
             if (err) {
                 done(err);
             }
-            assert.include(out.compiled, "</span>shane<span");
+            //require("d-logger")(out.compiled);
+            assert.include(out.compiled, "<pre><code class=\"html\"><span class=\"hljs-tag\">");
             done();
         });
     });
