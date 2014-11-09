@@ -7,7 +7,7 @@ var assert        = require("chai").assert;
 var crossbow = require("../../../index");
 
 var layout = multiline.stripIndent(function(){/*
-{#content /}
+{{ content }}
 */});
 
 var yml = multiline.stripIndent(function(){/*
@@ -50,9 +50,9 @@ describe("Processing a DATA", function(){
          date: 2013-11-13
          ---
 
-         {#site.data.members}
-         {name}
-         {/site.data.members}
+         {{#site.data.members}}
+         {{name}}
+         {{/site.data.members}}
 
          */});
 
