@@ -30,6 +30,7 @@ describe("@inc helper", function(){
             if (err) {
                 done(err);
             }
+            require("d-logger")(out.compiled);
             assert.include(out.compiled, "<button>");
             done();
         });

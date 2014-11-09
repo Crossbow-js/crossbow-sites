@@ -8,7 +8,7 @@ var fs        = require("fs");
 var Post     = require("../../../lib/post");
 var crossbow = require("../../../index");
 
-describe.only("@highlight + @hl", function(){
+describe("@highlight + @hl", function(){
 
     beforeEach(function () {
         crossbow.clearCache();
