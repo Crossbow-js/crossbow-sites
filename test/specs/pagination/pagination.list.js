@@ -11,7 +11,7 @@ var defaultLayout = multiline.stripIndent(function(){/*
 <!DOCTYPE html>
 <html>
 <body>
-{#content /}
+{{ content }}
 </body>
 </html>
 */});
@@ -20,7 +20,7 @@ var postLayout = multiline.stripIndent(function(){/*
 <!DOCTYPE html>
 <html>
 <body class="post">
-{#content /}
+{{ content }}
 </body>
 </html>
 */});
@@ -50,7 +50,7 @@ describe("Creating a pagination index", function(){
         crossbow.populateCache("_layouts/default.html", defaultLayout);
 
         // Add HEAD section to cache
-        crossbow.populateCache("head.html", "<head><title>{page.title} {site.sitename}</title></head>");
+        crossbow.populateCache("head.html", "<head><title>{{page.title}} {{site.sitename}}</title></head>");
     });
 
     it("Can use site variables", function(done) {
@@ -123,25 +123,25 @@ describe("Creating a pagination index", function(){
          paginate: posts:2
          ---
 
-         Number of posts: {posts.length}
+         Number of posts: {{posts.length}}
 
-         Per Page: {paged.perPage}
+         Per Page: {{paged.perPage}}
 
          This URL:
 
-         {#paged.items}
-         {title}{~n}
-         {/paged.items}
+         {{#paged.items}}
+         {{title}}
+         {{/paged.items}}
 
-         {#paged.next}
-         NEXT: {url} - {title}
-         {/paged.next}
+         {{#paged.next}}
+         NEXT: {{url}} - {{title}}
+         {{/paged.next}}
 
-         {#paged.prev}
-         PREV: {url} - {title}
-         {/paged.prev}
+         {{#paged.prev}}
+         PREV: {{url}} - {{title}}
+         {{/paged.prev}}
 
-         {site.site-name}
+         {{site.site-name}}
 
          */});
 
@@ -155,7 +155,7 @@ describe("Creating a pagination index", function(){
         var page = crossbow.addPage("blog/posts/index.html", page1, {prettyUrls: true});
 
         crossbow.compileOne(page, {siteConfig: {"site-name": "shane - test"}}, function (err, out) {
-            
+
             if (err) {
                 return done(err);
             }

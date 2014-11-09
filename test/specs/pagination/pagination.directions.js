@@ -50,7 +50,7 @@ describe("Processing a Markdown file", function(){
         crossbow.populateCache("head.html", "<head><title>{{page.title}} {{site.sitename}}</title></head>");
     });
 
-    it.only("Can use site variables", function(done) {
+    it("Can use site variables", function(done) {
 
         var post1 = multiline.stripIndent(function(){/*
          ---

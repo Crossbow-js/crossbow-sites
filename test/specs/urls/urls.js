@@ -5,21 +5,15 @@ var assert        = require("chai").assert;
 var crossbow = require("../../../index");
 
 var postLayout = multiline.stripIndent(function(){/*
-<!DOCTYPE html>
-<html>
-{>head /}
-<body class="post">
-{#content /}
-</body>
-</html>
+{{ content }}
 */});
 
 var pageLayout = multiline.stripIndent(function(){/*
 <!DOCTYPE html>
 <html>
-{#inc src="head.html" /}
+{{ inc src="head.html" }}
 <body class="page">
-{#content /}
+{{ content }}
 </body>
 </html>
 */});
@@ -31,7 +25,7 @@ title: "Function Composition in Javascript."
 date: 2013-11-13 20:51:39
 ---
 
-Hi there {page.title}
+Hi there {{page.title}}
 
 */});
 
@@ -57,9 +51,9 @@ describe("Processing a file", function(){
          date: 2014-04-10
          ---
 
-         {#posts}
-         {title} - {url}
-         {/posts}
+         {{#posts}}
+         {{title}} - {{url}}
+         {{/posts}}
 
          */});
 
