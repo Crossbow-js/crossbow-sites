@@ -27,7 +27,7 @@ module.exports = function (config) {
     config = merge(defaults, config || {}, true);
 
     config.siteConfig = config.transformSiteConfig(yaml.getYaml(config.configFile), config);
-    
+
     if (config.cwd) {
         crossbow.setCwd(config.cwd);
     }
@@ -36,14 +36,18 @@ module.exports = function (config) {
     var stream;
 
     return through2.obj(function (file, enc, cb) {
-        
+
         stream              = this;
-        var contents        = file._contents.toString();
-        var relFilePath     = file.path.replace(file.cwd, "");
-        
-        relFilePath         = relFilePath.replace(/^\//, "");
-        
-        files[relFilePath]  = contents;
+
+        if (file._contents) {
+
+            var contents        = file._contents.toString();
+            var relFilePath     = file.path.replace(file.cwd, "");
+
+            relFilePath         = relFilePath.replace(/^\//, "");
+
+            files[relFilePath]  = contents;
+        }
 
         cb();
 
@@ -73,7 +77,7 @@ module.exports = function (config) {
         });
 
         if (!queue.length && partials.length) {
-            
+
             crossbow.compileAll(config, function (err, out) {
                 _.each(out, function (item) {
                     stream.push(new File({

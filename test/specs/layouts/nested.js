@@ -5,8 +5,8 @@ var crossbow  = require("../../../index");
 var parentLayout = multiline.stripIndent(function () {/*
 <!DOCTYPE html>
 <html>
-<head><title>{page.title}</title></head>
-{#content /}
+<head><title>{{page.title}}</title></head>
+{{ content }}
 </html>
  */
 });
@@ -15,13 +15,13 @@ var childLayout = multiline.stripIndent(function () {/*
 ---
 layout: parent
 ---
-<body class="post">{#content /}</body>
+<body class="post">{{ content }}</body>
  */});
 var childLayout2 = multiline.stripIndent(function () {/*
 ---
 layout: child
 ---
-<section>{#content /}</section>
+<section>{{ content }}</section>
  */});
 
 describe("Nested/child layouts", function () {
@@ -39,7 +39,7 @@ describe("Nested/child layouts", function () {
     it("Can render with no layout", function (done) {
 
         var post1 = multiline.stripIndent(function () {/*
-         {site.sitename}
+         {{site.sitename}}
          */});
 
         var post = crossbow.addPost("_posts/post2.md", post1, {});
@@ -53,12 +53,12 @@ describe("Nested/child layouts", function () {
     it("Can render using a default layout in config", function (done) {
 
         var post1 = multiline.stripIndent(function () {/*
-         {site.sitename}
+         {{site.sitename}}
          */});
 
         var post = crossbow.addPost("_posts/post2.md", post1, {});
 
-        crossbow.populateCache("_layouts/shane.html", ":::{#content /}");
+        crossbow.populateCache("_layouts/shane.html", ":::{{ content }}");
 
         var config = {
             siteConfig: {
@@ -81,7 +81,7 @@ describe("Nested/child layouts", function () {
          title: "Nested layout testing"
          ---
 
-         {post.title}
+         {{post.title}}
          */});
 
         var post = crossbow.addPost("_posts/post2.md", post1, {});
@@ -101,7 +101,7 @@ describe("Nested/child layouts", function () {
          title: "Nested layout testing"
          ---
 
-         {post.title}
+         {{post.title}}
          */});
 
         var post = crossbow.addPost("_posts/post2.md", post1, {});
