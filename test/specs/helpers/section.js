@@ -44,7 +44,7 @@ body { background: red; }
             done();
         });
     });
-    it.only("clears it's cache", function(done){
+    it("clears it's cache", function(done){
 
         var layout = multiline.stripIndent(function(){/*
          <html>
