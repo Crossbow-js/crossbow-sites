@@ -123,7 +123,7 @@ function buildOne(stream, item, config) {
 
         if (err) {
             deferred.reject(err);
-        } else {
+        } else if (out) {
 
             if (Array.isArray(out)) {
                 out.forEach(function (item) {
@@ -166,7 +166,7 @@ function transformSiteConfig(yaml, config) {
 }
 
 function isPartial(filePath) {
-    return filePath.match(/(_includes|_layouts|_snippets)/);
+    return filePath.match(/(_inc|_includes|_layouts|_snippets)/);
 }
 
 function isPost(filePath) {
@@ -178,5 +178,5 @@ function isData(filePath) {
 }
 
 function isPage(filePath) {
-    return filePath.match(/\.(html|md|markdown)$/);
+    return filePath.match(/\.(html|md|markdown|hbs)$/);
 }
