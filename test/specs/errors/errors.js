@@ -63,7 +63,7 @@ describe("API gives meaningfull errors", function(){
 
         var post = crossbow.addPost("_posts/post2.md", post2, {});
 
-        crossbow.emitter.on("error", function (data) {
+        crossbow.emitter.on("_error", function (data) {
             assert.equal(data.error.name, "Error");
             done();
         });
@@ -87,7 +87,7 @@ describe("API gives meaningfull errors", function(){
 
         var post = crossbow.addPost("_posts/post2.md", post2, {});
 
-        crossbow.emitter.on("error", function (data) {
+        crossbow.emitter.on("_error", function (data) {
             assert.equal(data.error.name, "Error");
             done();
         });
@@ -111,7 +111,7 @@ describe("API gives meaningfull errors", function(){
 
         var post = crossbow.addPost("_posts/post2.md", post2, {});
 
-        crossbow.emitter.on("error", function (data) {
+        crossbow.emitter.on("_error", function (data) {
             assert.equal(data.error.name, "Error");
             done();
         });
