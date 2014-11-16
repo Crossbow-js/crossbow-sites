@@ -1,7 +1,7 @@
 var gulp         = require("gulp");
 var jshint       = require("gulp-jshint");
 var coderBlog    = require("./plugins/blog");
-var browserSync  = require("/Users/shakyshane/sites/os-browser-sync");
+var browserSync  = require("browser-sync");
 var htmlInjector = require("/Users/shakyshane/code/bs-plugins/html-injector");
 
 gulp.task("lint", function () {

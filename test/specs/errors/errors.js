@@ -7,9 +7,9 @@ var crossbow = require("../../../index");
 var postLayout = multiline.stripIndent(function(){/*
  <!DOCTYPE html>
  <html>
- {>"includes/head" /}
+ {{ inc src="_includes/head.html" }}
  <body class="post">
- {#content /}
+ {{ content }}
  </body>
  </html>
  */});
@@ -17,9 +17,9 @@ var postLayout = multiline.stripIndent(function(){/*
 var pageLayout = multiline.stripIndent(function(){/*
 <!DOCTYPE html>
 <html>
- {>"includes/head" /}
+ {{ inc src="_includes/head.html" }}
 <body class="page">
-{#content /}
+{{ content }}
 </body>
 </html>
 */});
@@ -31,7 +31,7 @@ var post1 = multiline.stripIndent(function(){/*
  date: 2013-11-13 20:51:39
  ---
 
- Hi there {page.title}
+ Hi there {{page.title}}
 
  */});
 
@@ -45,10 +45,10 @@ describe("API gives meaningfull errors", function(){
         crossbow.populateCache("_layouts/page-test.html", pageLayout);
 
         // Add HEAD section to cache
-        crossbow.populateCache("_includes/head", "<head><title>{page.title} {site.sitename}</title></head>");
+        crossbow.populateCache("_includes/head.html", "<head><title>{{page.title}} {{site.sitename}}</title></head>");
     });
 
-    it("passes error about includes", function(done) {
+    it("passes error about helpers", function(done) {
 
         var post2 = multiline.stripIndent(function(){/*
          ---
@@ -57,18 +57,67 @@ describe("API gives meaningfull errors", function(){
          date: 2013-11-13 20:51:39
          ---
 
-         {page.title}
-
-         {@inc src="buttonss" /}
+         Before {{ inc src=3 }}After
 
          */});
 
         var post = crossbow.addPost("_posts/post2.md", post2, {});
-        crossbow.populateCache("_snippets/function2.js", "var name = \"{params.name}\"");
+
+        crossbow.emitter.on("error", function (data) {
+            assert.equal(data.error.name, "Error");
+            done();
+        });
 
         crossbow.compileOne(post, {siteConfig: {sitename: "(shakyShane)"}}, function (err, out) {
-//            assert.equal(err, "Error: Template Not Found: includes/buttonss.html");
+            assert.include(out.compiled, "<p>Before After</p>");
+        });
+    });
+    it("passes error about include helpers", function(done) {
+
+        var post2 = multiline.stripIndent(function(){/*
+         ---
+         layout: post-test
+         title: "Highlight Helper"
+         date: 2013-11-13 20:51:39
+         ---
+
+         Before {{ inc src=3 }}After
+
+         */});
+
+        var post = crossbow.addPost("_posts/post2.md", post2, {});
+
+        crossbow.emitter.on("error", function (data) {
+            assert.equal(data.error.name, "Error");
             done();
+        });
+
+        crossbow.compileOne(post, {siteConfig: {sitename: "(shakyShane)"}}, function (err, out) {
+            assert.include(out.compiled, "<p>Before After</p>");
+        });
+    });
+    it("passes error about data helpers", function(done) {
+
+        var post2 = multiline.stripIndent(function(){/*
+         ---
+         layout: post-test
+         title: "Highlight Helper"
+         date: 2013-11-13 20:51:39
+         ---
+
+         Before {{ data src=3 }}After
+
+         */});
+
+        var post = crossbow.addPost("_posts/post2.md", post2, {});
+
+        crossbow.emitter.on("error", function (data) {
+            assert.equal(data.error.name, "Error");
+            done();
+        });
+
+        crossbow.compileOne(post, {siteConfig: {sitename: "(shakyShane)"}}, function (err, out) {
+            assert.include(out.compiled, "<p>Before After</p>");
         });
     });
 });
