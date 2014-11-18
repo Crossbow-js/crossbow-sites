@@ -29,7 +29,7 @@ describe("$dump helper", function() {
             if (err) {
                 done(err);
             }
-            //require("d-logger")(out.compiled);
+            require("d-logger")(out.compiled);
             assert.include(out.compiled, "class=\"hljs-string\">\"Shane\"</span>");
             done();
         });

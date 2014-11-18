@@ -79,7 +79,13 @@ module.exports = function (config) {
         if (!queue.length && partials.length) {
 
             crossbow.compileAll(config, function (err, out) {
+
                 _.each(out, function (item) {
+
+                    if (!item) {
+                        return;
+                    }
+
                     stream.push(new File({
                         cwd:  "./",
                         base: "./",

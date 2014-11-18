@@ -40,6 +40,9 @@ body { background: red; }
         crossbow.addPage("projects/about-us.html", page1);
 
         crossbow.compileOne("projects/about-us.html", {}, function (err, out) {
+            if (err) {
+                done(err);
+            }
             assert.include(out.compiled, "body { background: red; }");
             done();
         });
