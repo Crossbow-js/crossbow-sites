@@ -77,7 +77,6 @@ title: "Homepage"
             if (err) {
                 done(err);
             }
-            require("d-logger")(out.compiled);
             assert.include(out.compiled, "shakyshane");
             done();
         });
