@@ -47,6 +47,41 @@ body { background: red; }
             done();
         });
     });
+        it("allows access to globals in sections with names:", function(done){
+
+        var layout = multiline(function(){/*
+<html>
+<head>
+<style>
+{{ $yield name="head-stuff" }}
+</style>
+</head>
+<body>
+    {{ content }}
+</body>
+</html>
+         */});
+        var page1 = multiline(function(){/*
+---
+layout: test
+title: "Homepage"
+---
+{{#section name="head-stuff" }}{{ site.title }}{{/section}}
+*/});
+
+        crossbow.populateCache("_layouts/test.html", layout);
+
+        crossbow.addPage("projects/about-us.html", page1);
+
+        crossbow.compileOne("projects/about-us.html", {siteConfig: {title: "shakyshane"}}, function (err, out) {
+            if (err) {
+                done(err);
+            }
+            require("d-logger")(out.compiled);
+            assert.include(out.compiled, "shakyshane");
+            done();
+        });
+    });
     it("clears it's cache", function(done){
 
         var layout = multiline.stripIndent(function(){/*
