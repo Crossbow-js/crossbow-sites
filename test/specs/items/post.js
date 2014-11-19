@@ -33,8 +33,8 @@ describe("Creating a POST with maximum info", function(){
         assert.deepEqual(postItem.timestamp,    1384300800000,       "Adds Timestamp");
         assert.deepEqual(postItem.type,         "post",              "Adds Timestamp");
 
-        assert.deepEqual(postItem.categories,   ["javascript", "node-js"], "Adds Categories");
-        assert.deepEqual(postItem.tags,   ["code", "jquery-ui", "how-to-guide"], "Adds tags");
+        assert.deepEqual(postItem.categories[0].name,   "javascript", "Adds Categories");
+        assert.deepEqual(postItem.tags[0].name,   "code", "Adds tags");
 
         assert.isTrue(postItem.dateObj instanceof Date);
     });
