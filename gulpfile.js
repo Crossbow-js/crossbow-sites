@@ -21,7 +21,7 @@ gulp.task("lint", function () {
 gulp.task("browserSync", function () {
     browserSync.use(htmlInjector, {
         excludedTags: ["BODY"],
-        logLevel: "debug"
+        logLevel: "info"
     });
     browserSync({
         server: {
@@ -54,19 +54,20 @@ gulp.task("build-blog", function () {
     return gulp.src([
         "test/fixtures/**/*.html",
         "test/fixtures/_posts/*.md",
-        "test/fixtures/**/*.md",
+        "test/fixtures/**/*.md"
     ])
         .pipe(coderBlog(blogconfig))
         .pipe(gulp.dest("_site"));
 });
 
 gulp.task("watch", function () {
-    gulp.watch(["test/fixtures/**"], function (file) {
+    gulp.watch(["test/fixtures/**/*"], function (file) {
         return gulp.src(file.path)
             .pipe(coderBlog(blogconfig))
             .pipe(gulp.dest("_site"))
             .on("end", function () {
-                htmlInjector();
+                browserSync.reload();
+                //htmlInjector();
             });
     });
 });
