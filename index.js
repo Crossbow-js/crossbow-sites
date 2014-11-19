@@ -497,7 +497,12 @@ function addPost(key, string, config) {
      */
     if (post = cache.find(key, "posts")) {
         post.addData(key, string);
-        utils.prepareFrontVars(post, config, true);
+        utils.prepareFrontVars({
+            items:    post,
+            config:   config,
+            override: true,
+            blacklist: ["categories"]
+        });
         return post;
     }
 
@@ -528,7 +533,11 @@ function addPage(key, string, config) {
 
     if (page = cache.find(key, "pages")) {
         page.addData(key, string);
-        utils.prepareFrontVars(page, config, true);
+        utils.prepareFrontVars({
+            items: page,
+            config: config,
+            override: true
+        });
         return page;
     }
 

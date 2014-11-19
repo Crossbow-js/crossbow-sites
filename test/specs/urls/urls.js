@@ -39,7 +39,7 @@ describe("Processing a file", function(){
         crossbow.populateCache("_layouts/page-test.html", pageLayout);
 
         // Add HEAD section to cache
-        crossbow.populateCache("head.html", "<head><title>{page.title} {site.sitename}</title></head>");
+        crossbow.populateCache("head.html", "<head><title>{{page.title}} {{site.sitename}}</title></head>");
     });
 
     it("Knows about posts", function(done) {
@@ -62,6 +62,9 @@ describe("Processing a file", function(){
         crossbow.addPost("posts/blog1.md", post1);
         var page = crossbow.addPage("index.html", index);
         crossbow.compileOne(page, {}, function (err, out) {
+            if (err) {
+                done(err);
+            }
             var compiled = out.compiled;
             assert.include(compiled, "Function Composition in Javascript. - /blog1.html");
             done();

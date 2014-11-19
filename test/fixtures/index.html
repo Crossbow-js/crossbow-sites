@@ -5,16 +5,14 @@ button: "button.html"
 buttons: ["Primary", "Secondary", ""]
 ---
 
-<h1>{{page.title}} Buttons</h1>
-
-<!--- [Layouts](/docs/layouts)-->
-
-
-{{#page.buttons}}
-{{ save @index src="_includes/button.html" name=. }}
-{{ inc src="saved:_includes/button.html"   }}
-{{ hl  src="saved:_includes/button.html"   }}
-{{/page.buttons}}
-
+<h1>Categories:</h1>
+{{#each categories}}
+    <h2>{{$ucfirst this.title}}</h2>
+    <ul>
+        {{#each this.items}}
+        <li><a href="{{this.url}}">{{this.title}}</a></li>
+        {{/each}}
+    </ul>
+{{/each}}
 
 
