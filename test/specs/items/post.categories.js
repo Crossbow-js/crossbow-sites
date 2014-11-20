@@ -44,20 +44,20 @@ describe("Creating a Post that knows about others in the same category", functio
         crossbow.clearCache();
         crossbow.populateCache("_layouts/post-test.html", "{{ content }}");
     });
-    //it("can list the categories with separator", function(done) {
-    //
-    //
-    //    var postItem  = crossbow.addPost("_posts/post1.md", post1);
-    //    var postItem2 = crossbow.addPost("_posts/post2.md", post2);
-    //
-    //    crossbow.compileOne(postItem, {}, function (err, out) {
-    //        if (err) {
-    //            done(err);
-    //        }
-    //        assert.include(out.compiled, "<p>javascript,node-js</p>");
-    //        done();
-    //    });
-    //});
+    it("can list the categories with separator", function(done) {
+
+
+        var postItem  = crossbow.addPost("_posts/post1.md", post1);
+        var postItem2 = crossbow.addPost("_posts/post2.md", post2);
+
+        crossbow.compileOne(postItem, {}, function (err, out) {
+            if (err) {
+                done(err);
+            }
+            assert.include(out.compiled, "<p>javascript,node-js</p>");
+            done();
+        });
+    });
     it("can re-render category list when it's updated", function (done) {
 
         var postItem = crossbow.addPost("_posts/post1.md", post1);
@@ -70,7 +70,6 @@ describe("Creating a Post that knows about others in the same category", functio
                 if (err) {
                     done(err);
                 }
-                //require("d-logger")(out.compiled);
                 assert.include(out.compiled, "<p>javascript</p>");
                 done();
             });

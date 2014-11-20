@@ -2,12 +2,12 @@
 layout: default
 title: "Crossbow"
 button: "button.html"
-buttons: ["Primary", "Secondary", ""]
+buttons: ["Primary", "Secondary"]
 ---
 
-<h1>Categories:</h1>
-{{#each categories}}
-    <h2>{{$ucfirst this.title}}</h2>
+<h1>Tags:</h1>
+{{#each tags}}
+    <h2>{{this.title}}</h2>
     <ul>
         {{#each this.items}}
         <li><a href="{{this.url}}">{{this.title}}</a></li>

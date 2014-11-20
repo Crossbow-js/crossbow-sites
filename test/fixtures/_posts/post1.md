@@ -1,9 +1,8 @@
 ---
 layout: "post.html"
 title: "Test post"
-categories: javascript, kittens
+categories: javascript, node js
+tags: scss
 ---
 
-{{#post.categories}}
-    {{this.name}}
-{{/post.categories}}
+First post example
