@@ -95,6 +95,7 @@ describe("Adding Partials to the Cache", function(){
             if (err) {
                 done(err);
             }
+            //console.log(out.compiled);
             var compiled = out.compiled;
             assert.include(compiled, "<footer>Date: April 10, 2014</footer>");
             assert.include(compiled, "<li>Homepage</li>");

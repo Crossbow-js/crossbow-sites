@@ -130,7 +130,10 @@ function addLayout(layout, data, cb) {
 
         return renderTemplate(_data.content, data, function (err, out) {
 
-            data = compiler.addContent(data, out);
+            data = compiler.addContent({
+                context: data,
+                content: out
+            });
 
             addLayout(_data.front.layout, data, cb);
         });
@@ -387,7 +390,10 @@ function handleSuccess(item, data, config, cb, err, out) {
     var fullContent = applyContentTransforms("before item render", out, data, config);
 
     // Just write the body content without parsing (already done);
-    data = compiler.addContent(data, fullContent);
+    data = compiler.addContent({
+        content: fullContent,
+        context: data
+    });
 
     var layout = getLayoutName(data.page.front.layout, config);
 

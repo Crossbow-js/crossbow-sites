@@ -38,6 +38,9 @@ describe("Compiling everything in the cache", function(){
         crossbow.addPost("_posts/2.md", content2);
 
         crossbow.compilePosts({}, function (err, out) {
+            if (err) {
+                done(err);
+            }
             assert.equal(out.length, 2);
             done();
         });

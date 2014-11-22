@@ -84,8 +84,14 @@ describe("Adding Posts to the Cache", function(){
         crossbow.addPost("_posts/1.md", content1);
 
         crossbow.compileOne("_posts/1.md", {}, function (err, out) {
+            if (err) {
+                done(err);
+            }
             crossbow.addPost("_posts/1.md", updatedContent);
             crossbow.compileOne("_posts/1.md", {}, function (err, out) {
+                if (err) {
+                    done(err);
+                }
                 assert.notInclude(out.compiled, "<p>post1</p>");
                 assert.include(out.compiled, "<p>Blog 1 - updated</p>");
                 crossbow.clearCache();
