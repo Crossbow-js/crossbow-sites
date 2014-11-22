@@ -275,6 +275,51 @@ title: "Homepage"
             done();
         }); // Good if no error thrown
     });
+    it("Does not auto-indent lines with PRE tags indented code-blocks", function (done) {
+
+        var layout = multiline(function () {/*
+<div>
+    {{content}}
+</div>
+*/});
+        var index = multiline(function () {/*
+---
+title: "Homepage"
+layout: "post.hbs"
+highlight: false
+---
+```js
+var snippet = "false";
+var shane   = "awse";
+var func = function () {
+    console.log("Hello");
+}
+```
+*/});
+        var expected = multiline(function () {/*
+<div>
+    <pre><code class="lang-js">var snippet = &quot;false&quot;;
+var shane   = &quot;awse&quot;;
+var func = function () {
+    console.log(&quot;Hello&quot;);
+}
+</code></pre>
+</div>
+*/});
+
+
+
+        // NO POSTS ADDED
+        crossbow.populateCache("_layouts/post.hbs", layout);
+        crossbow.addPost("_posts/post1.md", index);
+        crossbow.compileOne("_posts/post1.md", {highlight: false, autoHighlight: false}, function (err, out) {
+            if (err) {
+                done(err);
+            }
+            assert.equal(out.compiled, expected);
+            done();
+        });
+    });
     it("Can render any content as markdown if `markdown: true` given in header.", function (done) {
 
         var index = multiline.stripIndent(function () {/*
