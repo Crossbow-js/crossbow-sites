@@ -126,7 +126,12 @@ function addLayout(layout, data, cb) {
     if (layoutFile && yaml.hasFrontMatter(layoutFile.content)) {
 
         // nested layout
-        var _data   = yaml.readFrontMatter(layoutFile.content, data.item, data.item.paths.filePath);
+        // file, context, filePath
+        var _data   = yaml.readFrontMatter({
+            file:     layoutFile.content,
+            context:  data.item,
+            filePath: data.item.paths.filePath
+        });
 
         return renderTemplate(_data.content, data, function (err, out) {
 
