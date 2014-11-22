@@ -96,6 +96,10 @@ var defaults = {
      */
     prettyUrls: true,
     /**
+     * Padd content blocks to enable nicer source code
+     */
+    prettyMarkup: true,
+    /**
      * No layouts by default.
      */
     defaultLayout: false,
@@ -137,7 +141,8 @@ function addLayout(layout, data, cb) {
 
             data = compiler.addContent({
                 context: data,
-                content: out
+                content: out,
+                config: data.config
             });
 
             addLayout(_data.front.layout, data, cb);
@@ -397,7 +402,8 @@ function handleSuccess(item, data, config, cb, err, out) {
     // Just write the body content without parsing (already done);
     data = compiler.addContent({
         content: fullContent,
-        context: data
+        context: data,
+        config:  config
     });
 
     var layout = getLayoutName(data.page.front.layout, config);
