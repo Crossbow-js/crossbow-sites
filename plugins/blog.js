@@ -9,6 +9,7 @@ var path      = require("path");
 var merge     = require("opt-merger").merge;
 var Q         = require("q");
 var _         = require("lodash");
+var errors    = require("../lib/errors");
 
 var PLUGIN_NAME = "gulp-coder-blog";
 
@@ -22,10 +23,14 @@ var defaults = {
 var memo;
 crossbow.emitter.on("_error", function (data) {
     if (data.error.message && data.error.message !== memo) {
-        //console.log(data.error);
-        //console.log("ERR");
-        crossbow.logger.error(data.error.type);
-    //    //console.log(data.error.stack);
+        if (data._type && errors[data._type]) {
+            var errorOut = errors[data._type](data);
+            if (errorOut && errorOut.length) {
+                crossbow.logger.error.apply(crossbow.logger, errorOut);
+            }
+        } else {
+            crossbow.logger.error(data.error.message);
+        }
         memo = data.error.message;
         setTimeout(function () {
             memo = "";

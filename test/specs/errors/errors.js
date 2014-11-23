@@ -64,7 +64,8 @@ describe("API gives meaningfull errors", function(){
         var post = crossbow.addPost("_posts/post2.md", post2, {});
 
         crossbow.emitter.on("_error", function (data) {
-            assert.include(data.error.message, "Parse");
+            assert.equal(data.error.hash.loc.first_line, 2);
+            assert.include(data.error.hash.position.string, "Before {{ inc src=\"shane }}After");
             done();
         });
 
