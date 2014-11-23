@@ -2,7 +2,7 @@ var _             = require("lodash");
 var multiline     = require("multiline");
 var assert        = require("chai").assert;
 
-var crossbow = require("../../../index");
+var crossbow      = require("../../../index");
 
 var postLayout = multiline.stripIndent(function(){/*
  <!DOCTYPE html>
@@ -57,18 +57,21 @@ describe("API gives meaningfull errors", function(){
          date: 2013-11-13 20:51:39
          ---
 
-         Before {{ inc src=3 }}After
+         Before {{ inc src="shane }}After
 
          */});
 
         var post = crossbow.addPost("_posts/post2.md", post2, {});
 
         crossbow.emitter.on("_error", function (data) {
-            assert.equal(data.error.name, "Error");
+            assert.include(data.error.message, "Parse");
             done();
         });
 
         crossbow.compileOne(post, {siteConfig: {sitename: "(shakyShane)"}}, function (err, out) {
+            if (err) {
+                done(err);
+            }
             assert.include(out.compiled, "<p>Before After</p>");
         });
     });
@@ -117,6 +120,10 @@ describe("API gives meaningfull errors", function(){
         });
 
         crossbow.compileOne(post, {siteConfig: {sitename: "(shakyShane)"}}, function (err, out) {
+            if (err) {
+                done(err);
+            }
+            //require("d-logger")(out.compiled);
             assert.include(out.compiled, "<p>Before After</p>");
         });
     });

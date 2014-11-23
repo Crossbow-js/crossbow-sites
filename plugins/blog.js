@@ -19,6 +19,20 @@ var defaults = {
     logLevel: "debug"
 };
 
+var memo;
+crossbow.emitter.on("_error", function (data) {
+    if (data.error.message && data.error.message !== memo) {
+        //console.log(data.error);
+        //console.log("ERR");
+        crossbow.logger.error(data.error.type);
+    //    //console.log(data.error.stack);
+        memo = data.error.message;
+        setTimeout(function () {
+            memo = "";
+        }, 2000);
+    }
+});
+
 /**
  * @returns {Function}
  */
@@ -54,7 +68,7 @@ module.exports = function (config) {
     }, function (cb) {
 
         var promises = [];
-        var queue = [];
+        var queue    = [];
         var partials = [];
 
         Object.keys(files).forEach(function (key) {
@@ -80,21 +94,27 @@ module.exports = function (config) {
 
             crossbow.compileAll(config, function (err, out) {
 
-                _.each(out, function (item) {
+                if (err) {
+                    //console.log(err);
+                    cb();
+                } else {
 
-                    if (!item) {
-                        return;
-                    }
+                    _.each(out, function (item) {
 
-                    stream.push(new File({
-                        cwd:  "./",
-                        base: "./",
-                        path: item.filePath,
-                        contents: new Buffer(item.compiled)
-                    }));
-                });
+                        if (!item) {
+                            return;
+                        }
 
-                cb();
+                        stream.push(new File({
+                            cwd:  "./",
+                            base: "./",
+                            path: item.filePath,
+                            contents: new Buffer(item.compiled)
+                        }));
+                    });
+
+                    cb();
+                }
             });
 
         } else {
@@ -110,13 +130,17 @@ module.exports = function (config) {
             Q.all(promises).then(function (err, out) {
                 cb();
             }).catch(function (err) {
-                err = err.toString();
-                crossbow.logger.error(err);
+                //console.log("ERROR FROM PRIMISE");
+                //throw err;
+                //err = err.toString();
+                //crossbow.logger.error(err);
                 cb();
             })
         }
     });
 };
+
+module.exports.logger = crossbow.logger;
 
 /**
  *

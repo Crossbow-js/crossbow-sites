@@ -3,14 +3,14 @@
  */
 var fs      = require("fs");
 var path    = require("path");
-var events  = require("events");
-var emitter = new events.EventEmitter();
 
 /**
  * 3rd Party Modules
  */
 var merge       = require("opt-merger").merge;
 var _           = require("lodash");
+
+var emitter     = require("./lib/emitter");
 
 /**
  * Logging

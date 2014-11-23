@@ -15,8 +15,8 @@ describe("@inc helper errors", function(){
 Before {{ inc }}After
 */});
 
-        crossbow.emitter.on("log", function (data) {
-            assert.equal(data.type, "warn");
+        crossbow.emitter.on("_error", function (data) {
+            assert.equal(data._type, "include");
             done();
         });
 
@@ -34,8 +34,8 @@ Before {{ inc }}After
 
          */});
 
-        crossbow.emitter.on("log", function (data) {
-            assert.equal(data.type, "warn");
+        crossbow.emitter.on("_error", function (data) {
+            assert.equal(data._type, "include");
             done();
         });
 
@@ -56,8 +56,8 @@ Before {{ inc }}After
 
          */});
 
-        crossbow.emitter.on("log", function (data) {
-            assert.equal(data.type, "warn");
+        crossbow.emitter.on("_error", function (data) {
+            assert.equal(data._type, "filter");
             done();
         });
 
@@ -66,7 +66,9 @@ Before {{ inc }}After
         var page = crossbow.addPage("index.html", index, {});
 
         crossbow.compileOne(page, {siteConfig:{text:"Hi there"}}, function (err, out) {
-            //require("d-logger")(out.compiled);
+            if (err) {
+                done(err);
+            }
         });
     });
 });
