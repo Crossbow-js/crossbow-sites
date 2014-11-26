@@ -19,23 +19,26 @@ describe("@inc helper", function() {
 
         crossbow.populateCache("button.html", "<button>Sign up</button>");
 
-        var page = crossbow.addPage("index.html", index, {});
+        var config = {
+            siteConfig:{}
+        };
 
-        crossbow.compileOne(page, {siteConfig:{}}, function (err, out) {
-            if (err) {
-                done(err);
+        crossbow.compileOne(
+            crossbow.addPage("index.html", index, {}),
+            config,
+            function (err, out) {
+                if (err) {
+                    done(err);
+                }
+                assert.include(out.compiled, "<button>Sign up</button>");
+                done();
             }
-            //require("d-logger")(out.compiled);
-            assert.include(out.compiled, "<button>Sign up</button>");
-            done();
-        });
+        );
     });
     it("Can do simple includes in nested dirs", function(done) {
 
         var index = multiline.stripIndent(function(){/*
-
          Button: {{ inc src="elems/button.html" }}
-
          */});
 
         crossbow.populateCache("elems/button.html", "<button>Sign up</button>");
@@ -98,10 +101,6 @@ describe("@inc helper", function() {
          {{ inc src="_scss/main.scss" }}
 
          */});
-
-        crossbow.emitter.on("log", function (err) {
-//            console.log(err);
-        });
 
         var page = crossbow.addPage("index.html", index, {});
 
@@ -166,7 +165,6 @@ describe("@inc helper", function() {
             if (err) {
                 done(err);
             }
-            //require("d-logger")(out.compiled);
             assert.include(out.compiled, "<button>btn-shane Example: 1</button>");
             assert.include(out.compiled, "<button>btn-kittie Example: 2</button>");
             done();
