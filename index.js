@@ -123,14 +123,14 @@ function addLayout(layout, data, cb) {
     var layoutFile = file.getFile(layoutPath);
 
     if (!layoutFile) {
-        logger.warn("The layout file {red:_%s} does not exist", layoutPath);
+        logger.warn("The layout file {red:%s} does not exist", layoutPath);
+        logger.warn("Check the file exists and that you've set the {magenta:cwd} property");
         return cb(null, data.item.content);
     }
 
     if (layoutFile && yaml.hasFrontMatter(layoutFile.content)) {
 
         // nested layout
-        // file, context, filePath
         var _data   = yaml.readFrontMatter({
             file:     layoutFile.content,
             context:  data.item,

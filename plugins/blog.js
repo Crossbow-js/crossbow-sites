@@ -11,10 +11,7 @@ var Q         = require("q");
 var _         = require("lodash");
 var errors    = require("../lib/errors");
 
-var PLUGIN_NAME = "gulp-coder-blog";
-
 var defaults = {
-    transformSiteConfig: transformSiteConfig,
     env: "production",
     logLevel: "debug"
 };
@@ -49,6 +46,8 @@ module.exports = function (config) {
     } else {
         config.siteConfig = {};
     }
+
+    crossbow.logger.setLevel(config.logLevel);
 
     if (config.cwd) {
         crossbow.setCwd(config.cwd);
@@ -162,7 +161,6 @@ function buildOne(stream, item, config) {
         if (err) {
             deferred.reject(err);
         } else if (out) {
-
             if (Array.isArray(out)) {
                 out.forEach(function (item) {
                     stream.push(new File({
