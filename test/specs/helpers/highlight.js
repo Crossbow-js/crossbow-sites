@@ -28,7 +28,6 @@ var shane = "awesome";
             if (err) {
                 done(err);
             }
-            //require("d-logger")(out.compiled);
             assert.include(out.compiled, "<pre><code class=\"js\"><span class=\"hljs-keyword\">var</span>");
             done();
         });

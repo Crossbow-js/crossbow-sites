@@ -14,7 +14,6 @@ var errors    = require("../lib/errors");
 var PLUGIN_NAME = "gulp-coder-blog";
 
 var defaults = {
-    configFile: "./_config.yml",
     transformSiteConfig: transformSiteConfig,
     env: "production",
     logLevel: "debug"
@@ -45,7 +44,11 @@ module.exports = function (config) {
 
     config = merge(defaults, config || {}, true);
 
-    config.siteConfig = config.transformSiteConfig(yaml.getYaml(config.configFile), config);
+    if (config.configFile) {
+        config.siteConfig = yaml.getYaml(config.configFile);
+    } else {
+        config.siteConfig = {};
+    }
 
     if (config.cwd) {
         crossbow.setCwd(config.cwd);
@@ -183,21 +186,6 @@ function buildOne(stream, item, config) {
     });
 
     return deferred.promise;
-}
-
-/**
- * @param yaml
- * @param config
- */
-function transformSiteConfig(yaml, config) {
-
-    if (config.env === "dev") {
-        yaml.cssFile = yaml.css.dev;
-    } else {
-        yaml.cssFile = yaml.s3prefix + yaml.css.production;
-    }
-
-    return yaml;
 }
 
 function isPartial(filePath) {
