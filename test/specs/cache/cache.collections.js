@@ -55,7 +55,7 @@ describe("Adding Posts to the Cache", function(){
         _cache.addPost([post1, post2]);
 
         var grouped = _cache.getCollection("posts", {
-            groupBy: 'categories'
+            groupBy: "categories"
         });
 
         assert.isTrue(grouped[0].items[0] instanceof Post);
@@ -68,7 +68,7 @@ describe("Adding Posts to the Cache", function(){
         _cache.addPost([post1, post2]);
 
         var grouped = _cache.getCollection("posts", {
-            groupBy: 'tags'
+            groupBy: "tags"
         });
 
         assert.equal(grouped.length, 3);

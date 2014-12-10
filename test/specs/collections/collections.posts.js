@@ -69,7 +69,7 @@ describe("Using the categories collection", function(){
             }
             assert.include(out.compiled, expected);
             done();
-        })
+        });
     });
 
     it("should loop through and render links to posts in tags", function(done) {
@@ -107,6 +107,6 @@ describe("Using the categories collection", function(){
             }
             assert.include(out.compiled, expected);
             done();
-        })
+        });
     });
 });

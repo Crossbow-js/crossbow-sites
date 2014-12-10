@@ -43,6 +43,7 @@
     "easy-extender": "^2.0.0",
     "eazy-logger": "^2.0.0",
     "highlight.js": "^8.1.0",
+    "immutable": "^3.3.0",
     "js-yaml": "^3.1.0",
     "lodash": "^2.4.1",
     "marked": "^0.3.2",

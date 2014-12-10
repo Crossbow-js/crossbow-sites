@@ -1,6 +1,6 @@
 var gulp         = require("gulp");
 var jshint       = require("gulp-jshint");
-var coderBlog    = require("./plugins/blog");
+var coderBlog    = require("./plugins/stream");
 var browserSync  = require("browser-sync");
 var htmlInjector = require("/Users/shakyshane/code/bs-plugins/html-injector");
 

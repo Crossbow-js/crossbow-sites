@@ -1,20 +1,19 @@
 var crossbow  = require("../index");
 var yaml      = require("../lib/yaml");
 var utils     = crossbow.utils;
-
 var through2  = require("through2");
 var gutil     = require("gulp-util");
 var File      = gutil.File;
 var path      = require("path");
-var merge     = require("opt-merger").merge;
+var Immutable = require("immutable");
 var Q         = require("q");
 var _         = require("lodash");
 var errors    = require("../lib/errors");
 
-var defaults = {
-    env: "production",
-    logLevel: "debug"
-};
+var defaults = Immutable.Map({
+    env:        "production",
+    logLevel:   "info"
+});
 
 var memo;
 crossbow.emitter.on("_error", function (data) {
@@ -37,24 +36,27 @@ crossbow.emitter.on("_error", function (data) {
 /**
  * @returns {Function}
  */
-module.exports = function (config) {
+module.exports = function (userConfig) {
 
-    config = merge(defaults, config || {}, true);
+    var config = defaults.merge(Immutable.Map(userConfig || {}));
 
-    if (config.configFile) {
-        config.siteConfig = yaml.getYaml(config.configFile);
-    } else {
-        config.siteConfig = {};
+    if (typeof config.get('siteConfig') === "string") {
+       config = config.set('siteConfig', getConfigFile(config.get('siteConfig')));
     }
 
-    crossbow.logger.setLevel(config.logLevel);
+    if (!config.get('siteConfig')) {
+        config.set('siteConfig', {});
+    }
 
-    if (config.cwd) {
-        crossbow.setCwd(config.cwd);
+    crossbow.logger.setLevel(config.get('logLevel'));
+
+    if (config.get('cwd')) {
+        crossbow.setCwd(config.get('cwd'));
     }
 
     var files = {};
     var stream;
+    var jsConfig = config.toJS();
 
     return through2.obj(function (file, enc, cb) {
 
@@ -87,10 +89,10 @@ module.exports = function (config) {
             } else {
                 var item;
                 if (isPost(key)) {
-                    item = crossbow.addPost(key, files[key], config);
+                    item = crossbow.addPost(key, files[key], jsConfig);
                 } else {
                     if (isPage(key)) {
-                        item = crossbow.addPage(key, files[key], config);
+                        item = crossbow.addPage(key, files[key], jsConfig);
                     }
                 }
                 queue.push(item);
@@ -99,7 +101,7 @@ module.exports = function (config) {
 
         if (!queue.length && partials.length) {
 
-            crossbow.compileAll(config, function (err, out) {
+            crossbow.compileAll(jsConfig, function (err, out) {
 
                 if (err) {
                     //console.log(err);
@@ -131,7 +133,7 @@ module.exports = function (config) {
             }
 
             _.each(queue, function (item) {
-                promises.push(buildOne(stream, item, config));
+                promises.push(buildOne(stream, item, jsConfig));
             });
 
             Q.all(promises).then(function (err, out) {
@@ -139,15 +141,16 @@ module.exports = function (config) {
             }).catch(function (err) {
                 //console.log("ERROR FROM PRIMISE");
                 //throw err;
-                //err = err.toString();
-                //crossbow.logger.error(err);
+                err = err.toString();
+                crossbow.logger.error(err);
                 cb();
             })
         }
     });
 };
 
-module.exports.logger = crossbow.logger;
+module.exports.logger     = crossbow.logger;
+module.exports.clearCache = crossbow.clearCache;
 
 /**
  *
@@ -200,4 +203,17 @@ function isData(filePath) {
 
 function isPage(filePath) {
     return filePath.match(/\.(html|md|markdown|hbs)$/);
+}
+
+function getConfigFile (filepath) {
+
+    if (filepath.match(/ya?ml$/i)) {
+        return yaml.getYaml(filepath);
+    }
+
+    if (filepath.match(/json$/i)) {
+        return require("/Users/shakyshane/code/crossbow.js/test/fixtures/_config.json");
+    }
+
+    return {};
 }
