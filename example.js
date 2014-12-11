@@ -1,4 +1,4 @@
-var Handbars  = require("/Users/shakyshane/code/handlebars.js");
+var Handbars  = require("handlebars");
 var multiline = require("multiline");
 var dust      = require("dustjs-linkedin");
 

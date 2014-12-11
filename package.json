@@ -1,6 +1,6 @@
 {
   "name": "crossbow",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Static Site Generator API - built for speed & extendibility",
   "main": "index.js",
   "scripts": {
@@ -33,15 +33,13 @@
     "rimraf": "^2.2.8",
     "sinon": "^1.10.3",
     "through2": "^0.6.3",
-    "vinyl-fs": "^0.3.13"
+    "vinyl-fs": "^0.3.13",
+    "bs-html-injector": "^1.1.0"
   },
   "dependencies": {
-    "browser-sync": "^1.7.0",
-    "bs-html-injector": "^1.1.0",
-    "crossbow-helpers": "^1.0.0",
-    "crossbow-lang": "^1.0.0",
     "easy-extender": "^2.0.0",
     "eazy-logger": "^2.0.0",
+    "handlebars": "git://github.com/shakyshane/hb-fork",
     "highlight.js": "^8.1.0",
     "immutable": "^3.3.0",
     "js-yaml": "^3.1.0",
