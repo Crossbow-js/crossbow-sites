@@ -41,7 +41,6 @@ describe("Creating a PAGE with maximum info", function(){
                 item.front.title = item.front.title + " - Page 2";
             }
         });
-
         assert.deepEqual(page.front.title,  "Homepage - Page 2", "Adds transformed title");
     });
 });

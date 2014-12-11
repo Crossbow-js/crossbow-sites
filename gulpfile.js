@@ -4,6 +4,7 @@ var coderBlog    = require("./plugins/stream");
 var browserSync  = require("browser-sync");
 var through      = require("through2");
 var noAbs        = require("no-abs");
+var rimraf       = require("rimraf");
 var htmlInjector = require("bs-html-injector");
 
 gulp.task("lint", function () {
@@ -47,7 +48,8 @@ var blogconfig = {
     logLevel: "debug",
     postUrlFormat: "/posts/:title",
     prettyUrls: true,
-    cwd: "test/fixtures"
+    cwd: "test/fixtures",
+    siteConfig: "test/fixtures/_config.yml"
 };
 
 /**
@@ -56,9 +58,10 @@ var blogconfig = {
 gulp.task("build-blog", function () {
 
     return gulp.src([
-        "test/fixtures/**/*.html",
-        "test/fixtures/_posts/*.md",
-        "test/fixtures/**/*.md"
+        "test/fixtures/*.html",
+        "test/fixtures/_posts/**",
+        "test/fixtures/docs/**",
+        "test/fixtures/projects/**"
     ])
         .pipe(coderBlog(blogconfig))
         .pipe(gulp.dest("_site"));
@@ -76,4 +79,9 @@ gulp.task("watch", function () {
     });
 });
 
-gulp.task("default", ["build-blog", "browserSync", "watch"]);
+gulp.task("clean", function (done) {
+    rimraf.sync("./_site");
+    done();
+});
+
+gulp.task("default", ["clean", "build-blog", "browserSync", "watch"]);

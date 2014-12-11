@@ -4,17 +4,9 @@ title: "Crossbow"
 button: "button.html"
 buttons: ["Primary", "Secondary"]
 ---
-
-<h1>Tags:</h1>
-{{#each tags}}
-    <h2>{{this.title}}</h2>
-    <ul>
-        {{#each this.items}}
-        <li><a href="{{this.url}}">{{this.title}}</a></li>
-        {{/each}}
-    </ul>
+<h1>Pages</h1>
+<ul class="shane">
+{{#each pages}}
+    <li>{{this.title}}</li>
 {{/each}}
-
-{{ $dump page }}
-
-
+</ul>

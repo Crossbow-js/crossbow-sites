@@ -5,9 +5,15 @@ var rimraf      = require("rimraf").sync;
 var outpath     = "./stream-out";
 
 rimraf(outpath);
-fs.src("test/fixtures/index.html")
+fs.src([
+    "test/fixtures/*.html",
+    "test/fixtures/_posts/**",
+    "test/fixtures/docs/**",
+    "test/fixtures/projects/**"
+])
     .pipe(crossbow({
-        cwd: "test/fixtures"
+        cwd: "test/fixtures",
+        postUrlFormat: "/posts/:title"
     }))
     .pipe(fs.dest(outpath));
 

@@ -549,6 +549,7 @@ function addPage(key, string, config) {
     var page;
 
     if (page = cache.find(key, "pages")) {
+        logger.debug("Updating page: {yellow:%s}", page.key);
         page.addData(key, string);
         utils.prepareFrontVars({
             items: page,
@@ -560,6 +561,7 @@ function addPage(key, string, config) {
 
     page = new Page(key, string, config);
 
+    logger.debug("Adding page {yellow:%s} as {cyan:%s}", page.key, page.url);
     cache.addPage(page);
 
     return page;
