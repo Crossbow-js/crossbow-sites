@@ -40,18 +40,18 @@ module.exports = function (userConfig) {
 
     var config = defaults.merge(Immutable.Map(userConfig || {}));
 
-    if (typeof config.get('siteConfig') === "string") {
-       config = config.set('siteConfig', getConfigFile(config.get('siteConfig')));
+    if (typeof config.get("siteConfig") === "string") {
+       config = config.set("siteConfig", getConfigFile(config.get("siteConfig")));
     }
 
-    if (!config.get('siteConfig')) {
-        config.set('siteConfig', {});
+    if (!config.get("siteConfig")) {
+        config.set("siteConfig", {});
     }
 
-    crossbow.logger.setLevel(config.get('logLevel'));
+    crossbow.logger.setLevel(config.get("logLevel"));
 
-    if (config.get('cwd')) {
-        crossbow.setCwd(config.get('cwd'));
+    if (config.get("cwd")) {
+        crossbow.setCwd(config.get("cwd"));
     }
 
     var files = {};
@@ -144,7 +144,7 @@ module.exports = function (userConfig) {
                 err = err.toString();
                 crossbow.logger.error(err);
                 cb();
-            })
+            });
         }
     });
 };
@@ -212,7 +212,7 @@ function getConfigFile (filepath) {
     }
 
     if (filepath.match(/json$/i)) {
-        return require("/Users/shakyshane/code/crossbow.js/test/fixtures/_config.json");
+        return require(filepath);
     }
 
     return {};

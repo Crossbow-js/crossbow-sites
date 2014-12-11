@@ -2,14 +2,18 @@ var gulp         = require("gulp");
 var jshint       = require("gulp-jshint");
 var coderBlog    = require("./plugins/stream");
 var browserSync  = require("browser-sync");
+var through      = require("through2");
+var noAbs        = require("no-abs");
 var htmlInjector = require("bs-html-injector");
 
 gulp.task("lint", function () {
     gulp.src([
         "index.js",
+        "plugins/*.js",
         "test/**/*.js",
         "lib/**/*.js"
     ])
+    .pipe(noAbs())
     .pipe(jshint("test/.jshintrc"))
     .pipe(jshint.reporter("default"))
     .pipe(jshint.reporter("fail"));
