@@ -46,7 +46,7 @@
     "lodash": "^2.4.1",
     "marked": "^0.3.2",
     "moment": "^2.8.1",
-    "object-path": "^0.6.0",
+    "object-path": "^0.8.1",
     "opt-merger": "^0.2.1",
     "q": "^1.0.1",
     "slugify": "^0.1.0",

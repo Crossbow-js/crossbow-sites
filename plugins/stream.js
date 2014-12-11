@@ -208,11 +208,11 @@ function isPage(filePath) {
 function getConfigFile (filepath) {
 
     if (filepath.match(/ya?ml$/i)) {
-        return yaml.getYaml(filepath);
+        return yaml.getYaml(path.resolve(filepath));
     }
 
     if (filepath.match(/json$/i)) {
-        return require(filepath);
+        return require(path.resolve(filepath));
     }
 
     return {};

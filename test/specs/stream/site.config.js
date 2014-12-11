@@ -63,7 +63,7 @@ describe("Site config: YML file path given", function() {
         fs.src("test/fixtures/index.html")
             .pipe(crossbow({
                 cwd: "test/fixtures",
-                siteConfig: "test/fixtures/_config.YML"
+                siteConfig: "test/fixtures/_config.yml"
             }))
             .pipe(through.obj(function (file, enc, next) {
                 files.push(file);
