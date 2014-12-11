@@ -112,10 +112,13 @@ describe("@data helper", function(){
         var page = crossbow.addPage("index.html", index, {});
 
         crossbow.compileOne(page, {siteConfig:{title: "shakyshane"}}, function (err, out) {
-            fs.existsSync.restore();
-            fs.readFileSync.restore();
-            assert.include(out.compiled, "Shane Osbourne - shakyshane");
-            done();
+
+            crossbow.compileOne(page, {siteConfig:{title: "shakyshane"}}, function (err, out) {
+                fs.existsSync.restore();
+                fs.readFileSync.restore();
+                assert.include(out.compiled, "Shane Osbourne - shakyshane");
+                done();
+            });
         });
     });
 });

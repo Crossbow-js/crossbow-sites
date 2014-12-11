@@ -7,6 +7,9 @@ buttons: ["Primary", "Secondary"]
 <h1>Pages</h1>
 <ul class="shane">
 {{#each pages}}
-    <li>{{this.title}}</li>
+    {{#data src="_config.yml" as="kitty" }}
+
+    {{/data}}
+    <li><a href="{{this.url}}">{{this.title}}</a></li>
 {{/each}}
 </ul>
