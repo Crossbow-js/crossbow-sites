@@ -7,4 +7,6 @@ bower_components
 _fixtures
 ast.json
 funcs.js
-stream-out/
+stream-out
+_bench/
+_bench-out/
