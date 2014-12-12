@@ -1,6 +1,7 @@
 var _             = require("lodash");
 var assert        = require("chai").assert;
 var multiline     = require("multiline");
+var Immutable     = require("immutable");
 
 var Post     = require("../../../lib/post");
 var crossbow = require("../../../index");
@@ -23,9 +24,9 @@ describe("Creating a Post title from the filename", function(){
 
     it("uses the filename as title if no title available in front-matter", function() {
 
-        var postItem = new Post("posts/2013-11-13-this-post-is-great.md", post1, {
+        var postItem = new Post("posts/2013-11-13-this-post-is-great.md", post1, Immutable.Map({
             postUrlFormat: "/blog/:month/:title"
-        });
+        }));
 
         assert.deepEqual(postItem.front.title, "This Post Is Great");
     });
