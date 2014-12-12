@@ -63,12 +63,15 @@ Here
         crossbow.populateCache("_layouts/default.hbs", layout);
 
         var page = crossbow.addPage("index.html", index, {});
+        crossbow.emitter.on("_error", function (err) {
+            console.log(err.error.stack);
+        });
 
         crossbow.compileOne(page, {siteConfig:{}}, function (err, out) {
             if (err) {
                 done(err);
             }
-            //require("d-logger")(out.compiled);
+            require("d-logger")(out.compiled);
             assert.equal(out.compiled, expected);
             done();
         });

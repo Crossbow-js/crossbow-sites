@@ -7,7 +7,8 @@ var path    = require("path");
 /**
  * 3rd Party Modules
  */
-var merge       = require("opt-merger").merge;
+var Immutable   = require("immutable");
+
 var _           = require("lodash");
 
 var emitter     = require("./lib/emitter");
@@ -63,10 +64,7 @@ if (compiler["dataTransforms"]) {
     dataTransforms = _.merge(dataTransforms, compiler["dataTransforms"]);
 }
 
-/**
- * Default configuration
- */
-var defaults = {
+var defaults = Immutable.Map({
     /**
      * The location of your sites configuration file.
      */
@@ -106,8 +104,8 @@ var defaults = {
     /**
      * Initial Site config
      */
-    siteConfig: {}
-};
+    siteConfig: {some:"value"}
+});
 
 /**
  * Allow layouts to have layouts.
@@ -161,7 +159,6 @@ function renderTemplate(template, data, cb) {
     compiler.renderTemplate(template, data, cb);
 }
 
-
 /**
  * @param out
  * @param config
@@ -182,7 +179,7 @@ function applyContentTransforms(scope, out, data, config) {
 /**
  * @param scope
  * @param item
- * @param config
+ * @param {Immutable.Map} config
  * @param data
  * @returns {*}
  */
@@ -220,32 +217,35 @@ function getMatch(item) {
 
 /**
  * Compile a single file
- * @param item
- * @param config
- * @param cb
+ * @param {String|Object} item
+ * @param {Object} userConfig
+ * @param {Function} cb
  */
-function compileOne(item, config, cb) {
+function compileOne(item, userConfig, cb) {
 
     /**
      * Merge configs
      */
-    config = merge(_.cloneDeep(defaults), config, true);
+    var config = defaults.merge(userConfig);
 
     /**
      * Set CWD on the fly
      */
-    if (_.isString(config.cwd)) {
-        file.config.cwd = config.cwd;
+    if (config.has("cwd")) {
+        file.config.cwd = config.get("cwd");
     }
+
+    var merged = config.toJS();
 
     /**
      * Setup data + look for _config.yml if needed
      * @type {{site: (siteConfig|*), config: *}}
      */
     var data = {
-        site: config.siteConfig || yaml.getYaml(defaults.configFile) || {},
+        site: merged.siteConfig,
         config: config
     };
+
 
     /**
      * Get the current item from the cache
@@ -369,7 +369,7 @@ function doPagination(item, data, config, cb) {
 /**
  * @param {Post|Page} item
  * @param {Object} data
- * @param {Object} config
+ * @param {Immutable.Map} config
  * @param {Function} cb
  */
 function constructItem(item, data, config, cb) {
@@ -419,12 +419,12 @@ function handleSuccess(item, data, config, cb, err, out) {
 
 /**
  * @param layout
- * @param config
+ * @param {Immutable.Map} config
  * @returns {*}
  */
 function getLayoutName(layout, config) {
     if (_.isUndefined(layout)) {
-        return config.siteConfig["defaultLayout"];
+        return config.get('siteConfig').defaultLayout
     }
     return layout;
 }
@@ -497,17 +497,13 @@ function getCache() {
 /**
  * @param key
  * @param string
- * @param [config]
+ * @param [userConfig]
  */
-function addPost(key, string, config) {
+function addPost(key, string, userConfig) {
 
-    config = config || {};
+    var config = getConfig(userConfig);
 
     var post;
-
-    if (!config.cwd) {
-        config.cwd = file.config.cwd;
-    }
 
     /**
      * Update a cached post
@@ -539,12 +535,25 @@ function addPost(key, string, config) {
     return post;
 }
 
+function getConfig (userConfig) {
+
+    var config = Immutable.Map(userConfig || {});
+
+    if (!config.cwd) {
+        return config.set("cwd", file.config.cwd);
+    }
+
+    return config;
+}
+
 /**
  * @param key
  * @param string
- * @param [config]
+ * @param [userConfig]
  */
-function addPage(key, string, config) {
+function addPage(key, string, userConfig) {
+
+    var config = getConfig(userConfig);
 
     var page;
 
