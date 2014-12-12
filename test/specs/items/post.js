@@ -1,6 +1,7 @@
 var _             = require("lodash");
 var assert        = require("chai").assert;
 var multiline     = require("multiline");
+var Immutable     = require("immutable");
 
 var Post = require("../../../lib/post");
 
@@ -39,18 +40,18 @@ describe("Creating a POST with maximum info", function(){
         assert.isTrue(postItem.dateObj instanceof Date);
     });
     it("Uses Config for urls", function() {
-        var postItem = new Post("test/fixtures/_posts/post1.md", post1, {
+        var postItem = new Post("test/fixtures/_posts/post1.md", post1, Immutable.Map({
             postUrlFormat:  "/blog/:categories/:title",
             prettyUrls:     true,
             cwd:            "test/fixtures"
-        });
+        }));
         assert.deepEqual(postItem.url, "/blog/javascript/node-js/post1", "Adds URL + categories");
     });
     it("Uses Config for urls", function() {
-        var postItem = new Post("_posts/post1.md", post1, {
+        var postItem = new Post("_posts/post1.md", post1, Immutable.Map({
             postUrlFormat: "/blog/:categories/:title",
             prettyUrls: false
-        });
+        }));
         assert.deepEqual(postItem.url, "/blog/javascript/node-js/post1.html", "Adds URL + categories");
     });
     it("uses slugify on categories", function() {
@@ -63,10 +64,10 @@ describe("Creating a POST with maximum info", function(){
          ---
          post1
          */});
-        var postItem = new Post("_posts/post1.md", post1, {
+        var postItem = new Post("_posts/post1.md", post1, Immutable.Map({
             postUrlFormat: "/blog/:categories/:title",
             prettyUrls: false
-        });
+        }));
         assert.deepEqual(postItem.url, "/blog/javascript/node-js/post1.html", "Adds URL + categories");
     });
 });

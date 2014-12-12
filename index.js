@@ -424,7 +424,9 @@ function handleSuccess(item, data, config, cb, err, out) {
  */
 function getLayoutName(layout, config) {
     if (_.isUndefined(layout)) {
-        return config.get('siteConfig').defaultLayout
+        if (config.get("defaultLayout") !== false) {
+            return config.get("defaultLayout");
+        }
     }
     return layout;
 }
@@ -554,7 +556,6 @@ function getConfig (userConfig) {
 function addPage(key, string, userConfig) {
 
     var config = getConfig(userConfig);
-
     var page;
 
     if (page = cache.find(key, "pages")) {

@@ -1,4 +1,5 @@
 var assert      = require("chai").assert;
+var Immutable   = require("immutable");
 var url         = require("../../../lib/url");
 var makePostUrl = url.makePostUrl;
 
@@ -6,11 +7,11 @@ describe("Creating Post URLS from keys + categories & tags", function () {
 
     it("Adds categories", function () {
 
-        var config = {
+        var config = Immutable.Map({
             postUrlFormat: "/blog/:category/:filename",
             prettyUrls: false,
             cwd: "test/fixtures"
-        };
+        });
 
         var categories = [
             {
@@ -30,10 +31,10 @@ describe("Creating Post URLS from keys + categories & tags", function () {
     });
     it("Adds categories", function () {
 
-        var config = {
+        var config = Immutable.Map({
             postUrlFormat: "/blog/:category/:filename",
             prettyUrls: true
-        };
+        });
 
         var categories = [
             {
@@ -53,10 +54,10 @@ describe("Creating Post URLS from keys + categories & tags", function () {
     });
     it("removes categories categories when none exist + pretty", function () {
 
-        var config = {
+        var config = Immutable.Map({
             postUrlFormat: "/blog/:category/:filename",
             prettyUrls: true
-        };
+        });
 
         var categories = [];
 
@@ -67,10 +68,10 @@ describe("Creating Post URLS from keys + categories & tags", function () {
     });
     it("removes categories categories when none exist + none pretty", function () {
 
-        var config = {
+        var config = Immutable.Map({
             postUrlFormat: "/blog/:category/:filename",
             prettyUrls: false
-        };
+        });
 
         var categories = [];
 
