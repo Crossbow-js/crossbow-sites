@@ -52,7 +52,7 @@ describe("Site config: JSON file path given", function() {
         var string = files[0]._contents.toString();
         assert.equal(files.length, 1);
         assert.equal(files[0].path, "index.html");
-        assert.include(string, 'href="css/main.css"'); //jshint ignore:line
+        assert.include(string, 'href="/css/main.css"'); //jshint ignore:line
     });
 });
 
@@ -77,6 +77,6 @@ describe("Site config: YML file path given", function() {
         var string = files[0]._contents.toString();
         assert.equal(files.length, 1);
         assert.equal(files[0].path, "index.html");
-        assert.include(string, 'href="css/main.css"'); //jshint ignore:line
+        assert.include(string, 'href="/css/main.css"'); //jshint ignore:line
     });
 });

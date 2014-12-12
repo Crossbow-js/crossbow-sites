@@ -58,11 +58,11 @@ var blogconfig = {
 gulp.task("build-blog", function () {
 
     return gulp.src([
-        //"test/fixtures/*.html",
-        "test/fixtures/index.html",
-        //"test/fixtures/_posts/**",
-        //"test/fixtures/docs/**",
-        //"test/fixtures/projects/**"
+        "test/fixtures/*.html",
+        //"test/fixtures/index.html"
+        "test/fixtures/_posts/**",
+        "test/fixtures/docs/**",
+        "test/fixtures/projects/**"
     ])
         .pipe(coderBlog(blogconfig))
         .pipe(gulp.dest("_site"));
