@@ -1,6 +1,7 @@
 var _             = require("lodash");
 var assert        = require("chai").assert;
 var multiline     = require("multiline");
+var Immutable     = require("immutable");
 
 var Post      = require("../../../lib/post");
 var Page      = require("../../../lib/page");
@@ -46,20 +47,21 @@ var page1 = multiline.stripIndent(function(){/*
 describe("Paginating the posts", function(){
     var _cache, post1, post2, post3, post4, post5, post6;
     beforeEach(function () {
+        var config = Immutable.Map({});
         _cache    = new Cache();
-        post1     = new Post("_posts/post1.md", content1);
-        post2     = new Post("_posts/post2.md", content2);
-        post3     = new Post("_posts/post3.md", content2);
-        post4     = new Post("_posts/post4.md", content2);
-        post5     = new Post("_posts/post5.md", content2);
-        post6     = new Post("_posts/post6.md", content2);
+        post1     = new Post("_posts/post1.md", content1, config);
+        post2     = new Post("_posts/post2.md", content2, config);
+        post3     = new Post("_posts/post3.md", content2, config);
+        post4     = new Post("_posts/post4.md", content2, config);
+        post5     = new Post("_posts/post5.md", content2, config);
+        post6     = new Post("_posts/post6.md", content2, config);
     });
     it("Should create pages", function(){
 
         var cache = _cache.addPosts([post1, post2, post3, post4, post5, post6]);
         assert.equal(cache.posts().length, 6);
 
-        var config = {prettyUrls: true};
+        var config = Immutable.Map({prettyUrls: true});
 
         var page      = new Page("blog/posts/index.html", page1, config);
         var paginator = new Paginator(cache.posts(), page, 3, config);

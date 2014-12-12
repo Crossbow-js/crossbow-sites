@@ -1,6 +1,7 @@
 var _             = require("lodash");
 var assert        = require("chai").assert;
 var multiline     = require("multiline");
+var Immutable     = require("immutable");
 
 var Post     = require("../../../lib/post");
 var crossbow = require("../../../index");
@@ -21,7 +22,7 @@ describe("Creating a Post date from the filename", function(){
         crossbow.populateCache("_layouts/post-test.html", "{{ content }}");
     });
 
-    it("uses date from the filename if not available in front-matter", function() {
+    it.only("uses date from the filename if not available in front-matter", function() {
 
         var postItem = new Post("posts/2013-11-13-this-post-is-great.md", post1, {
             postUrlFormat: "/blog/:month/:title"
