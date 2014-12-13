@@ -105,7 +105,8 @@ var defaults = Immutable.Map({
      * Set lookup DIRS for layouts & includes
      */
     dirs: Immutable.Map({
-        layouts: "_layouts"
+        layouts:  "_layouts",
+        includes: "_includes"
     })
 });
 
@@ -119,7 +120,7 @@ var defaults = Immutable.Map({
  */
 function addLayout(layout, data, cb) {
 
-    var layoutPath = utils.getLayoutPath(layout, data.config.get("dirs"));
+    var layoutPath = utils.getLayoutPath(layout, data.config.get("dirs").get("layouts"));
     var layoutFile = file.getFile(layoutPath);
 
     if (!layoutFile) {
