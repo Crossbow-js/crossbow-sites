@@ -71,7 +71,7 @@ Here
             if (err) {
                 done(err);
             }
-            require("d-logger")(out.compiled);
+            //require("d-logger")(out.compiled);
             assert.equal(out.compiled, expected);
             done();
         });
