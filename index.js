@@ -66,10 +66,6 @@ if (compiler["dataTransforms"]) {
 
 var defaults = Immutable.Map({
     /**
-     * The location of your sites configuration file.
-     */
-    configFile: "./_config.yml",
-    /**
      * Should posts be rendered using Markdown?
      */
     markdown: true,
@@ -242,7 +238,6 @@ function compileOne(item, userConfig, cb) {
     var data = {
         config: config
     };
-
 
     /**
      * Get the current item from the cache
