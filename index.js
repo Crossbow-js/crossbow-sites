@@ -460,30 +460,17 @@ function populateCache(key, value, type) {
     type = type || "partial";
 
     var partial;
-    var shortKey;
-    var partialKey;
 
     if (type === "data") {
         return cache.addData(key, value);
     }
 
     if (partial = cache.find(url.makeShortKey(key, file.config.cwd), "partials")){
-
         partial.content = value;
-        shortKey        = partial.shortKey;
-        partialKey      = partial.partialKey;
-
     } else {
-
         partial = new Partial(key, value, file);
-
         cache.addPartial(partial);
-
-        shortKey   = partial.shortKey;
-        partialKey = partial.partialKey;
     }
-
-    //compiler.addToTemplateCache(key, value, shortKey, partialKey);
 
     return cache;
 }
