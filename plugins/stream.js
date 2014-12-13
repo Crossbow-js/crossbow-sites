@@ -45,7 +45,7 @@ module.exports = function (userConfig) {
     }
 
     if (!config.get("siteConfig")) {
-        config.set("siteConfig", {});
+        config = config.set("siteConfig", {});
     }
 
     crossbow.logger.setLevel(config.get("logLevel"));

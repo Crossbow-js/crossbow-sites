@@ -104,7 +104,7 @@ var defaults = Immutable.Map({
     /**
      * Initial Site config
      */
-    siteConfig: {some:"value"}
+    siteConfig: Immutable.Map({})
 });
 
 /**
@@ -235,14 +235,11 @@ function compileOne(item, userConfig, cb) {
         file.config.cwd = config.get("cwd");
     }
 
-    var merged = config.toJS();
-
     /**
      * Setup data + look for _config.yml if needed
      * @type {{site: (siteConfig|*), config: *}}
      */
     var data = {
-        site: merged.siteConfig,
         config: config
     };
 
