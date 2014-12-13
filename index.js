@@ -100,7 +100,13 @@ var defaults = Immutable.Map({
     /**
      * Initial Site config
      */
-    siteConfig: Immutable.Map({})
+    siteConfig: Immutable.Map({}),
+    /**
+     * Set lookup DIRS for layouts & includes
+     */
+    dirs: Immutable.Map({
+        layouts: "_layouts"
+    })
 });
 
 /**
@@ -113,7 +119,7 @@ var defaults = Immutable.Map({
  */
 function addLayout(layout, data, cb) {
 
-    var layoutPath = utils.getLayoutPath(layout);
+    var layoutPath = utils.getLayoutPath(layout, data.config.get("dirs"));
     var layoutFile = file.getFile(layoutPath);
 
     if (!layoutFile) {
