@@ -39,6 +39,7 @@
   "dependencies": {
     "easy-extender": "^2.1.0",
     "eazy-logger": "^2.0.0",
+    "gulp-util": "^3.0.1",
     "handlebars": "git://github.com/shakyshane/hb-fork",
     "highlight.js": "^8.4.0",
     "immutable": "^3.3.0",
