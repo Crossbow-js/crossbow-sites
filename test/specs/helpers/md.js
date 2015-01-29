@@ -11,7 +11,7 @@ describe("#md helper", function() {
         crossbow.clearCache();
     });
 
-    it.only("can render md blocks with page content", function(done) {
+    it("can render md blocks with page content", function(done) {
 
         var layout = multiline.stripIndent(function(){/*
 {{ content }}
