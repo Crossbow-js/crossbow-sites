@@ -9,7 +9,7 @@ describe("@inc helper errors", function(){
         crossbow.clearCache();
     });
 
-    it("emits an error when src missing", function(done) {
+    it.skip("emits an error when src missing", function(done) {
 
         var index = multiline(function(){/*
 Before {{ inc }}After

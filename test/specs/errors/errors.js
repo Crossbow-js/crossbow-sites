@@ -48,7 +48,7 @@ describe("API gives meaningfull errors", function(){
         crossbow.populateCache("_includes/head.html", "<head><title>{{page.title}} {{site.sitename}}</title></head>");
     });
 
-    it("passes error about helpers", function(done) {
+    it.skip("passes error about helpers", function(done) {
 
         var post2 = multiline.stripIndent(function(){/*
          ---
