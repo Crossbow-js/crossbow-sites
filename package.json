@@ -1,6 +1,6 @@
 {
   "name": "crossbow",
-  "version": "0.0.2",
+  "version": "0.0.8",
   "description": "Static Site Generator - built for speed & extendibility",
   "main": "index.js",
   "scripts": {
@@ -39,6 +39,7 @@
   "dependencies": {
     "easy-extender": "^2.0.0",
     "eazy-logger": "^2.0.0",
+    "gulp-util": "^3.0.2",
     "handlebars": "git://github.com/shakyshane/hb-fork",
     "highlight.js": "^8.1.0",
     "immutable": "^3.3.0",

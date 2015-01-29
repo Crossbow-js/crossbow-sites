@@ -624,3 +624,4 @@ module.exports.file                 = file;
  * @private
  */
 module.exports._getFile = file.getFile;
+module.exports.stream   = require("./plugins/stream");
