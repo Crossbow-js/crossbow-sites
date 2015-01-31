@@ -1,4 +1,3 @@
-
 var _         = require("lodash");
 var assert    = require("chai").assert;
 var multiline = require("multiline");
@@ -7,26 +6,36 @@ var fs        = require("fs");
 var crossbow = require("../../../index");
 
 describe("Simple mode", function(){
-
-    it("Replaces Vars", function(done) {
-
-        var page1 = multiline(function(){/*
-{{#md}}
-#shane is awesome, kittie is a {{kittie}}
-{{/md}}
-         */});
-
+    it("Replaces vars with markdown", function(done) {
         crossbow.compile({
-            key: "docs.html",
-            content: page1,
+            key: "docs.md",
+            content: "#{{title}}",
             data: {
-                kittie: "cat"
+                title: "Shane"
             },
             cb: function (err, out) {
                 if (err) {
                     return done(err);
                 }
-                assert.include(out.compiled, "shane is awesome, kittie is a cat");
+                assert.include(out.compiled, "<h1 id=\"shane\">Shane</h1>");
+                done();
+            }
+        });
+    });
+    it("Has access to site info", function(done) {
+        crossbow.compile({
+            key: "docs.html",
+            content: "<h1>{{site.title}}</h1>",
+            data: {
+                site: {
+                    title: "BrowserSync.io"
+                }
+            },
+            cb: function (err, out) {
+                if (err) {
+                    return done(err);
+                }
+                assert.include(out.compiled, "<h1>BrowserSync.io</h1>");
                 done();
             }
         });
