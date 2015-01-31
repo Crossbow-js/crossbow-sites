@@ -24,6 +24,7 @@ gulp.task("lint", function () {
  */
 gulp.task("serve", function () {
     browserSync({
+        open: false,
         server: {
             baseDir: "_site",
             routes: {

@@ -49,4 +49,23 @@ describe("Multi page mode", function() {
             }
         });
     });
+    it("Can render all in one go", function(done) {
+
+        var site = crossbow.builder();
+
+        var post1 = site.addPost("blog/js/hello.md", "---\ntitle: nodejs\n---\n#{{post.title}}\nPost count: {{posts.length}}");
+        var post2 = site.addPost("blog/js/hello2.md", "Hi there");
+        var post3 = site.addPage("blog/js/hello3.md", "Hi there");
+        var post4 = site.addPage("blog/js/hello4.md", "Hi there");
+
+        site.compileAll({
+            cb: function (err, out) {
+                if (err) {
+                    return done(err);
+                }
+                assert.equal(out.length, 4);
+                done();
+            }
+        });
+    });
 });

@@ -56,54 +56,52 @@ module.exports = function (userConfig) {
             }
         });
 
-        //if (!queue.length && partials.length) {
-        //
-        //    site.compileAll(function (err, out) {
-        //
-        //        if (err) {
-        //            //console.log(err);
-        //            cb();
-        //        } else {
-        //
-        //            _.each(out, function (item) {
-        //
-        //                if (!item) {
-        //                    return;
-        //                }
-        //
-        //                stream.push(new File({
-        //                    cwd:  "./",
-        //                    base: "./",
-        //                    path: item.filePath,
-        //                    contents: new Buffer(item.compiled)
-        //                }));
-        //            });
-        //
-        //            cb();
-        //        }
-        //    });
-        //
-        //} else {
+        if (!queue.length && partials.length) {
 
-        if (!queue.length) {
-            return;
+            site.compileAll(function (err, out) {
+
+                if (err) {
+                    cb();
+                } else {
+
+                    _.each(out, function (item) {
+
+                        if (!item) {
+                            return;
+                        }
+
+                        stream.push(new File({
+                            cwd:  "./",
+                            base: "./",
+                            path: item.filePath,
+                            contents: new Buffer(item.compiled)
+                        }));
+                    });
+
+                    cb();
+                }
+            });
+
+        } else {
+
+            if (!queue.length) {
+                return;
+            }
+
+            _.each(queue, function (item) {
+                promises.push(buildOne(site, stream, item));
+            });
+
+            Q.all(promises).then(function (err, out) {
+                cb();
+            }).catch(function (err) {
+                //console.log("ERROR FROM PRIMISE");
+                //throw err;
+                err = err.toString();
+                crossbow.logger.error(err);
+                cb();
+            });
         }
-
-        _.each(queue, function (item) {
-            promises.push(buildOne(site, stream, item));
-        });
-
-        Q.all(promises).then(function (err, out) {
-            cb();
-        }).catch(function (err) {
-            //console.log("ERROR FROM PRIMISE");
-            //throw err;
-            err = err.toString();
-            crossbow.logger.error(err);
-            cb();
-        });
-        //}
-        cb();
     });
 };
 
@@ -129,31 +127,6 @@ function buildOne(site, stream, item) {
             deferred.resolve(out);
         }
     });
-
-
-            //if (err) {
-            //    deferred.reject(err);
-            //} else if (out) {
-            //    if (Array.isArray(out)) {
-            //        out.forEach(function (item) {
-            //            stream.push(new File({
-            //                cwd:  "./",
-            //                base: "./",
-            //                path: item.filePath,
-            //                contents: new Buffer(item.compiled)
-            //            }));
-            //        });
-            //    } else {
-            //        stream.push(new File({
-            //            cwd:  "./",
-            //            base: "./",
-            //            path: out.filePath,
-            //            contents: new Buffer(out.compiled)
-            //        }));
-            //    }
-            //    deferred.resolve(out);
-            //}
-    //})
 
     return deferred.promise;
 }
