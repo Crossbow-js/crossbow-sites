@@ -8,21 +8,27 @@ var crossbow = require("../../../index");
 
 describe("Simple mode", function(){
 
-    it("highlights a block of code", function(done) {
+    it("Replaces Vars", function(done) {
 
         var page1 = multiline(function(){/*
- {{#hl lang="js"}}
- var shane = "awesome";
- {{/hl}}
+{{#md}}
+#shane is awesome, kittie is a {{kittie}}
+{{/md}}
          */});
 
-        crossbow.compile({content: page1, cb: function (err, out) {
-            if (err) {
-                done(err);
+        crossbow.compile({
+            key: "docs.html",
+            content: page1,
+            data: {
+                kittie: "cat"
+            },
+            cb: function (err, out) {
+                if (err) {
+                    return done(err);
+                }
+                assert.include(out.compiled, "shane is awesome, kittie is a cat");
+                done();
             }
-            require("d-logger")(out);
-            done();
-            //assert.include(out.compiled, "<pre><code class=\"js\"><span class=\"hljs-keyword\">var</span>");
-        }});
+        });
     });
 });
