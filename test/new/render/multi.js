@@ -43,8 +43,6 @@ describe("Multi page mode", function() {
                 if (err) {
                     return done(err);
                 }
-                require("d-logger")(out.compiled);
-
                 assert.include(out.compiled, "<h1 id=\"nodejs\">nodejs</h1>");
                 assert.include(out.compiled, "<p>Post count: 4</p>");
                 done();

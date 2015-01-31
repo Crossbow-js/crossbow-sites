@@ -4,7 +4,7 @@
   "description": "Static Site Generator - built for speed & extendibility",
   "main": "index.js",
   "scripts": {
-    "test": "gulp lint && mocha --recursive test/"
+    "test": "gulp lint && mocha --recursive test/new"
   },
   "homepage": "https://github.com/shakyshane/crossbow.js",
   "author": {

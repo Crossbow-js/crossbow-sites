@@ -25,10 +25,13 @@ describe("Using cache", function() {
             }
         });
 
+        /**
+         * Check there's no cross-polution of caches
+         */
         crossbow.compile({
             content: "{{#md}}#hello{{/md}}",
             cb: function  (err, out) {
-                console.log(out.compiled);
+                assert.include(out.compiled, "<h1 id=\"hello\">hello</h1>");
                 done();
             }
         });
