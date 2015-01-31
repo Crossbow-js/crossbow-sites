@@ -37,6 +37,7 @@
     "vinyl-fs": "^0.3.13"
   },
   "dependencies": {
+    "async": "^0.9.0",
     "easy-extender": "^2.1.0",
     "eazy-logger": "^2.0.0",
     "gulp-util": "^3.0.2",
