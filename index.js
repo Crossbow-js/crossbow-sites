@@ -25,7 +25,9 @@ function compile (opts) {
 module.exports.compile = compile;
 
 /**
- *
+ * Builder.
+ * var site = crossbow.builder();
+ * site.addPage("index.html", "some content")
  */
 function builder (opts) {
     opts        = opts        || {};
