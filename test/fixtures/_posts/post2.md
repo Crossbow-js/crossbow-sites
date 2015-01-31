@@ -1,5 +1,5 @@
 ---
-layout: "post.html"
+layout: "post.hbs"
 title: "Second Test Post"
 categories: javascript
 ---

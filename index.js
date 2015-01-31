@@ -39,3 +39,5 @@ function builder (opts) {
 }
 
 module.exports.builder = builder;
+
+module.exports.stream  = require("./plugins/stream");
