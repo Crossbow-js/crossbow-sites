@@ -19,6 +19,7 @@ describe("Using cache", function() {
             item: page1,
             cb: function (err, out) {
                 if (err) {
+                    console.log(err);
                     return done(err);
                 }
                 assert.include(out.compiled, "<button>Click me</button>");

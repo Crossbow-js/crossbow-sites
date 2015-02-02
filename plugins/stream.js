@@ -8,7 +8,7 @@ var path      = require("path");
 var Immutable = require("immutable");
 var Q         = require("q");
 var _         = require("lodash");
-var errors    = require("../lib/errors");
+var errors    = require("../lib/errors").fails;
 
 /**
  * @returns {Function}
@@ -95,10 +95,8 @@ module.exports = function (userConfig) {
             Q.all(promises).then(function (err, out) {
                 cb();
             }).catch(function (err) {
-                //console.log("ERROR FROM PRIMISE");
-                //throw err;
-                err = err.toString();
-                crossbow.logger.error(err);
+                site.logger.warn(site.getErrorString(err));
+                stream.emit("end");
                 cb();
             });
         }
@@ -118,13 +116,17 @@ function buildOne(site, stream, item) {
     site.compile({
         item: item,
         cb: function (err, out) {
-            stream.push(new File({
-                cwd:  "./",
-                base: "./",
-                path: out.filePath,
-                contents: new Buffer(out.compiled)
-            }));
-            deferred.resolve(out);
+            if (err) {
+                deferred.reject(err);
+            } else {
+                stream.push(new File({
+                    cwd:  "./",
+                    base: "./",
+                    path: out.filePath,
+                    contents: new Buffer(out.compiled)
+                }));
+                deferred.resolve(out);
+            }
         }
     });
 
