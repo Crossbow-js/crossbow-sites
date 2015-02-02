@@ -17,7 +17,14 @@ module.exports = function (userConfig) {
 
     var files = {};
     var stream;
-    var site = crossbow.builder({config: userConfig});
+    if (!userConfig.errorHandler) {
+        userConfig.errorHandler = function (err, compiler) {
+            compiler.logger.error(compiler.getErrorString(err));
+        }
+    }
+    var site = crossbow.builder({
+        config: userConfig
+    });
 
     return through2.obj(function (file, enc, cb) {
 
@@ -95,7 +102,7 @@ module.exports = function (userConfig) {
             Q.all(promises).then(function (err, out) {
                 cb();
             }).catch(function (err) {
-                site.logger.warn(site.getErrorString(err));
+                //site.logger.warn(site.getErrorString(err));
                 stream.emit("end");
                 cb();
             });
