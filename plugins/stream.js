@@ -17,11 +17,14 @@ module.exports = function (userConfig) {
 
     var files = {};
     var stream;
+    var sitedata = userConfig.data;
+    
     if (!userConfig.errorHandler) {
         userConfig.errorHandler = function (err, compiler) {
             compiler.logger.error(compiler.getErrorString(err));
-        }
+        };
     }
+
     var site = crossbow.builder({
         config: userConfig
     });
@@ -96,7 +99,7 @@ module.exports = function (userConfig) {
             }
 
             _.each(queue, function (item) {
-                promises.push(buildOne(site, stream, item));
+                promises.push(buildOne(site, stream, item, sitedata));
             });
 
             Q.all(promises).then(function (err, out) {
@@ -116,12 +119,13 @@ module.exports.clearCache = crossbow.clearCache;
 /**
  *
  */
-function buildOne(site, stream, item) {
+function buildOne(site, stream, item, data) {
 
     var deferred = Q.defer();
 
     site.compile({
         item: item,
+        data: data,
         cb: function (err, out) {
             if (err) {
                 deferred.reject(err);
