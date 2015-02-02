@@ -36,7 +36,7 @@ describe("Sending good errors", function(){
 
         var site = crossbow.builder({
             config: {
-                errHandler: function (err) {
+                errorHandler: function (err) {
                     assert.equal(err._crossbow.line, 4);
                     assert.equal(err._crossbow.file, "index.html");
                     done();
@@ -54,11 +54,11 @@ describe("Sending good errors", function(){
 
         var page = site.addPage("index.html", input);
     });
-    it.only("YAML errors in front matter (2)", function(done) {
+    it("YAML errors in front matter (2)", function(done) {
 
         var site = crossbow.builder({
             config: {
-                errHandler: function (err) {
+                errorHandler: function (err) {
                     assert.equal(err._crossbow.line, 10);
                     assert.equal(err._crossbow.file, "index.html");
                     done();
