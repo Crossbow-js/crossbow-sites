@@ -32,9 +32,16 @@ describe("Sending good errors", function(){
             }
         });
     });
-    it.only("YAML errors", function() {
+    it("YAML errors in front matter", function(done) {
 
-        var site = crossbow.builder();
+        var site = crossbow.builder({
+            config: {
+                errHandler: function (err) {
+                    assert.equal(err._crossbow.line, 4);
+                    assert.equal(err._crossbow.file, "index.html");
+                    done();
+                }
+            }});
 
         var input = multiline.stripIndent(function (){/*
          ---
@@ -46,18 +53,33 @@ describe("Sending good errors", function(){
          */});
 
         var page = site.addPage("index.html", input);
+    });
+    it.only("YAML errors in front matter (2)", function(done) {
 
-        //
-        //site.compile({
-        //    item: page,
-        //    cb: function (err, out) {
-        //
-        //        console.log(err);
-        //        //assert.equal(err._crossbow.line, 7);
-        //        //assert.equal(err._crossbow.file, "index.html");
-        //        //site.logger.warn(site.getErrorString(err));
-        //        done();
-        //    }
-        //});
+        var site = crossbow.builder({
+            config: {
+                errHandler: function (err) {
+                    assert.equal(err._crossbow.line, 10);
+                    assert.equal(err._crossbow.file, "index.html");
+                    done();
+                }
+            }});
+
+        var input = multiline.stripIndent(function (){/*
+         ---
+         name: "shane"
+         testing: "errors"
+         testing: "errors"
+         testing: "errors"
+         testing: "errors"
+         testing: "errors"
+         testing: "errors"
+         testing: "errors"
+         testing: "errors
+         ---
+         Testing Yaml Errors
+         */});
+
+        var page = site.addPage("index.html", input);
     });
 });
