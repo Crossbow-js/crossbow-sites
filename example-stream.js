@@ -1,17 +1,18 @@
-var crossbow    = require("./plugins/stream");
+var crossbow    = require("./");
 var through     = require("through2");
 var fs          = require("vinyl-fs");
 var rimraf      = require("rimraf").sync;
 var outpath     = "./stream-out";
 
 rimraf(outpath);
+
 fs.src([
     "test/fixtures/*.html",
     "test/fixtures/_posts/**",
-    "test/fixtures/docs/**",
-    "test/fixtures/projects/**"
+    //"test/fixtures/docs/**",
+    //"test/fixtures/projects/**"
 ])
-    .pipe(crossbow({
+    .pipe(crossbow.stream({
         cwd: "test/fixtures",
         postUrlFormat: "/posts/:title"
     }))

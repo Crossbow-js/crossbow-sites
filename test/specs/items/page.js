@@ -1,6 +1,7 @@
 var _             = require("lodash");
 var assert        = require("chai").assert;
 var multiline     = require("multiline");
+var Immutable     = require("immutable");
 
 var Page     = require("../../../lib/page");
 var crossbow = require("../../../index");
@@ -25,7 +26,7 @@ describe("Creating a PAGE with maximum info", function(){
     });
     it("Has access to front matter", function() {
 
-        var page = new Page("projects/about-us.html", page1, {prettyUrls: true});
+        var page = new Page("projects/about-us.html", page1, Immutable.Map({prettyUrls: true}));
 
         assert.deepEqual(page.front.title,  "Homepage",                      "Adds title from front");
         assert.deepEqual(page.front.layout, "default",                       "Adds layout from front");
@@ -36,11 +37,11 @@ describe("Creating a PAGE with maximum info", function(){
         assert.deepEqual(page.type,         "page",                          "Adds Adds type");
     });
     it("Can transform a post.", function(){
-        var page = new Page("projects/about-us.html", page1, {
+        var page = new Page("projects/about-us.html", page1, Immutable.Map({
             transform: function (item) {
                 item.front.title = item.front.title + " - Page 2";
             }
-        });
+        }));
         assert.deepEqual(page.front.title,  "Homepage - Page 2", "Adds transformed title");
     });
 });

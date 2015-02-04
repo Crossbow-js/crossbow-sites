@@ -1,8 +1,7 @@
 var gulp         = require("gulp");
 var jshint       = require("gulp-jshint");
-var coderBlog    = require("./plugins/stream");
+var crossbow     = require("./");
 var browserSync  = require("browser-sync");
-var through      = require("through2");
 var noAbs        = require("no-abs");
 var rimraf       = require("rimraf");
 var htmlInjector = require("bs-html-injector");
@@ -23,61 +22,37 @@ gulp.task("lint", function () {
 /**
  * Start BrowserSync
  */
-gulp.task("browserSync", function () {
-    browserSync.use(htmlInjector, {
-        excludedTags: ["BODY"],
-        logLevel: "info"
-    });
+gulp.task("serve", function () {
     browserSync({
+        open: false,
         server: {
             baseDir: "_site",
             routes: {
                 "/img": "./img",
                 "/css": "test/fixtures/css"
             }
-        },
-        open: false,
-        online: false
+        }
     });
 });
-
-var blogconfig = {
-    env: "dev",
-    highlight: true,
-    markdown: true,
-    logLevel: "info",
-    postUrlFormat: "/posts/:title",
-    prettyUrls: true,
-    cwd: "test/fixtures",
-    siteConfig: "test/fixtures/_config.yml"
-};
 
 /**
  * Default task
  */
-gulp.task("build-blog", function () {
+gulp.task("crossbow", function () {
 
     return gulp.src([
         "test/fixtures/*.html",
         //"test/fixtures/index.html"
-        "test/fixtures/_posts/**",
-        "test/fixtures/docs/**",
-        "test/fixtures/projects/**"
+        "test/fixtures/_posts/**"
+        //"test/fixtures/docs/**",
+        //"test/fixtures/projects/**"
     ])
-        .pipe(coderBlog(blogconfig))
+        .pipe(crossbow.stream({cwd: "test/fixtures"}))
         .pipe(gulp.dest("_site"));
 });
 
 gulp.task("watch", function () {
-    gulp.watch(["test/fixtures/**/*"], function (file) {
-        return gulp.src(file.path)
-            .pipe(coderBlog(blogconfig))
-            .pipe(gulp.dest("_site"))
-            .on("end", function () {
-                browserSync.reload();
-                //htmlInjector();
-            });
-    });
+    gulp.watch(["test/fixtures/**"], ["crossbow", browserSync.reload]);
 });
 
 gulp.task("clean", function (done) {
@@ -85,4 +60,4 @@ gulp.task("clean", function (done) {
     done();
 });
 
-gulp.task("default", ["clean", "build-blog", "browserSync", "watch"]);
+gulp.task("default", ["clean", "crossbow", "serve", "watch"]);

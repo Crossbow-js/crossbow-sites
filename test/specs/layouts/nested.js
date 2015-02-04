@@ -61,9 +61,9 @@ describe("Nested/child layouts", function () {
         crossbow.populateCache("_layouts/shane.html", ":::{{ content }}");
 
         var config = {
+            defaultLayout: "shane.html",
             siteConfig: {
-                sitename: "({shakyShane})",
-                defaultLayout: "shane.html"
+                sitename: "({shakyShane})"
             }
         };
 
