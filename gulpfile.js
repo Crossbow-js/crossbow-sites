@@ -39,15 +39,8 @@ gulp.task("serve", function () {
  * Default task
  */
 gulp.task("crossbow", function () {
-
-    return gulp.src([
-        "test/fixtures/*.html",
-        //"test/fixtures/index.html"
-        "test/fixtures/_posts/**"
-        //"test/fixtures/docs/**",
-        //"test/fixtures/projects/**"
-    ])
-        .pipe(crossbow.stream({cwd: "test/fixtures"}))
+    return gulp.src(["app/*.html"])
+        .pipe(crossbow.stream())
         .pipe(gulp.dest("_site"));
 });
 
