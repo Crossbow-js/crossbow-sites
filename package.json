@@ -47,7 +47,7 @@
     "highlight.js": "^8.4.0",
     "immutable": "^3.3.0",
     "js-yaml": "^3.2.3",
-    "lodash": "^2.4.1",
+    "lodash": "^3.1.0",
     "marked": "^0.3.2",
     "moment": "^2.8.4",
     "object-path": "^0.8.1",
