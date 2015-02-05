@@ -15,10 +15,11 @@ var errors    = require("../lib/errors").fails;
  */
 module.exports = function (userConfig) {
 
+    userConfig = userConfig || {};
     var files = {};
     var stream;
     var sitedata = userConfig.data;
-    
+
     if (!userConfig.errorHandler) {
         userConfig.errorHandler = function (err, compiler) {
             compiler.logger.error(compiler.getErrorString(err));
