@@ -5,7 +5,7 @@ var sinon     = require("sinon");
 var fs        = require("fs");
 var crossbow = require("../../../index");
 
-describe.only("pre-processing an item", function() {
+describe("pre-processing an item", function() {
 
     it("should return the key", function() {
 
@@ -13,7 +13,8 @@ describe.only("pre-processing an item", function() {
 
         var item = site.preProcess("src/docs/index.html", "<p>Shane is rad, {{page.url}}</p>");
 
-        assert.equal(item.get("key"),   "src/docs/index.html");
+        assert.equal(item.get("key"),  "src/docs/index.html");
+        assert.equal(item.get("type"), "page");
     });
     it("should return the front matter + content", function() {
 
@@ -37,7 +38,7 @@ describe.only("pre-processing an item", function() {
         assert.equal(path.name, "index");
         assert.equal(path.dir, "src/docs");
     });
-    it.only("should return the url & filepath", function() {
+    it("should return the url & filepath", function() {
 
         var site = crossbow.builder();
 
