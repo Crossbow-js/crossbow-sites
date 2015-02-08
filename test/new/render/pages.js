@@ -67,11 +67,12 @@ describe("Adding a page", function(){
 
         var site = crossbow.builder({
             config: {
-                prettyUrls: false
+                prettyUrls: false,
+                cwd: "test/fixtures"
             }
         });
 
-        var page = site.addPage("some_file.html", "<p>Shane is rad, {{page.url}}</p>");
+        var page = site.addPage("test/fixtures/some_file.html", "<p>Shane is rad, {{page.url}}</p>");
 
         crossbow.compile({
             item: page,

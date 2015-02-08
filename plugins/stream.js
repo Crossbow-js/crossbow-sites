@@ -16,6 +16,7 @@ var errors    = require("../lib/errors").fails;
 module.exports = function (userConfig) {
 
     userConfig = userConfig || {};
+
     var files = {};
     var stream;
     var sitedata = userConfig.data;
