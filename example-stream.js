@@ -7,15 +7,15 @@ var outpath     = "./stream-out";
 rimraf(outpath);
 
 fs.src([
-    "test/fixtures/*.html",
-    "test/fixtures/_posts/**",
+    "test/fixtures/index.html"
+    //"test/fixtures/_posts/**",
     //"test/fixtures/docs/**",
     //"test/fixtures/projects/**"
 ])
-    .pipe(crossbow.stream({
-        cwd: "test/fixtures",
-        postUrlFormat: "/posts/:title"
-    }))
-    .pipe(fs.dest(outpath));
+.pipe(crossbow.stream({
+    cwd: "test/fixtures",
+    postUrlFormat: "/posts/:title"
+}))
+.pipe(fs.dest(outpath));
 
 

@@ -5,7 +5,7 @@ var sinon     = require("sinon");
 var fs        = require("fs");
 var crossbow = require("../../../index");
 
-describe("pre-processing an item", function() {
+describe("Pre-processing an item", function() {
 
     it("should return the key", function() {
 

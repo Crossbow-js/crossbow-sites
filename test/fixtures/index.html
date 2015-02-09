@@ -3,14 +3,20 @@ layout: post.hbs
 title: "Crossbow"
 button: "button.html"
 buttons: ["Primary", "Secondary"]
-markdown: true
 prefix: "tonse"
 ---
 <h1>Pages</h1>
 <ul class="shane">
-{{#each pages}}
-    <li><a href="{{this.url}}">{{this.title}}</a></li>
+{{#each page.front.buttons}}
+    <li>
+        <a href="{{this.url}}">{{this}}</a>
+    </li>
 {{/each}}
 </ul>
 
 {{ inc src="button.html" name="Kittie" }}
+
+{{#md}}
+#shane is awese
+{{/md}}
+

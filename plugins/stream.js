@@ -23,6 +23,7 @@ module.exports = function (userConfig) {
 
     if (!userConfig.errorHandler) {
         userConfig.errorHandler = function (err, compiler) {
+            console.log(err.stack);
             compiler.logger.error(compiler.getErrorString(err));
         };
     }
@@ -50,22 +51,7 @@ module.exports = function (userConfig) {
         var partials = [];
 
         Object.keys(files).forEach(function (key) {
-            if (isPartial(key)) {
-                site.populateCache(key, files[key], "");
-                partials.push(key);
-            } else if (isData(key)) {
-                site.populateCache(key, files[key], "data");
-            } else {
-                var item;
-                if (isPost(key)) {
-                    item = site.addPost(key, files[key]);
-                } else {
-                    if (isPage(key)) {
-                        item = site.addPage(key, files[key]);
-                    }
-                }
-                queue.push(item);
-            }
+            queue.push(site.addPage(key, files[key]));
         });
 
         if (!queue.length && partials.length) {
@@ -132,11 +118,12 @@ function buildOne(site, stream, item, data) {
             if (err) {
                 deferred.reject(err);
             } else {
+                console.log(out);
                 stream.push(new File({
                     cwd:  "./",
                     base: "./",
-                    path: out.filePath,
-                    contents: new Buffer(out.compiled)
+                    path: out.get("filepath"),
+                    contents: new Buffer(out.get("compiled"))
                 }));
                 deferred.resolve(out);
             }
