@@ -11,18 +11,24 @@ describe("Adding a page", function() {
 
         var site = crossbow.builder();
 
-        var item = site.addPage("src/docs/index.html", "<p>{{itemTitle}} is rad, {{page.url}}, {{site.title}}</p>");
+        var index = site.addPage("src/docs/index.html", "<p>{{itemTitle}} is rad, {{page.url}}, {{site.title}}</p>");
+        var about = site.addPage("src/docs/about.html", "<div>About page</div>");
 
-        assert.equal(item.get("key"),   "src/docs/index.html");
-        assert.equal(item.get("url"),   "/src/docs/index.html");
-        assert.equal(item.get("title"), "Index");
+        assert.equal(index.get("key"),   "src/docs/index.html");
+        assert.equal(index.get("url"),   "/src/docs/index.html");
+        assert.equal(index.get("title"), "Index");
 
-        assert.equal(site.cache.byType("page").size, 1);
-        assert.equal(site.cache.byType("page").get(0).get("title"), "Index");
-        assert.equal(site.cache.byType("page").get(0).get("url"), "/src/docs/index.html");
+        assert.equal(site.cache.byType("page").size, 2);
+
+        var collection = site.cache.byType("page");
+
+        assert.equal(collection.get("src/docs/index.html").get("url"), "/src/docs/index.html");
+        assert.equal(collection.get("src/docs/index.html").get("title"), "Index");
+        assert.equal(collection.get("src/docs/about.html").get("url"), "/src/docs/about.html");
+        assert.equal(collection.get("src/docs/about.html").get("title"), "About");
 
         site.compile({
-            item: item,
+            item: index,
             data: {
                 site: {
                     title: "browsersync"
@@ -51,8 +57,8 @@ describe("Adding a page", function() {
         assert.equal(item.get("title"), "Index");
 
         assert.equal(site.cache.byType("page").size, 1);
-        assert.equal(site.cache.byType("page").get(0).get("title"), "Index");
-        assert.equal(site.cache.byType("page").get(0).get("url"), "/src/docs/index.html");
+        assert.equal(site.cache.byType("page").get("src/docs/index.html").get("title"), "Index");
+        assert.equal(site.cache.byType("page").get("src/docs/index.html").get("url"), "/src/docs/index.html");
 
         site.compile({
             item: item,

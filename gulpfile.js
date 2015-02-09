@@ -40,9 +40,9 @@ gulp.task("serve", function () {
  */
 gulp.task("crossbow", function () {
     return gulp.src([
-        "test/fixtures/*.html",
+        "test/fixtures/*.html"
         //"test/fixtures/index.html"
-        "test/fixtures/_posts/**"
+        //"test/fixtures/_posts/**"
         //"test/fixtures/docs/**",
         //"test/fixtures/projects/**"
     ])

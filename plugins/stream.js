@@ -118,7 +118,6 @@ function buildOne(site, stream, item, data) {
             if (err) {
                 deferred.reject(err);
             } else {
-                console.log(out);
                 stream.push(new File({
                     cwd:  "./",
                     base: "./",
