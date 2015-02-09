@@ -3,7 +3,7 @@ var assert    = require("chai").assert;
 var multiline = require("multiline");
 var sinon     = require("sinon");
 var fs        = require("fs");
-var crossbow = require("../../../index");
+var crossbow  = require("../../../index");
 
 describe("Adding a page", function() {
 
