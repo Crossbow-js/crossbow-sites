@@ -14,7 +14,6 @@ describe("Pre-processing an item", function() {
         var item = site.preProcess("src/docs/index.html", "<p>Shane is rad, {{page.url}}</p>");
 
         assert.equal(item.get("key"),  "src/docs/index.html");
-        assert.equal(item.get("type"), "page");
     });
     it("should return the front matter + content", function() {
 
@@ -45,7 +44,6 @@ describe("Pre-processing an item", function() {
         var item = site.preProcess("src/about.html", "<p>Shane is rad, {{page.url}}</p>");
 
         assert.equal(item.get("url"), "/src/about.html");
-        assert.equal(item.get("title"), "About");
         assert.equal(item.get("filepath"), "src/about.html");
     });
 });
