@@ -11,7 +11,8 @@ gulp.task("lint", function () {
         "index.js",
         "plugins/*.js",
         "test/**/*.js",
-        "lib/**/*.js"
+        "lib/**/*.js",
+        "!lib/core/*.js"
     ])
     .pipe(noAbs())
     .pipe(jshint("test/.jshintrc"))

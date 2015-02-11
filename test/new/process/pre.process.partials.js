@@ -30,6 +30,6 @@ describe("Pre-processing a random partial", function() {
                 assert.equal(out.get("compiled"), "Hello from main");
                 done();
             }
-        })
+        });
     });
 });
