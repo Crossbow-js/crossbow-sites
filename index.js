@@ -1,4 +1,4 @@
-var crossbow = require("./lib/_crossbow");
+var crossbow = require("./lib/crossbow");
 var merge    = require("./lib/config").merge;
 var noKey    = 0;
 
