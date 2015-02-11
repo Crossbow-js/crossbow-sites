@@ -1,10 +1,6 @@
-var _         = require("lodash");
 var assert    = require("chai").assert;
-var multiline = require("multiline");
-var sinon     = require("sinon");
 var path      = require("../../../lib/core/path");
-var fs        = require("fs");
-var crossbow = require("../../../index");
+var crossbow  = require("../../../index");
 
 describe("Fetching/parsing data files", function() {
 
@@ -65,5 +61,26 @@ describe("Fetching/parsing data files", function() {
 
         assert.isUndefined(out.data.css);
         assert.include(out.content, 'css "/css/main.css"'); // jshint ignore:line
+    });
+    it("YAML: pickup site data when a string given for site: option", function(done) {
+
+        var site = crossbow.builder({
+            config: {
+                cwd: "test/fixtures"
+            }
+        });
+
+        site.compile({
+            key: "docs.html",
+            content: "{{site.css}}",
+            data: {
+                site: "_config.yml"
+            },
+            cb: function (err, out) {
+                assert.equal(out.get("compiled"), "/css/main.css");
+                done();
+            }
+        });
+
     });
 });

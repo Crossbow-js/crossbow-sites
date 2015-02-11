@@ -23,7 +23,6 @@ module.exports = function (userConfig) {
 
     if (!userConfig.errorHandler) {
         userConfig.errorHandler = function (err, compiler) {
-            console.log(err.stack);
             compiler.logger.error(compiler.getErrorString(err));
         };
     }
