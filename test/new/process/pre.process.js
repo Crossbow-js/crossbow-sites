@@ -37,13 +37,12 @@ describe("Pre-processing an item", function() {
         assert.equal(path.name, "index");
         assert.equal(path.dir, "src/docs");
     });
-    it("should return the url & filepath", function() {
+    it("should return the filepath", function() {
 
         var site = crossbow.builder();
 
         var item = site.preProcess("src/about.html", "<p>Shane is rad, {{page.url}}</p>");
 
-        assert.equal(item.get("url"), "/src/about.html");
         assert.equal(item.get("filepath"), "src/about.html");
     });
 });

@@ -45,7 +45,6 @@ describe("Adding a page", function() {
 
         var site = crossbow.builder({
             config: {
-                logLevel: "debug",
                 cwd: "test/fixtures"
             }
         });

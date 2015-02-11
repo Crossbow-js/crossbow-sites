@@ -10,15 +10,26 @@ describe("Working with the cache", function() {
     it("should add/retrieve cache items", function() {
 
         var site = crossbow.builder();
-        var item = site.addPage("index.html", "<button>Click me</button>");
+
+        var item = site.preProcess("index.html", "<button>Click me</button>");
+
+        console.log(item.toJS());
+    });
+
+    it("should add/retrieve cache items with page semantics", function() {
+
+        var site = crossbow.builder();
+
+        site.addPage("index.html", "<button>Click me</button>");
+
         var out  = site.cache.byKey("index.html");
 
         assert.equal(out.get("content"),  "<button>Click me</button>");
 
-        item = site.addPage("index.html", "<button>Click me again!</button>");
+        site.addPage("index.html", "<button>Click me again!</button>");
 
         out = site.cache.byKey("index.html");
 
-        console.log(out);
+        assert.equal(out.get("content"),  "<button>Click me again!</button>");
     });
 });
