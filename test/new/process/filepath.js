@@ -12,17 +12,39 @@ function testfn (filepath, config) {
     return url.makeFilepath(filepath, merge(config));
 }
 
-describe.only("Resolving filepaths", function() {
-
-    it("remove cwd", function() {
+describe("Resolving filepaths", function() {
+    it("filepaths", function() {
         var filepath = "_src/app/index.html";
-        assert.equal(testfn(filepath, {cwd: "_src"}),  "app/index.html");
-        assert.equal(testfn(filepath, {cwd: ""}),      "_src/app/index.html");
-        assert.equal(testfn(filepath, {cwd: "."}),     "_src/app/index.html");
-        assert.equal(testfn(filepath, {cwd: "./"}),    "_src/app/index.html");
+        assert.equal(testfn(filepath, {}),  "_src/app/index.html");
+        assert.equal(testfn("/" + filepath, {}),  "_src/app/index.html");
     });
     it("remove cwd", function() {
-        //assert.equal(url.makeFilepath("_src/app/index.hbs", site.config),  "app/index.html");
-        //assert.equal(url.makeFilepath("_src/app/index.hbs", site2.config), "_src/app/index.html");
+        var filepath = "_src/app/index.html";
+        assert.equal(testfn(filepath, {cwd: "_src"}),     "app/index.html");
+        assert.equal(testfn(filepath, {cwd: ""}),         "_src/app/index.html");
+        assert.equal(testfn(filepath, {cwd: "."}),        "_src/app/index.html");
+        assert.equal(testfn(filepath, {cwd: "./"}),       "_src/app/index.html");
+        assert.equal(testfn(filepath, {cwd: "_src/app"}), "index.html");
+    });
+    it("remove cwd repeated", function() {
+        assert.equal(testfn("/_src/app/another/index.html", {cwd: "_src"}),      "app/another/index.html");
+        assert.equal(testfn("/_src/app/another/index.html", {cwd: "_src/app"}),  "another/index.html");
+    });
+
+    it("handles pretty urls", function() {
+        assert.equal(testfn("_src/app/docs.html", {cwd: "_src", prettyUrls: true}),  "app/docs/index.html");
+        assert.equal(testfn("_src/docs.html",     {cwd: "_src", prettyUrls: true}),  "docs/index.html");
+        assert.equal(testfn("docs.html",          {prettyUrls: true}),               "docs/index.html");
+    });
+    it("handles pretty urls + index", function() {
+        assert.equal(testfn("index.html",          {prettyUrls: false}),        "index.html");
+        assert.equal(testfn("index.html",          {prettyUrls: true}),         "index.html");
+        assert.equal(testfn("docs/index.html",     {prettyUrls: true}),         "docs/index.html");
+        assert.equal(testfn("docs/app/index.html", {prettyUrls: true}),         "docs/app/index.html");
+        assert.equal(testfn("docs/app.html",       {prettyUrls: true}),         "docs/app/index.html");
+    });
+    it("handles pretty urls + index + cwd", function() {
+        assert.equal(testfn("docs/app.html",       {cwd: "docs", prettyUrls: true}),  "app/index.html");
+        assert.equal(testfn("docs/app.html",       {cwd: "docs", prettyUrls: false}), "app.html");
     });
 });
