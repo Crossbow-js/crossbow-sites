@@ -17,8 +17,7 @@ describe("Doing Highlight includes", function() {
         site.compile({
             item: item,
             cb: function (err, out) {
-
-                assert.include(out.get("compiled"), '<code class="html">content</code></pre>'); // jshint ignore:line
+                assert.include(out.get("compiled"), '<code class="html"><span class="hljs-tag">&lt;<span'); // jshint ignore:line
                 done();
             }
         });

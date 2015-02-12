@@ -64,4 +64,25 @@ describe("Doing includes", function() {
             }
         });
     });
+
+    it.skip("Add does not blow up if filter does not exist", function(done) {
+
+        var site = crossbow.builder({
+            config: {
+                cwd: "test/fixtures",
+                logLevel: "debug"
+            }
+        });
+
+        var item = site.addPage("src/docs/index.html", "{{hl src='_includes/button.html'}}");
+
+        site.compile({
+            item: item,
+            cb: function (err, out) {
+                console.log(out.get("compiled"));
+                //assert.include(out.get("compiled"), '<button>'); // jshint ignore:line
+                done();
+            }
+        });
+    });
 });
