@@ -16,5 +16,3 @@ fs.src([
     cwd:  "test/fixtures"
 }))
 .pipe(fs.dest(outpath));
-
-

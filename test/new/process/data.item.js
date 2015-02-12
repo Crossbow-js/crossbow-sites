@@ -66,4 +66,23 @@ describe("Item compile data", function() {
             }
         });
     });
+    it("should promote front-vars to first-level of page", function(done) {
+
+        var site = crossbow.builder({
+            config: {
+                cwd: "test/fixtures",
+                logLevel: "debug"
+            }
+        });
+
+        var page = site.addPage("index.html", "---\nlayout: 'parent.html'\nanimal: 'cat'\n---\n<h1>{{page.animal}}</h1>");
+
+        site.compile({
+            item: page,
+            cb: function (err, out) {
+                assert.include(out.get("compiled"), "<h1>cat</h1>");
+                done();
+            }
+        });
+    });
 });
