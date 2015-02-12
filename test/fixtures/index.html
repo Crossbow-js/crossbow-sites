@@ -7,14 +7,14 @@ prefix: "tonse"
 ---
 <h1>Pages</h1>
 <ul class="shane">
-{{#each page.front.buttons}}
+{{#each page.buttons}}
     <li>
         <a href="{{this.url}}">{{this}}</a>
     </li>
 {{/each}}
 </ul>
 
-{{inc src="button.html" name="Kittie"}}
+{{inc src="button" name="Kittie"}}
 
 <ul>
     <li>

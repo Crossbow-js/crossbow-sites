@@ -47,7 +47,12 @@ gulp.task("crossbow", function () {
         //"test/fixtures/docs/**",
         //"test/fixtures/projects/**"
     ])
-        .pipe(crossbow.stream({cwd: "test/fixtures"}))
+        .pipe(crossbow.stream({
+            cwd: "test/fixtures",
+            data: {
+                site: "_config.yml"
+            }
+        }))
         .pipe(gulp.dest("_site"));
 });
 
