@@ -74,7 +74,7 @@ describe("Fetching/parsing data files", function() {
             key: "docs.html",
             content: "{{site.css}}",
             data: {
-                site: "_config.yml"
+                site: "file:_config.yml"
             },
             cb: function (err, out) {
                 assert.equal(out.get("compiled"), "/css/main.css");
