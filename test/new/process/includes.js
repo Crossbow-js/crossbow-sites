@@ -65,7 +65,7 @@ describe("Doing includes", function() {
         });
     });
 
-    it.skip("Add does not blow up if filter does not exist", function(done) {
+    it("Does an include with a HL filter", function(done) {
 
         var site = crossbow.builder({
             config: {
@@ -74,13 +74,33 @@ describe("Doing includes", function() {
             }
         });
 
-        var item = site.addPage("src/docs/index.html", "{{hl src='_includes/button.html'}}");
+        var item = site.addPage("src/docs/index.html", "{{inc src='_includes/button.html' filter='hl'}}");
 
         site.compile({
             item: item,
             cb: function (err, out) {
-                console.log(out.get("compiled"));
-                //assert.include(out.get("compiled"), '<button>'); // jshint ignore:line
+                assert.include(out.get("compiled"), '<code class="html"><span class="hljs-tag">&lt;<span'); // jshint ignore:line
+                done();
+            }
+        });
+    });
+    it("Does an include with a MD filter", function(done) {
+
+        var site = crossbow.builder({
+            config: {
+                cwd: "test/fixtures",
+                errorHandler: function (err) {
+                    console.log(err);
+                }
+            }
+        });
+
+        var item = site.addPage("src/docs/index.html", "{{inc src='markdown' filter='md'}}");
+
+        site.compile({
+            item: item,
+            cb: function (err, out) {
+                assert.include(out.get("compiled"), 'This is a title</h2>'); // jshint ignore:line
                 done();
             }
         });
