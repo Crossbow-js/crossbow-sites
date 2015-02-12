@@ -6,7 +6,7 @@ I wanted a node-only, jekyll-type thingy - but as simple as this to use:
 
 ```js
 /**
- * Default task
+ * What it might end up being...
  */
 gulp.task("crossbow", function () {
     return gulp.src(["app/*.html"])
@@ -15,4 +15,6 @@ gulp.task("crossbow", function () {
 });
 ```
 
-So that's exactly what Crossbow is - a static-site & blog generator. No Ruby, no slow. Just awesome.
+So that's exactly what Crossbow will be - a static-site & blog generator. No Ruby, no slow. Just awesome.
+
+**Note**: Not ready for public use just yet... will be soon though.  
