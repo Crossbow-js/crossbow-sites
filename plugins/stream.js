@@ -92,6 +92,7 @@ module.exports = function (userConfig) {
             Q.all(promises).then(function (err, out) {
                 cb();
             }).catch(function (err) {
+                console.log(err);
                 //site.logger.warn(site.getErrorString(err));
                 stream.emit("end");
                 cb();
