@@ -31,7 +31,6 @@ describe("Inline data helper", function() {
                 errorHandler: function (err) {
                     assert.equal(err._crossbow.line, 1);
                     assert.equal(err._crossbow.column, 1);
-                    console.log(err);
                     site.logger.error(site.getErrorString(err));
                 }
             }

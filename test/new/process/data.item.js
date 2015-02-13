@@ -27,8 +27,7 @@ describe("Item compile data", function() {
 
         var site = crossbow.builder({
             config: {
-                cwd: "test/fixtures",
-                logLevel: "debug"
+                cwd: "test/fixtures"
             }
         });
 
@@ -46,8 +45,7 @@ describe("Item compile data", function() {
 
         var site = crossbow.builder({
             config: {
-                cwd: "test/fixtures",
-                logLevel: "debug"
+                cwd: "test/fixtures"
             },
             data: {
                 site: {
@@ -70,8 +68,7 @@ describe("Item compile data", function() {
 
         var site = crossbow.builder({
             config: {
-                cwd: "test/fixtures",
-                logLevel: "debug"
+                cwd: "test/fixtures"
             }
         });
 

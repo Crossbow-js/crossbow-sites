@@ -69,8 +69,7 @@ describe("Doing includes", function() {
 
         var site = crossbow.builder({
             config: {
-                cwd: "test/fixtures",
-                logLevel: "debug"
+                cwd: "test/fixtures"
             }
         });
 
