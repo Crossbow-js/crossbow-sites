@@ -11,3 +11,4 @@ stream-out
 _bench/
 _bench-out/
 simple-out/
+npm-debug.log
