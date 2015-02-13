@@ -104,4 +104,31 @@ describe("Doing includes", function() {
             }
         });
     });
+    it("includes with correct context", function (done) {
+
+        var site = crossbow.builder({
+            config: {
+                cwd: "test/fixtures"
+            },
+            data: {
+                buttons: ["one", "two"],
+                site: {
+                    title: "Crossbow"
+                }
+            }
+        });
+
+        var item = site.addPage("src/docs/index.html", ":{{#each buttons}}{{inc src='context.html' title='Param title'}}{{/each}}:");
+
+        site.compile({
+            item: item,
+            cb: function (err, out) {
+                var compiled = out.get("compiled");
+                assert.include(compiled, "Site Title: Crossbow");
+                assert.include(compiled, "Page Url: /src/docs/index.html");
+                assert.include(compiled, "Param Title: Param title");
+                done();
+            }
+        });
+    });
 });

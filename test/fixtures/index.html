@@ -22,11 +22,15 @@ prefix: "tonse"
     </li>
 </ul>
 
-A gap
+<p>a gap</p>
 
+<strong>site dump</strong>
 
+{{#each page.buttons}}
 
+{{/each}}
 
+{{$dump site}}
 
 Another huge gap
 
@@ -34,7 +38,7 @@ Another huge gap
 ## shane is awesome
 {{/md}}
 
-{{inc src="markdown" filter="md"}}
+    {{inc src="markdown" filter="md"}}
 
 {{#data src="_config.yml" as="config"}}
 {{$dump config}}
