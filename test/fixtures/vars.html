@@ -1,0 +1,30 @@
+---
+layout: "default"
+markdown: true
+buttons: ["Primary"]
+---
+
+##{{page.title}}
+
+### These vars accessed directly from the page
+
+Site title: **{{site.title}}**
+
+Page Title: **{{page.title}}**
+
+Page URL: **{{page.url}}**
+
+<hr/>
+
+### These vars accessed from within an `\{{inc src='context'}}` block
+
+{{inc src="context" title="Param Title"}}
+
+<hr/>
+
+### These vars accessed from within an include, within an `\{{#each}}` block
+
+{{#each page.buttons}}
+{{inc src="context" title="Param Title"}}
+{{/each}}
+
