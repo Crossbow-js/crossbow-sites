@@ -55,29 +55,29 @@ module.exports = function (userConfig) {
 
         if (!queue.length && partials.length) {
 
-            site.compileAll(function (err, out) {
-
-                if (err) {
-                    cb();
-                } else {
-
-                    _.each(out, function (item) {
-
-                        if (!item) {
-                            return;
-                        }
-
-                        stream.push(new File({
-                            cwd:  "./",
-                            base: "./",
-                            path: item.filePath,
-                            contents: new Buffer(item.compiled)
-                        }));
-                    });
-
-                    cb();
-                }
-            });
+            //site.compileAll(function (err, out) {
+            //
+            //    if (err) {
+            //        cb();
+            //    } else {
+            //
+            //        _.each(out, function (item) {
+            //
+            //            if (!item) {
+            //                return;
+            //            }
+            //
+            //            stream.push(new File({
+            //                cwd:  "./",
+            //                base: "./",
+            //                path: item.filePath,
+            //                contents: new Buffer(item.compiled)
+            //            }));
+            //        });
+            //
+            //        cb();
+            //    }
+            //});
 
         } else {
 
