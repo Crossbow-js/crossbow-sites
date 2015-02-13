@@ -23,7 +23,7 @@ describe("Adding a partial", function() {
 
         assert.deepEqual(site.cache.byType("partial").size, 1);
 
-        assert.equal(site.cache.byType("partial").get(key).get("content"), content2);
+        assert.equal(site.cache.byType("partial").get(0).get("content"), content2);
 
         done();
 

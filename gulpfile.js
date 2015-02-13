@@ -49,6 +49,8 @@ gulp.task("crossbow", function () {
     ])
         .pipe(crossbow.stream({
             cwd: "test/fixtures",
+            defaultLayout: "default",
+            prettyUrls: true,
             data: {
                 site: "file:_config.yml",
                 cats: "file:_config.json"

@@ -19,10 +19,10 @@ describe("Adding a page", function() {
 
         var collection = site.cache.byType("page");
 
-        assert.equal(collection.get("src/docs/index.html").get("url"), "/src/docs/index.html");
-        assert.equal(collection.get("src/docs/index.html").get("title"), "Index");
-        assert.equal(collection.get("src/docs/about.html").get("url"), "/src/docs/about.html");
-        assert.equal(collection.get("src/docs/about.html").get("title"), "About");
+        assert.equal(collection.get(0).get("url"), "/src/docs/index.html");
+        assert.equal(collection.get(0).get("title"), "Index");
+        assert.equal(collection.get(1).get("url"), "/src/docs/about.html");
+        assert.equal(collection.get(1).get("title"), "About");
 
         site.compile({
             item: index,
@@ -53,8 +53,8 @@ describe("Adding a page", function() {
         assert.equal(item.get("title"), "Index");
 
         assert.equal(site.cache.byType("page").size, 1);
-        assert.equal(site.cache.byType("page").get("src/docs/index.html").get("title"), "Index");
-        assert.equal(site.cache.byType("page").get("src/docs/index.html").get("url"), "/src/docs/index.html");
+        assert.equal(site.cache.byType("page").get(0).get("title"), "Index");
+        assert.equal(site.cache.byType("page").get(0).get("url"), "/src/docs/index.html");
 
         site.compile({
             item: item,

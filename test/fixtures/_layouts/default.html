@@ -11,6 +11,13 @@
 <body>
     <main class="page-content">
         <div class="container">
+            <ul class="nav nav--inline">
+                {{#each pages}}
+                <li {{#current this.url}}class="active"{{/current}}>
+                    <a href="{{this.url}}">{{this.title}}</a> {{#if @last}}{{else}} | {{/if}}
+                </li>
+                {{/each}}
+            </ul>
             {{ content }}
         </div>
     </main>

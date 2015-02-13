@@ -1,18 +1,9 @@
 ---
-layout: post.hbs
-title: "Crossbow"
-button: "button.html"
+title:   "Crossbow"
+button:  "button.html"
 buttons: ["Primary", "Secondary"]
-prefix: "tonse"
+prefix:  "tonse"
 ---
-<h1>Pages</h1>
-<ul class="shane">
-{{#each page.buttons}}
-    <li>
-        <a href="{{this.url}}">{{this}}</a>
-    </li>
-{{/each}}
-</ul>
 
 {{inc src="button" name="Kittie"}}
 
