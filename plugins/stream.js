@@ -16,6 +16,7 @@ var errors    = require("../lib/errors").fails;
 module.exports = function (userConfig) {
 
     userConfig = userConfig || {};
+
     var files = {};
     var stream;
     var sitedata = userConfig.data;
@@ -49,49 +50,34 @@ module.exports = function (userConfig) {
         var partials = [];
 
         Object.keys(files).forEach(function (key) {
-            if (isPartial(key)) {
-                site.populateCache(key, files[key], "");
-                partials.push(key);
-            } else if (isData(key)) {
-                site.populateCache(key, files[key], "data");
-            } else {
-                var item;
-                if (isPost(key)) {
-                    item = site.addPost(key, files[key]);
-                } else {
-                    if (isPage(key)) {
-                        item = site.addPage(key, files[key]);
-                    }
-                }
-                queue.push(item);
-            }
+            queue.push(site.addPage(key, files[key]));
         });
 
         if (!queue.length && partials.length) {
 
-            site.compileAll(function (err, out) {
-
-                if (err) {
-                    cb();
-                } else {
-
-                    _.each(out, function (item) {
-
-                        if (!item) {
-                            return;
-                        }
-
-                        stream.push(new File({
-                            cwd:  "./",
-                            base: "./",
-                            path: item.filePath,
-                            contents: new Buffer(item.compiled)
-                        }));
-                    });
-
-                    cb();
-                }
-            });
+            //site.compileAll(function (err, out) {
+            //
+            //    if (err) {
+            //        cb();
+            //    } else {
+            //
+            //        _.each(out, function (item) {
+            //
+            //            if (!item) {
+            //                return;
+            //            }
+            //
+            //            stream.push(new File({
+            //                cwd:  "./",
+            //                base: "./",
+            //                path: item.filePath,
+            //                contents: new Buffer(item.compiled)
+            //            }));
+            //        });
+            //
+            //        cb();
+            //    }
+            //});
 
         } else {
 
@@ -106,6 +92,7 @@ module.exports = function (userConfig) {
             Q.all(promises).then(function (err, out) {
                 cb();
             }).catch(function (err) {
+                console.log(err);
                 //site.logger.warn(site.getErrorString(err));
                 stream.emit("end");
                 cb();
@@ -134,8 +121,8 @@ function buildOne(site, stream, item, data) {
                 stream.push(new File({
                     cwd:  "./",
                     base: "./",
-                    path: out.filePath,
-                    contents: new Buffer(out.compiled)
+                    path: out.get("filepath"),
+                    contents: new Buffer(out.get("compiled"))
                 }));
                 deferred.resolve(out);
             }

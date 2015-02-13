@@ -1,0 +1,49 @@
+---
+layout: "default"
+buttons: ["Primary"]
+---
+
+<h1>{{page.title}}</h1>
+
+<hr/>
+Using <code>\{{#hl}}</code> helper with no lang
+
+{{#hl}}
+<button>Click me</button>
+{{/hl}}
+
+Using <code>\{{#hl lang='html'}}</code> to highlight
+
+{{#hl lang='html'}}
+<button>Click me</button>
+{{/hl}}
+
+<hr/>
+
+{{#md}}
+
+##Highlighting an external file from base
+
+This will pull in an external file using your base to resolve the path. In this example,
+`button.html` lives in the `_includes` directory
+
+{{/md}}
+
+Code: <code>\{{hl src='button.html'}}</code>
+
+{{hl src='button.html'}}
+
+{{#md}}
+##Highlighting an external file relative to base
+
+All files includes are relative to the base setting, regardless of the current file you are working in.
+
+In addition, paths that begin with a dot `.` will be resolved before looking in includes directories
+etc. So, in this example if I wanted to include the contents of the `.gitignore`
+and the **base** is set to `test/fixtures`, all I need do is:
+
+{{/md}}
+
+<code>\{{hl src='../../.gitignore'}}</code>
+
+{{hl src='../../.gitignore'}}

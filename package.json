@@ -4,7 +4,7 @@
   "description": "Static Site Generator - built for speed & extendibility",
   "main": "index.js",
   "scripts": {
-    "unit": "mocha --recursive test/new",
+    "unit": "mocha --recursive test/new/process",
     "test": "gulp lint && npm run unit"
   },
   "homepage": "https://github.com/shakyshane/crossbow.js",
@@ -20,10 +20,10 @@
   },
   "license": "ISC",
   "devDependencies": {
-    "browser-sync": "^2.0.0-rc3",
+    "browser-sync": "^2.0.1",
     "bs-html-injector": "^1.1.0",
     "chai": "^1.9.1",
-    "d-logger": "^1.0.0",
+    "d-logger": "^1.0.1",
     "gulp": "^3.8.8",
     "gulp-autoprefixer": "^2.0.0",
     "gulp-jscs": "^1.1.2",

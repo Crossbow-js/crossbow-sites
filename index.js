@@ -1,6 +1,7 @@
-var crossbow = require("./lib/_crossbow");
-var merge    = require("./lib/config").merge;
-var noKey    = 0;
+var crossbow  = require("./lib/crossbow");
+var Immutable = require("immutable");
+var merge     = require("./lib/config").merge;
+var noKey     = 0;
 
 /**
  * Simple compiler with no state
@@ -30,12 +31,17 @@ module.exports.compile = compile;
  * site.addPage("index.html", "some content")
  */
 function builder (opts) {
+
     opts        = opts        || {};
     opts.config = opts.config || {};
+    opts.data   = opts.data   || {};
     opts.cb     = opts.cb     || function () { /*noop*/ };
 
-    return crossbow.
-        Compiler(merge(opts.config));
+    var site = crossbow.Compiler(merge(opts.config));
+
+    site.defaultData = Immutable.fromJS(opts.data);
+
+    return site;
 }
 
 module.exports.builder = builder;

@@ -3,14 +3,54 @@ layout: post.hbs
 title: "Crossbow"
 button: "button.html"
 buttons: ["Primary", "Secondary"]
-markdown: true
 prefix: "tonse"
 ---
 <h1>Pages</h1>
 <ul class="shane">
-{{#each pages}}
-    <li><a href="{{this.url}}">{{this.title}}</a></li>
+{{#each page.buttons}}
+    <li>
+        <a href="{{this.url}}">{{this}}</a>
+    </li>
 {{/each}}
 </ul>
 
-{{ inc src="button.html" name="Kittie" }}
+{{inc src="button" name="Kittie"}}
+
+<ul>
+    <li>
+        {{inc src="button.html" name="Kittie"}}
+    </li>
+</ul>
+
+<p>a gap</p>
+
+<strong>site dump</strong>
+
+{{#each page.buttons}}
+
+{{/each}}
+
+{{$dump site}}
+
+Another huge gap
+
+{{#md}}
+## shane is awesome
+{{/md}}
+
+{{inc src="markdown" filter="md"}}
+
+{{#data src="_config.yml" as="config"}}
+{{$dump config}}
+{{/data}}
+
+{{site.css}}
+{{cats.css}}
+
+{{{{hl lang="js"}}}}
+var shane = function () {
+    console.log("hi there");
+}
+
+// Another Comment
+{{{{/hl}}}}

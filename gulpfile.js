@@ -11,7 +11,8 @@ gulp.task("lint", function () {
         "index.js",
         "plugins/*.js",
         "test/**/*.js",
-        "lib/**/*.js"
+        "lib/**/*.js",
+        "!lib/core/*.js"
     ])
     .pipe(noAbs())
     .pipe(jshint("test/.jshintrc"))
@@ -40,13 +41,19 @@ gulp.task("serve", function () {
  */
 gulp.task("crossbow", function () {
     return gulp.src([
-        "test/fixtures/*.html",
+        "test/fixtures/*.html"
         //"test/fixtures/index.html"
-        "test/fixtures/_posts/**"
+        //"test/fixtures/_posts/**"
         //"test/fixtures/docs/**",
         //"test/fixtures/projects/**"
     ])
-        .pipe(crossbow.stream({cwd: "test/fixtures"}))
+        .pipe(crossbow.stream({
+            cwd: "test/fixtures",
+            data: {
+                site: "file:_config.yml",
+                cats: "file:_config.json"
+            }
+        }))
         .pipe(gulp.dest("_site"));
 });
 
