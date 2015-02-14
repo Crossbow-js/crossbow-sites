@@ -7,7 +7,7 @@ describe("Item compile data", function() {
     it("should always use data given at compile time over any other", function(done) {
 
         var site = crossbow.builder({config: {cwd: "test/fixtures"}});
-        var page = site.addPage("index.html", ":{{shane}}:{{site.title}}");
+        var page = site.add({key: "index.html", content: ":{{shane}}:{{site.title}}"});
 
         site.compile({
             item: page,
@@ -31,7 +31,7 @@ describe("Item compile data", function() {
             }
         });
 
-        var page = site.addPage("index.html", "---\nlayout: 'parent.html'\n---\nDummy page");
+        var page = site.add({key: "index.html", content: "---\nlayout: 'parent.html'\n---\nDummy page"});
 
         site.compile({
             item: page,
@@ -54,7 +54,7 @@ describe("Item compile data", function() {
             }
         });
 
-        var page = site.addPage("index.html", "---\nlayout: 'parent.html'\n---\n<h1>{{site.title}}</h1>");
+        var page = site.add({key: "index.html", content: "---\nlayout: 'parent.html'\n---\n<h1>{{site.title}}</h1>"});
 
         site.compile({
             item: page,
@@ -72,7 +72,7 @@ describe("Item compile data", function() {
             }
         });
 
-        var page = site.addPage("index.html", "---\nlayout: 'parent.html'\nanimal: 'cat'\n---\n<h1>{{page.animal}}</h1>");
+        var page = site.add({key: "index.html", content: "---\nlayout: 'parent.html'\nanimal: 'cat'\n---\n<h1>{{page.animal}}</h1>"});
 
         site.compile({
             item: page,

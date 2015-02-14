@@ -13,7 +13,7 @@ describe("Pre-processing a random partial", function() {
 
         assert.isUndefined(item.get("type"));
 
-        var page = site.addPage("main.html", "Hello from main");
+        var page = site.add({key: "main.html", content: "Hello from main"});
 
         assert.equal(page.get("url"), "/main.html");
         assert.equal(page.get("key"), "main.html");

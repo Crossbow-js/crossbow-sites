@@ -17,7 +17,7 @@ describe("Inline file data helper", function() {
 
         var string = ":{{site.css}}:";
 
-        var page = site.addPage("index.html", string);
+        var page = site.add({key: "index.html", content: string});
 
 
         site.compile({
@@ -42,7 +42,7 @@ describe("Inline file data helper", function() {
 
         var string = ":{{cats.css}}:{{site.css}}";
 
-        var page = site.addPage("index.html", string);
+        var page = site.add({key: "index.html", content: string});
 
 
         site.compile({
@@ -66,7 +66,7 @@ describe("Inline file data helper", function() {
 
         var string = ":{{cats.css}}:{{site.css}}";
 
-        var page = site.addPage("index.html", string);
+        var page = site.add({key: "index.html", content: string});
 
 
         site.compile({

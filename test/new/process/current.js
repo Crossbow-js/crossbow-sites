@@ -14,7 +14,7 @@ describe("Current helper", function() {
             }
         });
 
-        var item = site.addPage("index.html", ":{{#current '/index.html'}}Should{{/current}}: {{page.url}}");
+        var item = site.add({key: "index.html", content: ":{{#current '/index.html'}}Should{{/current}}: {{page.url}}"});
 
         site.compile({
             item: item,
@@ -35,7 +35,7 @@ describe("Current helper", function() {
             }
         });
 
-        var item = site.addPage("index.html", ":{{#current '/about.html'}}Should{{/current}}: {{page.url}}");
+        var item = site.add({key: "index.html", content: ":{{#current '/about.html'}}Should{{/current}}: {{page.url}}"});
 
         site.compile({
             item: item,

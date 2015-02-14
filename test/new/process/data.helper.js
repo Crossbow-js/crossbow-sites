@@ -13,7 +13,7 @@ describe("Inline data helper", function() {
 
         var string = ":{{#data src='_config.yml' as='config'}}{{config.css}}{{/data}}:";
 
-        var page = site.addPage("index.html", string);
+        var page = site.add({key: "index.html", content: string});
 
         site.compile({
             item: page,
@@ -38,7 +38,7 @@ describe("Inline data helper", function() {
 
         var string = ":{{#data src='_config.yml'}}{{config.css}}{{/data}}:";
 
-        var page = site.addPage("index.html", string);
+        var page = site.add({key: "index.html", content: string});
 
         site.compile({
             item: page,
@@ -59,7 +59,7 @@ describe("Inline data helper", function() {
 
         var string = ":{{#data src='_sconfig.yml' as='config'}}{{config.css}}{{/data}}:";
 
-        var page = site.addPage("index.html", string);
+        var page = site.add({key: "index.html", content: string});
 
         site.compile({
             item: page,

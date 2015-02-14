@@ -7,8 +7,8 @@ describe("Adding muliple pages", function() {
 
         var site = crossbow.builder();
 
-        var index = site.addPage("src/docs/index.html", "<p>{{pages.length}}</p>");
-        var about = site.addPage("src/docs/about.html", "<div>About page</div>");
+        var index = site.add({key: "src/docs/index.html", content: "<p>{{pages.length}}</p>"});
+        var about = site.add({key: "src/docs/about.html", content: "<div>About page</div>"});
 
         site.compile({
             item: index,

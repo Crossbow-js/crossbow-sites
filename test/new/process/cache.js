@@ -22,13 +22,13 @@ describe("Working with the cache", function() {
 
         var site = crossbow.builder();
 
-        site.addPage("index.html", "<button>Click me</button>");
+        site.add({key: "index.html", content: "<button>Click me</button>"});
 
         var out  = site.cache.byKey("index.html");
 
         assert.equal(out.get("content"),  "<button>Click me</button>");
 
-        site.addPage("index.html", "<button>Click me again!</button>");
+        site.add({key: "index.html", content: "<button>Click me again!</button>"});
 
         out = site.cache.byKey("index.html");
 

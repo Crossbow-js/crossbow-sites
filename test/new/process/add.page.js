@@ -7,8 +7,8 @@ describe("Adding a page", function() {
 
         var site = crossbow.builder();
 
-        var index = site.addPage("src/docs/index.html", "<p>{{itemTitle}} is rad, {{page.url}}, {{site.title}}</p>");
-        var about = site.addPage("src/docs/about.html", "<div>About page</div>");
+        var index = site.add({key: "src/docs/index.html", content: "<p>{{itemTitle}} is rad, {{page.url}}, {{site.title}}</p>"});
+        var about = site.add({key: "src/docs/about.html", content: "<div>About page</div>"});
 
         assert.equal(index.get("key"),   "src/docs/index.html");
         assert.equal(index.get("url"),   "/src/docs/index.html");
@@ -46,7 +46,7 @@ describe("Adding a page", function() {
             }
         });
 
-        var item = site.addPage("src/docs/index.html", "---\nlayout: 'docs.html'\n---\n<p>{{itemTitle}} is rad, {{page.url}}, {{site.title}}</p>");
+        var item = site.add({key: "src/docs/index.html", content: "---\nlayout: 'docs.html'\n---\n<p>{{itemTitle}} is rad, {{page.url}}, {{site.title}}</p>"});
 
         assert.equal(item.get("key"),   "src/docs/index.html");
         assert.equal(item.get("url"),   "/src/docs/index.html");

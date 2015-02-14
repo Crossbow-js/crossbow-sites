@@ -11,7 +11,7 @@ describe("Doing Highlight includes", function() {
             }
         });
 
-        var item = site.addPage("src/docs/index.html", "{{hl src='_includes/button.html'}}");
+        var item = site.add({key: "src/docs/index.html", content: "{{hl src='_includes/button.html'}}"});
 
         site.compile({
             item: item,
@@ -30,7 +30,7 @@ describe("Doing Highlight includes", function() {
             }
         });
 
-        var item = site.addPage("src/docs/index.html", "Highlight: {{{{hl lang=\"js\"}}}}<button>{{showme}}</button>{{{{/hl}}}}");
+        var item = site.add({key: "src/docs/index.html", content: "Highlight: {{{{hl lang=\"js\"}}}}<button>{{showme}}</button>{{{{/hl}}}}"});
 
         site.compile({
             item: item,

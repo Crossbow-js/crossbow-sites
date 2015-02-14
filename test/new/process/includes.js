@@ -14,7 +14,7 @@ describe("Doing includes", function() {
             }
         });
 
-        var item = site.addPage("src/docs/index.html", "{{inc src='button.html' name='kittie'}}");
+        var item = site.add({key: "src/docs/index.html", content: "{{inc src='button.html' name='kittie'}}"});
 
         site.compile({
             item: item,
@@ -51,7 +51,7 @@ describe("Doing includes", function() {
             }
         });
 
-        var item = site.addPage("src/docs/index.html", "This is not a P");
+        var item = site.add({key: "src/docs/index.html", content: "This is not a P"});
 
         site.compile({
             item: item,
@@ -71,7 +71,7 @@ describe("Doing includes", function() {
             }
         });
 
-        var item = site.addPage("src/docs/index.html", "{{inc src='_includes/button.html' filter='hl'}}");
+        var item = site.add({key: "src/docs/index.html", content: "{{inc src='_includes/button.html' filter='hl'}}"});
 
         site.compile({
             item: item,
@@ -92,7 +92,7 @@ describe("Doing includes", function() {
             }
         });
 
-        var item = site.addPage("src/docs/index.html", "{{inc src='markdown' filter='md'}}");
+        var item = site.add({key: "src/docs/index.html", content: "{{inc src='markdown' filter='md'}}"});
 
         site.compile({
             item: item,
@@ -120,7 +120,7 @@ describe("Doing includes", function() {
             }
         });
 
-        var item = site.addPage("src/docs/index.html", ":{{#each buttons}}{{inc src='context.html' title='Param title'}}{{/each}}:");
+        var item = site.add({key: "src/docs/index.html", content: ":{{#each buttons}}{{inc src='context.html' title='Param title'}}{{/each}}:"});
 
         site.compile({
             item: item,
