@@ -16,6 +16,8 @@ describe("Current helper", function() {
 
         var item = site.add({key: "index.html", content: ":{{#current '/index.html'}}Should{{/current}}: {{page.url}}"});
 
+        site.freeze();
+
         site.compile({
             item: item,
             cb: function (err, out) {
@@ -37,9 +39,14 @@ describe("Current helper", function() {
 
         var item = site.add({key: "index.html", content: ":{{#current '/about.html'}}Should{{/current}}: {{page.url}}"});
 
+        site.freeze();
+
         site.compile({
             item: item,
             cb: function (err, out) {
+                if (err) {
+                    return done(err);
+                }
                 assert.include(out.get("compiled"), '::'); // jshint ignore:line
                 done();
             }

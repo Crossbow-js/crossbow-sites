@@ -15,9 +15,14 @@ describe("Inline data helper", function() {
 
         var page = site.add({key: "index.html", content: string});
 
+        site.freeze();
+
         site.compile({
             item: page,
             cb: function (err, out) {
+                if (err) {
+                    return done(err);
+                }
                 assert.equal(out.get("compiled"), ":/css/main.css:");
                 done();
             }
@@ -40,6 +45,8 @@ describe("Inline data helper", function() {
 
         var page = site.add({key: "index.html", content: string});
 
+        site.freeze();
+
         site.compile({
             item: page,
             cb: function (err, out) {
@@ -60,6 +67,8 @@ describe("Inline data helper", function() {
         var string = ":{{#data src='_sconfig.yml' as='config'}}{{config.css}}{{/data}}:";
 
         var page = site.add({key: "index.html", content: string});
+
+        site.freeze();
 
         site.compile({
             item: page,

@@ -9,6 +9,8 @@ describe("Item compile data", function() {
         var site = crossbow.builder({config: {cwd: "test/fixtures"}});
         var page = site.add({key: "index.html", content: ":{{shane}}:{{site.title}}"});
 
+        site.freeze();
+
         site.compile({
             item: page,
             data: {
@@ -33,6 +35,8 @@ describe("Item compile data", function() {
 
         var page = site.add({key: "index.html", content: "---\nlayout: 'parent.html'\n---\nDummy page"});
 
+        site.freeze();
+
         site.compile({
             item: page,
             cb: function (err, out) {
@@ -56,9 +60,14 @@ describe("Item compile data", function() {
 
         var page = site.add({key: "index.html", content: "---\nlayout: 'parent.html'\n---\n<h1>{{site.title}}</h1>"});
 
+        site.freeze();
+
         site.compile({
             item: page,
             cb: function (err, out) {
+                if (err) {
+                    return done(err);
+                }
                 assert.include(out.get("compiled"), "<h1>Human</h1>");
                 done();
             }
@@ -73,6 +82,8 @@ describe("Item compile data", function() {
         });
 
         var page = site.add({key: "index.html", content: "---\nlayout: 'parent.html'\nanimal: 'cat'\n---\n<h1>{{page.animal}}</h1>"});
+
+        site.freeze();
 
         site.compile({
             item: page,

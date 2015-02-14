@@ -19,10 +19,14 @@ describe("Inline file data helper", function() {
 
         var page = site.add({key: "index.html", content: string});
 
+        site.freeze();
 
         site.compile({
             item: page,
             cb: function (err, out) {
+                if (err) {
+                    done(err);
+                }
                 assert.equal(out.get("compiled"), ":/css/main.css:");
                 done();
             }
@@ -44,6 +48,7 @@ describe("Inline file data helper", function() {
 
         var page = site.add({key: "index.html", content: string});
 
+        site.freeze();
 
         site.compile({
             item: page,
@@ -68,6 +73,7 @@ describe("Inline file data helper", function() {
 
         var page = site.add({key: "index.html", content: string});
 
+        site.freeze();
 
         site.compile({
             item: page,
@@ -75,6 +81,9 @@ describe("Inline file data helper", function() {
                 site: "file:_config.json"
             },
             cb: function (err, out) {
+                if (err) {
+                    return done(err);
+                }
                 assert.equal(out.get("compiled"), ":/css/main.css:/css/main.css");
                 done();
             }
