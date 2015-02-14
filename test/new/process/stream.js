@@ -26,7 +26,7 @@ describe("E2E stream", function(){
             }))
             .on("end", function () {
                 done();
-            })
+            });
     });
     it("works with CWD config", function(done){
         fs.src([
@@ -47,6 +47,6 @@ describe("E2E stream", function(){
             }))
             .on("end", function () {
                 done();
-            })
+            });
     });
 });

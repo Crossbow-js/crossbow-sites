@@ -50,7 +50,7 @@ gulp.task("crossbow", function () {
         .pipe(crossbow.stream({
             config: {
                 cwd: "test/fixtures",
-                defaultLayout: "default",
+                defaultLayout: "default.html",
                 prettyUrls: true
             },
             data: {

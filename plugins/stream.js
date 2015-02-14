@@ -27,7 +27,7 @@ module.exports = function (opts) {
         };
     }
 
-    var site = crossbow.builder({config: opts.config});
+    var site = crossbow.builder(opts);
 
     return through2.obj(function (file, enc, cb) {
 

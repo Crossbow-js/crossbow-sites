@@ -17,7 +17,7 @@ describe("Adding a partial", function() {
         assert.equal(index.get("key"), key);
         assert.equal(index.get("content"), content);
 
-        index = site.add({type: "partial", key: key, content: content2})
+        index = site.add({type: "partial", key: key, content: content2});
 
         assert.equal(index.get("content"), content2);
 
