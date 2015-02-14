@@ -6,10 +6,13 @@ var outpath     = "./_bench-out";
 
 rimraf(outpath);
 
+console.time("bench");
 fs.src([
     "_bench/*.html"
 ])
     .pipe(crossbow({cwd: "_bench"}))
-    .pipe(fs.dest(outpath));
+    .pipe(fs.dest(outpath)).on("end", function () {
+        console.timeEnd("bench");
+    });
 
 
