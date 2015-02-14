@@ -13,23 +13,21 @@ var errors    = require("../lib/errors").fails;
 /**
  * @returns {Function}
  */
-module.exports = function (userConfig) {
+module.exports = function (opts) {
 
-    userConfig = userConfig || {};
+    opts        = opts        || {};
+    opts.config = opts.config || {};
 
     var files = {};
     var stream;
-    var sitedata = userConfig.data;
 
-    if (!userConfig.errorHandler) {
-        userConfig.errorHandler = function (err, compiler) {
+    if (!opts.config.errorHandler) {
+        opts.config.errorHandler = function (err, compiler) {
             compiler.logger.error(compiler.getErrorString(err));
         };
     }
 
-    var site = crossbow.builder({
-        config: userConfig
-    });
+    var site = crossbow.builder({config: opts.config});
 
     return through2.obj(function (file, enc, cb) {
 
@@ -50,7 +48,7 @@ module.exports = function (userConfig) {
         var partials = [];
 
         Object.keys(files).forEach(function (key) {
-            queue.push(site.addPage(key, files[key]));
+            queue.push(site.add({key: key, content: files[key]}));
         });
 
         if (!queue.length && partials.length) {
@@ -86,14 +84,13 @@ module.exports = function (userConfig) {
             }
 
             _.each(queue, function (item) {
-                promises.push(buildOne(site, stream, item, sitedata));
+                promises.push(buildOne(site, stream, item));
             });
 
             Q.all(promises).then(function (err, out) {
                 cb();
             }).catch(function (err) {
-                console.log(err);
-                //site.logger.warn(site.getErrorString(err));
+                site.logger.warn(site.getErrorString(err));
                 stream.emit("end");
                 cb();
             });
@@ -107,13 +104,12 @@ module.exports.clearCache = crossbow.clearCache;
 /**
  *
  */
-function buildOne(site, stream, item, data) {
+function buildOne(site, stream, item) {
 
     var deferred = Q.defer();
 
     site.compile({
         item: item,
-        data: data,
         cb: function (err, out) {
             if (err) {
                 deferred.reject(err);
@@ -130,30 +126,4 @@ function buildOne(site, stream, item, data) {
     });
 
     return deferred.promise;
-}
-
-function isPartial(filePath) {
-    return filePath.match(/(_inc|_includes|_layouts|_snippets)/);
-}
-
-function isPost(filePath) {
-    return filePath.match(/_posts/);
-}
-
-function isData(filePath) {
-    return path.extname(filePath).match(/(json|yml)$/i);
-}
-
-function isPage(filePath) {
-    return filePath.match(/\.(html|md|markdown|hbs)$/);
-}
-
-function getConfigFile (filepath) {
-    if (filepath.match(/ya?ml$/i)) {
-        return yaml.getYaml(path.resolve(filepath));
-    }
-    if (filepath.match(/json$/i)) {
-        return require(path.resolve(filepath));
-    }
-    return {};
 }
