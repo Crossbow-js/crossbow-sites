@@ -11,13 +11,13 @@ describe("Adding a partial", function() {
         var content2 = content + "<span>another</span>";
         var key      = "lay/default.hbs";
 
-        var index = site.addPartial("lay/default.hbs", content);
+        var index = site.add({type: "partial", key: key, content: content});
 
         assert.equal(index.get("type"), "partial");
         assert.equal(index.get("key"), key);
         assert.equal(index.get("content"), content);
 
-        index = site.addPartial(key, content2);
+        index = site.add({type: "partial", key: key, content: content2})
 
         assert.equal(index.get("content"), content2);
 
