@@ -24,6 +24,8 @@ describe("Adding a page", function() {
         assert.equal(collection.get(1).get("url"), "/src/docs/about.html");
         assert.equal(collection.get(1).get("title"), "About");
 
+        site.freeze();
+
         site.compile({
             item: index,
             data: {
@@ -48,6 +50,8 @@ describe("Adding a page", function() {
 
         var item = site.add({key: "src/docs/index.html", content: "---\nlayout: 'docs.html'\n---\n<p>{{itemTitle}} is rad, {{page.url}}, {{site.title}}</p>"});
 
+        site.freeze();
+
         assert.equal(item.get("key"),   "src/docs/index.html");
         assert.equal(item.get("url"),   "/src/docs/index.html");
         assert.equal(item.get("title"), "Index");
@@ -67,12 +71,12 @@ describe("Adding a page", function() {
             cb: function (err, out) {
 
                 if (err) {
-                    console.log(err);
+                    done(err);
                 } else {
                     assert.include(out.get("compiled"), "<h1>Parent Layout</h1>");
                     assert.include(out.get("compiled"), "<p>Crossbow is rad, /src/docs/index.html, browsersync</p>");
+                    done();
                 }
-                done();
             }
         });
     });

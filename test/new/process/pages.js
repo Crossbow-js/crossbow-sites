@@ -10,6 +10,8 @@ describe("Adding muliple pages", function() {
         var index = site.add({key: "src/docs/index.html", content: "<p>{{pages.length}}</p>"});
         var about = site.add({key: "src/docs/about.html", content: "<div>About page</div>"});
 
+        site.freeze();
+
         site.compile({
             item: index,
             cb: function (err, out) {

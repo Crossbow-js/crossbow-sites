@@ -20,6 +20,8 @@ describe("Pre-processing a random partial", function() {
         assert.equal(page.get("filepath"), "main.html");
         assert.equal(page.get("title"), "Main");
 
+        site.freeze();
+
         site.compile({
             item: page,
             cb: function (err, out) {

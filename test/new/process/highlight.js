@@ -13,6 +13,8 @@ describe("Doing Highlight includes", function() {
 
         var item = site.add({key: "src/docs/index.html", content: "{{hl src='_includes/button.html'}}"});
 
+        site.freeze();
+
         site.compile({
             item: item,
             cb: function (err, out) {
@@ -31,6 +33,8 @@ describe("Doing Highlight includes", function() {
         });
 
         var item = site.add({key: "src/docs/index.html", content: "Highlight: {{{{hl lang=\"js\"}}}}<button>{{showme}}</button>{{{{/hl}}}}"});
+
+        site.freeze();
 
         site.compile({
             item: item,

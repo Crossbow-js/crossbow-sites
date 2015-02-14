@@ -52,6 +52,8 @@ module.exports = function (opts) {
 
         if (!queue.length) {
             return;
+        } else {
+            site.freeze();
         }
 
         _.each(queue, function (item) {

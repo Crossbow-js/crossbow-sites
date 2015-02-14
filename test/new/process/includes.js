@@ -16,6 +16,8 @@ describe("Doing includes", function() {
 
         var item = site.add({key: "src/docs/index.html", content: "{{inc src='button.html' name='kittie'}}"});
 
+        site.freeze();
+
         site.compile({
             item: item,
             cb: function (err, out) {
@@ -53,6 +55,8 @@ describe("Doing includes", function() {
 
         var item = site.add({key: "src/docs/index.html", content: "This is not a P"});
 
+        site.freeze();
+
         site.compile({
             item: item,
             cb: function (err, out) {
@@ -72,6 +76,8 @@ describe("Doing includes", function() {
         });
 
         var item = site.add({key: "src/docs/index.html", content: "{{inc src='_includes/button.html' filter='hl'}}"});
+
+        site.freeze();
 
         site.compile({
             item: item,
@@ -93,6 +99,8 @@ describe("Doing includes", function() {
         });
 
         var item = site.add({key: "src/docs/index.html", content: "{{inc src='markdown' filter='md'}}"});
+
+        site.freeze();
 
         site.compile({
             item: item,
@@ -121,6 +129,8 @@ describe("Doing includes", function() {
         });
 
         var item = site.add({key: "src/docs/index.html", content: ":{{#each buttons}}{{inc src='context.html' title='Param title'}}{{/each}}:"});
+
+        site.freeze();
 
         site.compile({
             item: item,
