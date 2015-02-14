@@ -45,56 +45,26 @@ module.exports = function (opts) {
 
         var promises = [];
         var queue    = [];
-        var partials = [];
 
         Object.keys(files).forEach(function (key) {
             queue.push(site.add({key: key, content: files[key]}));
         });
 
-        if (!queue.length && partials.length) {
-
-            //site.compileAll(function (err, out) {
-            //
-            //    if (err) {
-            //        cb();
-            //    } else {
-            //
-            //        _.each(out, function (item) {
-            //
-            //            if (!item) {
-            //                return;
-            //            }
-            //
-            //            stream.push(new File({
-            //                cwd:  "./",
-            //                base: "./",
-            //                path: item.filePath,
-            //                contents: new Buffer(item.compiled)
-            //            }));
-            //        });
-            //
-            //        cb();
-            //    }
-            //});
-
-        } else {
-
-            if (!queue.length) {
-                return;
-            }
-
-            _.each(queue, function (item) {
-                promises.push(buildOne(site, stream, item));
-            });
-
-            Q.all(promises).then(function (err, out) {
-                cb();
-            }).catch(function (err) {
-                site.logger.warn(site.getErrorString(err));
-                stream.emit("end");
-                cb();
-            });
+        if (!queue.length) {
+            return;
         }
+
+        _.each(queue, function (item) {
+            promises.push(buildOne(site, stream, item));
+        });
+
+        Q.all(promises).then(function (err, out) {
+            cb();
+        }).catch(function (err) {
+            site.logger.warn(site.getErrorString(err));
+            stream.emit("end");
+            cb();
+        });
     });
 };
 

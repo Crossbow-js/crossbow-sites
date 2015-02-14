@@ -5,6 +5,9 @@ var path     = require("path");
 var assert   = require("chai").assert;
 
 var outpath   = "./stream-out";
+var rimraf    = require("rimraf").sync;
+
+rimraf(outpath);
 
 function vp (dir, file) {
     return path.resolve(process.cwd(), outpath, dir, path.basename(file));
@@ -28,17 +31,25 @@ describe("E2E stream", function(){
                 done();
             });
     });
-    it("works with CWD config", function(done){
+    it("works with CWD config", function(done) {
+        var count = 0;
         fs.src([
             "test/fixtures/*.html"
         ])
             .pipe(crossbow.stream({
                 config: {
                     cwd: "test/fixtures"
+                },
+                data: {
+                    site: "file:_config.yml"
                 }
             }))
             .pipe(fs.dest(outpath))
             .pipe(through.obj(function (file, enc, cb) {
+                if (file._contents) {
+                    count += 1;
+                    assert.include(file._contents.toString(), '<link rel="stylesheet" href="/css/main.css"/>');
+                }
                 assert.equal(vp("", file.path), file.path);
                 cb();
             }, function (cb) {
@@ -46,6 +57,7 @@ describe("E2E stream", function(){
                 cb();
             }))
             .on("end", function () {
+                assert.equal(count, 5);
                 done();
             });
     });
