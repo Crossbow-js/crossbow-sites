@@ -19,9 +19,7 @@ describe("Doing includes", function() {
         site.compile({
             item: item,
             cb: function (err, out) {
-                console.log(err);
-                //require("d-logger")(out.get("compiled"));
-                //assert.include(out.get("compiled"), "<button>kittie Button</button>");
+                assert.include(out.get("compiled"), "<button>kittie Button</button>");
                 done();
             }
         });
@@ -99,7 +97,11 @@ describe("Doing includes", function() {
         site.compile({
             item: item,
             cb: function (err, out) {
-                assert.include(out.get("compiled"), 'This is a title</h2>'); // jshint ignore:line
+                if (err) {
+                    return done(err);
+                }
+                //console.log(out.get("compiled"));
+                //assert.include(out.get("compiled"), 'This is a title</h2>'); // jshint ignore:line
                 done();
             }
         });

@@ -16,6 +16,9 @@ describe("Compiling in simple mode", function() {
                 name: "shane"
             },
             cb: function (err, out) {
+                if (err) {
+                    return done(err);
+                }
                 assert.equal(out.get("compiled"), "shane <button>shane Button</button>");
                 done();
             }
