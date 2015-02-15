@@ -6,23 +6,9 @@ buttons: ["Primary", "Secondary"]
 prefix:  "tonse"
 ---
 
-{{inc src="button" name="Kittie"}}
+<h1>{{page.title}}</h1>
 
-
-<ul>
-    <li>
-        {{inc src="button.html" name="Kittie"}}
-    </li>
-</ul>
-
-<p>a gap</p>
-
-<strong>site dump</strong>
-
-{{#each page.buttons}}
-
-{{/each}}
-
+<p>Site dump</p>
 {{$dump site}}
 
 Another huge gap

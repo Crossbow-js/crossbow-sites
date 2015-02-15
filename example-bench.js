@@ -10,7 +10,7 @@ console.time("bench");
 fs.src([
     "_bench/*.html"
 ])
-    .pipe(crossbow({cwd: "_bench"}))
+    .pipe(crossbow({config: {cwd: "_bench"}}))
     .pipe(fs.dest(outpath)).on("end", function () {
         console.timeEnd("bench");
     });
