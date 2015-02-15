@@ -47,7 +47,6 @@ module.exports = function (opts) {
         var queue    = [];
 
         Object.keys(files).forEach(function (key) {
-
             queue.push(site.add({type: site.getType(key), key: key, content: files[key]}));
         });
 
