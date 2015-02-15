@@ -13,5 +13,6 @@
     "boss": true,
     "eqnull": true,
     "node": true,
-    "mocha": true
+    "mocha": true,
+    "esnext": true
 }

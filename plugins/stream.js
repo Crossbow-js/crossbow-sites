@@ -63,6 +63,7 @@ module.exports = function (opts) {
         Q.all(promises).then(function (err, out) {
             cb();
         }).catch(function (err) {
+            console.log(err.stack);
             site.logger.warn(site.getErrorString(err));
             stream.emit("end");
             cb();
@@ -70,8 +71,6 @@ module.exports = function (opts) {
     });
 };
 
-module.exports.logger     = crossbow.logger;
-module.exports.clearCache = crossbow.clearCache;
 
 /**
  *

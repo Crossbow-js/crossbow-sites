@@ -37,7 +37,7 @@ function builder (opts) {
     opts.data   = opts.data   || {};
     opts.cb     = opts.cb     || function () { /*noop*/ };
 
-    var site = crossbow.Compiler(merge(opts.config));
+    var site = crossbow.Compiler(opts.config);
 
     site.defaultData = Immutable.fromJS(opts.data);
 
