@@ -13,10 +13,13 @@ function vp (dir, file) {
     return path.resolve(process.cwd(), outpath, dir, path.basename(file));
 }
 
-describe("E2E stream", function(){
-    it("works with noe config", function(done){
+describe("E2E stream - posts", function(){
+    it("works with cwd config", function(done){
+
+        var expected = ["blog/post1.html", "blog/post2.html"];
+        var out =      [];
+
         fs.src([
-            "test/fixtures/about.html",
             "test/fixtures/_posts/**"
         ])
             .pipe(crossbow.stream({
@@ -24,16 +27,15 @@ describe("E2E stream", function(){
                     cwd: "test/fixtures"
                 }
             }))
-            .pipe(fs.dest(outpath))
             .pipe(through.obj(function (file, enc, cb) {
-                //console.log(file.path);
-                //assert.equal(vp("test/fixtures", file.path), file.path);
+                out.push(file.relative);
                 cb();
             }, function (cb) {
                 this.emit("end");
                 cb();
             }))
             .on("end", function () {
+                assert.deepEqual(expected, out);
                 done();
             });
     });
