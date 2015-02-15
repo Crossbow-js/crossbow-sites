@@ -11,7 +11,7 @@ describe("Inline data helper", function() {
                 cwd: "test/fixtures"}
         });
 
-        var string = ":{{#data src='_config.yml' as='config'}}{{config.css}}{{/data}}:";
+        var string = ":{{#data src='_config.yml' as='config'}}{{config.css}}{{/data}}:{{config.css}}";
 
         var page = site.add({key: "index.html", content: string});
 
@@ -23,6 +23,7 @@ describe("Inline data helper", function() {
                 if (err) {
                     return done(err);
                 }
+                //require("d-logger")(out.get("compiled"));
                 assert.equal(out.get("compiled"), ":/css/main.css:");
                 done();
             }
