@@ -6,7 +6,7 @@ describe("Pre-processing a random partial", function() {
     it("should return the key", function(done) {
 
         var site = crossbow.builder();
-        var item = site.preProcess("_layouts/main.html", "Content: {{content}}");
+        var item = site.preProcess({key: "_layouts/main.html", content: "Content: {{content}}"});
 
         assert.equal(item.get("key"),  "_layouts/main.html");
         assert.equal(item.get("content"),  "Content: {{content}}");

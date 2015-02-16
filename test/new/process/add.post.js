@@ -112,6 +112,8 @@ describe("Adding a post", function() {
         assert.equal(index.get("url"),      "/blog/test.html");
         assert.equal(index.get("filepath"), "blog/test.html");
 
+        console.log(index.get("timestamp"));
+
         assert.equal(site.cache.byType("post").size, 1);
 
         site.freeze();

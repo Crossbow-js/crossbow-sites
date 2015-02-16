@@ -7,7 +7,7 @@ describe("Working with the cache", function() {
 
         var site = crossbow.builder();
 
-        var item = site.preProcess("index.html", "<button>Click me</button>");
+        var item = site.preProcess({key: "index.html", content: "<button>Click me</button>"});
 
         site.cache.add(item);
 

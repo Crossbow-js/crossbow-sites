@@ -94,7 +94,7 @@ describe("E2E stream - posts", function(){
                 done();
             });
     });
-    it("works with urlFormat", function(done){
+    it("works with urlFormat", function(done) {
 
         var expected = ["shane/kittie/post1.html", "shane/kittie/post2.html"];
         var out =      [];

@@ -7,7 +7,7 @@ describe("Pre-processing an item", function() {
 
         var site = crossbow.builder();
 
-        var item = site.preProcess("src/docs/index.html", "<p>Shane is rad, {{page.url}}</p>");
+        var item = site.preProcess({key: "src/docs/index.html", content: "<p>Shane is rad, {{page.url}}</p>"});
 
         assert.equal(item.get("key"),  "src/docs/index.html");
     });
@@ -15,7 +15,7 @@ describe("Pre-processing an item", function() {
 
         var site = crossbow.builder();
 
-        var item = site.preProcess("src/docs/index.html", "<p>Shane is rad, {{page.url}}</p>");
+        var item = site.preProcess({key: "src/docs/index.html", content: "<p>Shane is rad, {{page.url}}</p>"});
 
         assert.equal(item.get("content"), "<p>Shane is rad, {{page.url}}</p>");
         assert.deepEqual(item.get("front").toJS(), {});
@@ -24,7 +24,7 @@ describe("Pre-processing an item", function() {
 
         var site = crossbow.builder();
 
-        var item = site.preProcess("src/docs/index.html", "<p>Shane is rad, {{page.url}}</p>");
+        var item = site.preProcess({key: "src/docs/index.html", content: "<p>Shane is rad, {{page.url}}</p>"});
 
         var path = item.get("path").toJS();
 
@@ -37,7 +37,7 @@ describe("Pre-processing an item", function() {
 
         var site = crossbow.builder();
 
-        var item = site.preProcess("src/about.html", "<p>Shane is rad, {{page.url}}</p>");
+        var item = site.preProcess({key: "src/about.html", content: "<p>Shane is rad, {{page.url}}</p>"});
 
         assert.equal(item.get("filepath"), "src/about.html");
     });

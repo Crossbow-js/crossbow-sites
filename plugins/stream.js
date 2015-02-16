@@ -37,7 +37,7 @@ module.exports = function (opts) {
             var contents        = file._contents.toString();
             var relFilePath     = file.path.replace(file.cwd, "");
             relFilePath         = relFilePath.replace(/^\//, "");
-            files[relFilePath]  = contents;
+            files[relFilePath]  = {stat: file.stat, content: contents};
         }
         cb();
 
@@ -47,7 +47,12 @@ module.exports = function (opts) {
         var queue    = [];
 
         Object.keys(files).forEach(function (key) {
-            queue.push(site.add({type: site.getType(key), key: key, content: files[key]}));
+            queue.push(site.add({
+                type:    site.getType(key),
+                key:     key,
+                content: files[key].content,
+                stat:    files[key].stat
+            }));
         });
 
         if (!queue.length) {
