@@ -1,3 +1,4 @@
+var fs        = require("fs");
 var assert    = require("chai").assert;
 var crossbow  = require("../../../index");
 
@@ -20,14 +21,18 @@ describe("Adding a post", function() {
         assert.isTrue(index.get("date") instanceof Date);
         assert.equal(index.get("timestamp"), 1384300800000);
     });
-    it("Add 1 post & set date when NO front-matter", function() {
+    it("Add 1 post & set date when NO front-matter or in filename", function() {
 
         var site = crossbow.builder();
 
+        var stat    = fs.statSync("./test/fixtures/about.html");
+        var content = fs.readFileSync("./test/fixtures/about.html", "utf8");
+
         var index = site.add({
-            type: "post",
-            key: "src/_posts/test.md",
-            content: "{{post.date}}"
+            type:    "post",
+            key:     "src/_posts/test.md",
+            content: content,
+            stat:    stat
         });
 
         assert.equal(index.get("key"),      "src/_posts/test.md");
