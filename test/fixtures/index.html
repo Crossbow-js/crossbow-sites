@@ -6,6 +6,15 @@ buttons: ["Primary", "Secondary"]
 prefix:  "tonse"
 ---
 
+{{#md}}
+## Posts
+{{/md}}
+<ul>
+{{#each posts}}
+<li><a href="{{this.url}}">{{this.title}}</a></li>
+{{/each}}
+</ul>
+
 <h1>{{page.title}}</h1>
 
 <p>Site dump</p>
@@ -14,7 +23,7 @@ prefix:  "tonse"
 Another huge gap
 
 {{#md}}
-## shane is awesome
+## here's a title
 {{/md}}
 
 {{inc src="markdown" filter="md"}}

@@ -117,8 +117,6 @@ describe("Adding a post", function() {
         assert.equal(index.get("url"),      "/blog/test.html");
         assert.equal(index.get("filepath"), "blog/test.html");
 
-        console.log(index.get("timestamp"));
-
         assert.equal(site.cache.byType("post").size, 1);
 
         site.freeze();
@@ -174,6 +172,64 @@ describe("Adding a post", function() {
                     return done(err);
                 }
                 assert.include(out.get("compiled"), "<p>:Test</p>");
+                done();
+            }
+        });
+    });
+    it("Orders posts by created data", function(done) {
+        var site = crossbow.builder({
+            config: {
+                cwd: "src"
+            }
+        });
+
+        var index = site.add({type: "page", key: "src/index.html", content: "Post list:\n<ul>\n{{#posts}}    <li>{{this.title}}</li>\n{{/posts}}</ul>"});
+
+        var post1 = site.add({type: "post", key: "src/_posts/2014-10-10-test1.md", content: "Post 1"});
+        var post2 = site.add({type: "post", key: "src/_posts/2014-10-11-test2.md", content: "Post 2"});
+        var post3 = site.add({type: "post", key: "src/_posts/2014-10-09-test3.md", content: "Post 3"});
+        var post4 = site.add({type: "post", key: "src/_posts/2014-10-12-test4.md", content: "Post 4"});
+
+        assert.equal(post1.get("key"),      "src/_posts/2014-10-10-test1.md");
+        assert.equal(post1.get("url"),      "/blog/test1.html");
+        assert.equal(post1.get("filepath"), "blog/test1.html");
+
+        assert.equal(post2.get("key"),      "src/_posts/2014-10-11-test2.md");
+        assert.equal(post2.get("url"),      "/blog/test2.html");
+        assert.equal(post2.get("filepath"), "blog/test2.html");
+
+        assert.equal(post3.get("key"),      "src/_posts/2014-10-09-test3.md");
+        assert.equal(post3.get("url"),      "/blog/test3.html");
+        assert.equal(post3.get("filepath"), "blog/test3.html");
+
+        assert.equal(post4.get("key"),      "src/_posts/2014-10-12-test4.md");
+        assert.equal(post4.get("url"),      "/blog/test4.html");
+        assert.equal(post4.get("filepath"), "blog/test4.html");
+
+        site.freeze();
+
+        assert.equal(site.frozen["posts"][0].url, "/blog/test4.html");
+        assert.equal(site.frozen["posts"][1].url, "/blog/test2.html");
+        assert.equal(site.frozen["posts"][2].url, "/blog/test1.html");
+        assert.equal(site.frozen["posts"][3].url, "/blog/test3.html");
+
+        site.compile({
+            item: index,
+            data: {
+                site: {
+                    title: "browsersync"
+                },
+                itemTitle: "Crossbow"
+            },
+            cb: function (err, out) {
+                if (err) {
+                    return done(err);
+                }
+                var compiled = out.get("compiled");
+                assert.include(compiled, "<li>Test4.html</li>");
+                assert.include(compiled, "<li>Test2.html</li>");
+                assert.include(compiled, "<li>Test1.html</li>");
+                assert.include(compiled, "<li>Test3.html</li>");
                 done();
             }
         });
