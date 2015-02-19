@@ -136,4 +136,46 @@ describe("Adding a post with dates", function() {
             }
         });
     });
+    it("Does not add drafts when the filename begins _", function() {
+
+        var site = crossbow.builder({config: {cwd: "src"}});
+
+        var index = site.add({
+            type: "post",
+            key: "src/_posts/javascript/_2014-01-01-test.md",
+            content: "---\ndate: 2013-11-13\n---\n{{post.date}}"
+        });
+
+        assert.equal(index.get("date"),     "November 13, 2013");
+
+        site.freeze();
+
+        assert.equal(site.frozen["posts"].length, 0);
+    });
+
+    it("Can override default filters", function() {
+
+        var site = crossbow.builder({
+            config: {
+                cwd: "src",
+                filters: {
+                    "type:post": function (item) {
+                        return item;
+                    }
+                }
+            }
+        });
+
+        var index = site.add({
+            type: "post",
+            key: "src/_posts/javascript/_2014-01-01-test.md",
+            content: "---\ndate: 2013-11-13\n---\n{{post.date}}"
+        });
+
+        assert.equal(index.get("date"),     "November 13, 2013");
+
+        site.freeze();
+
+        assert.equal(site.frozen["posts"].length, 1);
+    });
 });
