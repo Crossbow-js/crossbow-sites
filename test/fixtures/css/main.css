@@ -820,10 +820,9 @@ a [class^="icon-"], a [class*=" icon-"] {
  * Base typography styles
  */
 code, samp {
-	font-size: 14px;
+	font-size: 15px;
 	font-size: 0.875rem;
-	font-family: Consolas, Monaco, monospace;
-	line-height: 1.25;
+	font-family: monospace;
 	padding: 0px 3px;
 	border-radius: 3px;
 	border: 1px solid #e9e9e9;
@@ -846,6 +845,7 @@ pre {
 	border: 1px solid #f1f1f1;
 	border-radius: 0;
 	margin-top: 40px;
+	line-height: 1;
 }
 
 pre:last-child {

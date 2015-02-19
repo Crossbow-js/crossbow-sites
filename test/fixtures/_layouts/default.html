@@ -16,8 +16,10 @@
                 <li {{#current this.url}}class="active"{{/current}}>
                     <a href="{{this.url}}">{{this.title}}</a> {{#if @last}}{{else}} | {{/if}}
                 </li>
+                {{else}}
                 {{/each}}
             </ul>
+            <h2>{{page.title}}</h2>
             {{ content }}
         </div>
     </main>

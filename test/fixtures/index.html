@@ -1,13 +1,10 @@
 ---
-title:   "Crossbow"
-layout:  default
-button:  "button.html"
-buttons: ["Primary", "Secondary"]
-prefix:  "tonse"
+title: Crossbow Home
 ---
-
 <ul>
 {{#each pages}}
-<li><a href="{{this.url}}">{{this.title}}</a></li>
+{{#if_not_eq this.url '/'}}
+    <li><a href="{{this.url}}">{{this.title}}</a></li>
+{{/if_not_eq}}
 {{/each}}
 </ul>
