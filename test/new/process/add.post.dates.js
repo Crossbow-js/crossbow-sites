@@ -71,16 +71,7 @@ describe("Adding a post with dates", function() {
             content: "{{post.date}}"
         });
 
-        assert.equal(index.get("date"),     "February 18, 2015");
-
-        site.freeze();
-
-        site.compile({
-            item: index,
-            cb: function (err, out) {
-                assert.include(out.get("compiled"), "<p>February 18, 2015</p>");
-            }
-        });
+        assert.isTrue(index.get("dateObj") instanceof Date);
     });
     it("Add 1 post & set pretty date when in URL", function() {
 

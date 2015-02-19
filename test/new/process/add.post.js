@@ -158,7 +158,46 @@ describe("Adding a post", function() {
             }
         });
     });
+    it("Allows access to data via `page`", function(done) {
 
+        var site = crossbow.builder({
+            config: {
+                cwd: "src",
+                markdown: false,
+                urlFormat: {
+                    "type:post": "/blog/:filename"
+                }
+            }
+        });
+
+        var index = site.add({type: "post", key: "src/_posts/test.md", content: ":{{page.title}}"});
+
+        assert.equal(index.get("key"),      "src/_posts/test.md");
+        assert.equal(index.get("url"),      "/blog/test.html");
+        assert.equal(index.get("filepath"), "blog/test.html");
+
+        assert.equal(site.cache.byType("post").size, 1);
+
+        site.freeze();
+
+        site.compile({
+            item: index,
+            data: {
+                site: {
+                    title: "browsersync"
+                },
+                itemTitle: "Crossbow"
+            },
+            cb: function (err, out) {
+                if (err) {
+                    return done(err);
+                }
+                assert.notInclude(out.get("compiled"), "<p>:Test</p>");
+                assert.include(out.get("compiled"), "Test");
+                done();
+            }
+        });
+    });
     it("Orders posts by created data", function(done) {
         var site = crossbow.builder({
             config: {
