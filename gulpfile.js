@@ -41,24 +41,24 @@ gulp.task("serve", function () {
  */
 gulp.task("crossbow", function () {
     return gulp.src([
-        "test/fixtures/*.html",
-        "test/fixtures/_posts/**"
-        //"test/fixtures/index.html"
-        //"test/fixtures/docs/**",
+        //"test/fixtures/*.html",
+        //"test/fixtures/_posts/**"
+        "test/fixtures/index.html",
+        "test/fixtures/docs/**"
         //"test/fixtures/projects/**"
     ])
-        .pipe(crossbow.stream({
-            config: {
-                cwd: "test/fixtures",
-                defaultLayout: "default.html",
-                prettyUrls: true
-            },
-            data: {
-                site: "file:_config.yml",
-                cats: "file:_config.json"
-            }
-        }))
-        .pipe(gulp.dest("_site"));
+    .pipe(crossbow.stream({
+        config: {
+            cwd: "test/fixtures",
+            defaultLayout: "default.html",
+            prettyUrls: true
+        },
+        data: {
+            site: "file:_config.yml",
+            cats: "file:_config.json"
+        }
+    }))
+    .pipe(gulp.dest("_site"));
 });
 
 gulp.task("watch", function () {

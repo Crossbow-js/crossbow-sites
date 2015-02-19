@@ -35,9 +35,13 @@ describe("Workign with Types", function() {
     it("Can determine a `partial type` when type:type syntax not being used", function(done) {
 
         var type = crossbow.builder().getType("_layouts/test.hbs");
-
         assert.equal(type, "partial");
+        done();
+    });
 
+    it("Can determine a `page type` file has MD extension", function(done) {
+        var type = crossbow.builder({config: {cwd: "src"}}).getType("src/docs/test.md");
+        assert.equal(type, "page");
         done();
     });
 });

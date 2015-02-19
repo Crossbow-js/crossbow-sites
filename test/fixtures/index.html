@@ -1,41 +1,10 @@
 ---
-title:   "Crossbow"
-layout:  default
-button:  "button.html"
-buttons: ["Primary", "Secondary"]
-prefix:  "tonse"
+title: Crossbow Home
 ---
-
 <ul>
-{{#each posts}}
-<li><a href="{{this.url}}">{{this.title}}</a></li>
+{{#each pages}}
+{{#if_not_eq this.url '/'}}
+    <li><a href="{{this.url}}">{{this.title}}</a></li>
+{{/if_not_eq}}
 {{/each}}
 </ul>
-
-<h1>{{page.title}}</h1>
-
-<p>Site dump</p>
-{{$dump site}}
-
-Another huge gap
-
-{{#md}}
-## here's a title
-{{/md}}
-
-{{inc src="markdown" filter="md"}}
-
-{{#data src="_config.yml" as="config"}}
-{{$dump config}}
-{{/data}}
-
-{{site.css}}
-{{cats.css}}
-
-{{{{hl lang="js"}}}}
-var shane = function () {
-    console.log("hi there");
-}
-
-// Another Comment
-{{{{/hl}}}}
