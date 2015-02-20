@@ -152,7 +152,22 @@ describe("Adding a post with dates", function() {
 
         assert.equal(site.frozen["posts"].length, 0);
     });
+    it("Does not add drafts when published: false in front matter.", function() {
 
+        var site = crossbow.builder({config: {cwd: "src"}});
+
+        var index = site.add({
+            type: "post",
+            key: "src/_posts/javascript/2014-01-01-test.md",
+            content: "---\ndate: 2013-11-13\npublished: false\n---\n{{post.date}}"
+        });
+
+        assert.equal(index.get("date"),     "November 13, 2013");
+
+        site.freeze();
+
+        assert.equal(site.frozen["posts"].length, 0);
+    });
     it("Can override default filters", function() {
 
         var site = crossbow.builder({
