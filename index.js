@@ -18,8 +18,8 @@ function compile (opts) {
         noKey += 1;
     }
 
-    return crossbow.
-        Compiler(merge(opts.config))
+    return crossbow
+        .create(merge(opts.config))
         .compile(opts);
 }
 
@@ -37,7 +37,7 @@ function builder (opts) {
     opts.data   = opts.data   || {};
     opts.cb     = opts.cb     || function () { /*noop*/ };
 
-    var site = crossbow.Compiler(opts.config);
+    var site = crossbow.create(opts.config);
 
     site.defaultData = Immutable.fromJS(opts.data);
 

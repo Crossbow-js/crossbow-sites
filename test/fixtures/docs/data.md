@@ -57,3 +57,15 @@ var site = crossbow.builder({
 ... now you have access to the `site` variable just as before.
 
 ## Data blocks
+
+You can also load data on the fly from within your templates. You use the 
+block-helper style syntax and provide at least two parameters `src` and `as`.
+
+- `src` is the path to the file containing data.
+- `as` is the name of the variable you use to access the data within the block.
+ 
+```hbs
+\{{#data src="config.yaml" as="config"}}
+<link href="\{{config.cssFile}}" rel="stylesheet" />
+\{{/data}}
+```
