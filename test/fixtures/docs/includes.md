@@ -16,8 +16,8 @@ A simple example would be to break small chunks of code into re-usable component
 
 
 ```hbs
-\{{inc src="hero-section.html"}}
-\{{inc src="button.html"}}
+{{inc src="hero-section.html"}}
+{{inc src="button.html"}}
 ```
 
 ### Sub directories
@@ -26,8 +26,8 @@ Given that Crossbow first resolves all files from a **base**. You can
 easily traverse the file system in both ways to include the file you want.
  
 ```hbs
-\{{inc src="sub/directory/hero-section.html"}}
-\{{inc src="../../some/button.html"}}
+{{inc src="sub/directory/hero-section.html"}}
+{{inc src="../../some/button.html"}}
 ```
 
 **Note**: In Crossbow, files are *always* resolved from the 
@@ -51,7 +51,7 @@ would be to to replace the text with a variable...
 
 ```hbs
 <p>
-    <button>\{{text}}</button>
+    <button>{{text}}</button>
 </p>
 ```
 
@@ -59,7 +59,7 @@ would be to to replace the text with a variable...
  as a parameter.
 
 ```hbs
-\{{inc src="button.html" text="Click me!"}}
+{{inc src="button.html" text="Click me!"}}
 ```
 
 ### Includes + Filters
@@ -69,7 +69,7 @@ this is a built-in feature. This example uses the built-in `hl` or `highlight`
 filter to provide syntax highlighting on the file contents.
 
 ```hbs
-\{{inc src="button.html" filter="hl" name="Highlighted"}}
+{{inc src="button.html" filter="hl" name="Highlighted"}}
 ```
 
 results in...
@@ -87,7 +87,7 @@ Here, I've deliberately tried to use a file that doesn't exist with the
 following: 
 
 ```hbs
-\{{inc src="does/not/exist.html"}}
+{{inc src="does/not/exist.html"}}
 ```
 
 ... which results in the following output in the html (don't worry, you 

@@ -31,10 +31,10 @@ this means you can easily use any of the values like so:
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>\{{site.title}}</title>
+    <title>{{site.title}}</title>
     <meta name="viewport" content="width=device-width">
     <meta name="description" content="Building things with Javascript.">
-    <link rel="stylesheet" href="\{{site.cssFile}}"/>
+    <link rel="stylesheet" href="{{site.cssFile}}"/>
 </head>
 ```
 
@@ -65,7 +65,7 @@ block-helper style syntax and provide at least two parameters `src` and `as`.
 - `as` is the name of the variable you use to access the data within the block.
  
 ```hbs
-\{{#data src="config.yaml" as="config"}}
-<link href="\{{config.cssFile}}" rel="stylesheet" />
-\{{/data}}
+{{#data src="config.yaml" as="config"}}
+<link href="{{config.cssFile}}" rel="stylesheet" />
+{{/data}}
 ```
