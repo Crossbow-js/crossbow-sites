@@ -74,7 +74,7 @@ layout: parent
 ```
 **Pro tip:** See those three lines `---`, this is called *front matter* and it's how you
 can set configuration for each page. Running Crossbow with those two files from above would
-result now would result in the content from index being placed into `posts.html` which in 
+result in the content from index being placed into `posts.html` which in 
 turn is placed into `parent.html`
 
 
