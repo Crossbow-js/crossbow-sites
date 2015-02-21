@@ -7,7 +7,7 @@ describe("Current helper", function() {
 
         var site = crossbow.builder({
             config: {
-                cwd: "test/fixtures"
+                base: "test/fixtures"
             },
             data: {
                 urls: ["/index.html", "/about.html"]
@@ -33,7 +33,7 @@ describe("Current helper", function() {
 
         var site = crossbow.builder({
             config: {
-                cwd: "test/fixtures"
+                base: "test/fixtures"
             },
             data: {
                 urls: ["/index.html", "/about.html"]

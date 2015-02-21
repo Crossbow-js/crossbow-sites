@@ -3,11 +3,11 @@ var crossbow  = require("../../../index");
 
 describe("Workign with Types", function() {
 
-    it("Can determine a `post type` using the filepath & cwd", function(done) {
+    it("Can determine a `post type` using the filepath & base", function(done) {
 
         var type = crossbow.builder({
             config: {
-                cwd: "src"
+                base: "src"
             }
         }).getType("src/_posts/test.md");
 
@@ -16,11 +16,11 @@ describe("Workign with Types", function() {
         done();
     });
 
-    it("Can determine a `post type` using the filepath & cwd", function(done) {
+    it("Can determine a `post type` using the filepath & base", function(done) {
 
         var type = crossbow.builder({
             config: {
-                cwd: "src",
+                base: "src",
                 dirs: {
                     "type:post": "_blog"
                 }
@@ -40,7 +40,7 @@ describe("Workign with Types", function() {
     });
 
     it("Can determine a `page type` file has MD extension", function(done) {
-        var type = crossbow.builder({config: {cwd: "src"}}).getType("src/docs/test.md");
+        var type = crossbow.builder({config: {base: "src"}}).getType("src/docs/test.md");
         assert.equal(type, "page");
         done();
     });

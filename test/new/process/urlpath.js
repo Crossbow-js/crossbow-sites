@@ -10,7 +10,7 @@ function testfn (filepath, config) {
 
 describe("Resolving url paths", function() {
     it("urlpaths", function() {
-        var filepath = url.makeFilepath("_src/app/about.html", merge({cwd: "_src"}));
+        var filepath = url.makeFilepath("_src/app/about.html", merge({base: "_src"}));
         assert.equal(testfn(filepath), "/app/about.html");
         assert.equal(testfn("_src/app/index.html"), "/_src/app/index.html");
     });
@@ -22,12 +22,12 @@ describe("Resolving url paths", function() {
         assert.equal(testfn("app/shane/kittie/about.html", {prettyUrls: true}), "/app/shane/kittie/about");
     });
     it("urlpaths with pretty urls + non-index base", function() {
-        var filepath = url.makeFilepath("_src/app/shane/kittie/index2.html", merge({cwd: "_src"}));
+        var filepath = url.makeFilepath("_src/app/shane/kittie/index2.html", merge({base: "_src"}));
         assert.equal(filepath, "app/shane/kittie/index2.html");
         assert.equal(testfn(filepath, {prettyUrls: true}), "/app/shane/kittie/index2");
     });
     it("urlpaths with pretty urls + non-index base", function() {
-        var filepath = url.makeFilepath("_src/app/shane/kittie/index2.html", merge({cwd: "_src"}));
+        var filepath = url.makeFilepath("_src/app/shane/kittie/index2.html", merge({base: "_src"}));
         assert.equal(filepath, "app/shane/kittie/index2.html");
         assert.equal(testfn(filepath, {prettyUrls: true}), "/app/shane/kittie/index2");
     });

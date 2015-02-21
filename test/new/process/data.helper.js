@@ -8,7 +8,7 @@ describe("Inline data helper", function() {
 
         var site = crossbow.builder({
             config: {
-                cwd: "test/fixtures"}
+                base: "test/fixtures"}
         });
 
         var string = ":{{#data src='_config.yml' as='config'}}{{config.css}}{{/data}}:{{config.css}}";
@@ -33,7 +33,7 @@ describe("Inline data helper", function() {
 
         var site = crossbow.builder({
             config: {
-                cwd: "test/fixtures",
+                base: "test/fixtures",
                 errorHandler: function (err) {
                     assert.equal(err._crossbow.line, 1);
                     assert.equal(err._crossbow.column, 1);
@@ -61,7 +61,7 @@ describe("Inline data helper", function() {
 
         var site = crossbow.builder({
             config: {
-                cwd: "test/fixtures"
+                base: "test/fixtures"
             }
         });
 

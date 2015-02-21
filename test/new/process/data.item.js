@@ -6,7 +6,7 @@ describe("Item compile data", function() {
 
     it("should always use data given at compile time over any other", function(done) {
 
-        var site = crossbow.builder({config: {cwd: "test/fixtures"}});
+        var site = crossbow.builder({config: {base: "test/fixtures"}});
         var page = site.add({key: "index.html", content: ":{{shane}}:{{site.title}}"});
 
         site.freeze();
@@ -29,7 +29,7 @@ describe("Item compile data", function() {
 
         var site = crossbow.builder({
             config: {
-                cwd: "test/fixtures"
+                base: "test/fixtures"
             }
         });
 
@@ -49,7 +49,7 @@ describe("Item compile data", function() {
 
         var site = crossbow.builder({
             config: {
-                cwd: "test/fixtures"
+                base: "test/fixtures"
             },
             data: {
                 site: {
@@ -77,7 +77,7 @@ describe("Item compile data", function() {
 
         var site = crossbow.builder({
             config: {
-                cwd: "test/fixtures"
+                base: "test/fixtures"
             }
         });
 

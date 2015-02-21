@@ -7,7 +7,7 @@ describe("Doing includes", function() {
 
         var site = crossbow.builder({
             config: {
-                cwd: "test/fixtures"
+                base: "test/fixtures"
             },
             errorHandler: function (err) {
                 console.log(err);
@@ -31,7 +31,7 @@ describe("Doing includes", function() {
 
         crossbow.compile({
             config: {
-                cwd: "test/fixtures"
+                base: "test/fixtures"
             },
             key: "src/docs/index.html",
             content: "{{inc src='button.html' name='kittie'}}",
@@ -46,7 +46,7 @@ describe("Doing includes", function() {
 
         var site = crossbow.builder({
             config: {
-                cwd: "test/fixtures"
+                base: "test/fixtures"
             },
             errorHandler: function (err) {
                 console.log(err);
@@ -71,7 +71,7 @@ describe("Doing includes", function() {
 
         var site = crossbow.builder({
             config: {
-                cwd: "test/fixtures"
+                base: "test/fixtures"
             }
         });
 
@@ -91,7 +91,7 @@ describe("Doing includes", function() {
 
         var site = crossbow.builder({
             config: {
-                cwd: "test/fixtures",
+                base: "test/fixtures",
                 errorHandler: function (err) {
                     console.log(err);
                 }
@@ -118,7 +118,7 @@ describe("Doing includes", function() {
 
         var site = crossbow.builder({
             config: {
-                cwd: "test/fixtures"
+                base: "test/fixtures"
             },
             data: {
                 buttons: ["one", "two"],

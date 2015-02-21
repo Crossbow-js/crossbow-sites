@@ -14,7 +14,7 @@ function vp (dir, file) {
 }
 
 describe("E2E stream - posts", function(){
-    it("works with cwd config", function(done){
+    it("works with base config", function(done){
 
         var expected = ["blog/post1.html", "blog/post2.html"];
         var out =      [];
@@ -24,7 +24,7 @@ describe("E2E stream - posts", function(){
         ])
             .pipe(crossbow.stream({
                 config: {
-                    cwd: "test/fixtures"
+                    base: "test/fixtures"
                 }
             }))
             .pipe(through.obj(function (file, enc, cb) {
@@ -49,7 +49,7 @@ describe("E2E stream - posts", function(){
         ])
             .pipe(crossbow.stream({
                 config: {
-                    cwd: "test/fixtures",
+                    base: "test/fixtures",
                     prettyUrls: true
                 }
             }))
@@ -75,7 +75,7 @@ describe("E2E stream - posts", function(){
         ])
             .pipe(crossbow.stream({
                 config: {
-                    cwd: "test/fixtures",
+                    base: "test/fixtures",
                     prettyUrls: true,
                     urlFormat: {
                         "type:post": "/shane/:filename"
@@ -104,7 +104,7 @@ describe("E2E stream - posts", function(){
         ])
             .pipe(crossbow.stream({
                 config: {
-                    cwd: "test/fixtures",
+                    base: "test/fixtures",
                     urlFormat: {
                         "type:post": "/shane/kittie/:filename"
                     }

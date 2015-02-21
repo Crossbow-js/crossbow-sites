@@ -45,7 +45,7 @@ describe("Adding a post with dates", function() {
 
         var site = crossbow.builder({
             config: {
-                cwd: "src",
+                base: "src",
                 urlFormat: {
                     "type:post": "/blog/:filename"
                 }
@@ -63,7 +63,7 @@ describe("Adding a post with dates", function() {
     });
     it("Add 1 post & set pretty date default to ctime when not set", function() {
 
-        var site = crossbow.builder({config: {cwd: "src"}});
+        var site = crossbow.builder({config: {base: "src"}});
 
         var index = site.add({
             type: "post",
@@ -75,7 +75,7 @@ describe("Adding a post with dates", function() {
     });
     it("Add 1 post & set pretty date when in URL", function() {
 
-        var site = crossbow.builder({config: {cwd: "src"}});
+        var site = crossbow.builder({config: {base: "src"}});
 
         var index = site.add({
             type: "post",
@@ -96,7 +96,7 @@ describe("Adding a post with dates", function() {
     });
     it("Add 1 post & set pretty date when in Frontmatter", function() {
 
-        var site = crossbow.builder({config: {cwd: "src"}});
+        var site = crossbow.builder({config: {base: "src"}});
 
         var index = site.add({
             type: "post",
@@ -117,7 +117,7 @@ describe("Adding a post with dates", function() {
     });
     it("Add 1 post & set pretty date when in Frontmatter + URL", function() {
 
-        var site = crossbow.builder({config: {cwd: "src"}});
+        var site = crossbow.builder({config: {base: "src"}});
 
         var index = site.add({
             type: "post",
@@ -138,7 +138,7 @@ describe("Adding a post with dates", function() {
     });
     it("Does not add drafts when the filename begins _", function() {
 
-        var site = crossbow.builder({config: {cwd: "src"}});
+        var site = crossbow.builder({config: {base: "src"}});
 
         var index = site.add({
             type: "post",
@@ -154,7 +154,7 @@ describe("Adding a post with dates", function() {
     });
     it("Does not add drafts when published: false in front matter.", function() {
 
-        var site = crossbow.builder({config: {cwd: "src"}});
+        var site = crossbow.builder({config: {base: "src"}});
 
         var index = site.add({
             type: "post",
@@ -172,7 +172,7 @@ describe("Adding a post with dates", function() {
 
         var site = crossbow.builder({
             config: {
-                cwd: "src",
+                base: "src",
                 filters: {
                     "type:post": function (item) {
                         return item;

@@ -8,7 +8,7 @@ describe("Inline file data helper", function() {
 
         var site = crossbow.builder({
             config: {
-                cwd: "test/fixtures"
+                base: "test/fixtures"
             },
             data: {
                 site: "file:_config.yml"
@@ -36,7 +36,7 @@ describe("Inline file data helper", function() {
 
         var site = crossbow.builder({
             config: {
-                cwd: "test/fixtures"
+                base: "test/fixtures"
             },
             data: {
                 cats: "file:_config.yml",
@@ -62,7 +62,7 @@ describe("Inline file data helper", function() {
 
         var site = crossbow.builder({
             config: {
-                cwd: "test/fixtures"
+                base: "test/fixtures"
             },
             data: {
                 cats: "file:_config.yml"

@@ -7,7 +7,7 @@ describe("Doing Highlight includes", function() {
 
         var site = crossbow.builder({
             config: {
-                cwd: "test/fixtures"
+                base: "test/fixtures"
             }
         });
 
@@ -28,7 +28,7 @@ describe("Doing Highlight includes", function() {
 
         var site = crossbow.builder({
             config: {
-                cwd: "test/fixtures"
+                base: "test/fixtures"
             }
         });
 

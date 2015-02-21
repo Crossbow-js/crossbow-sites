@@ -44,7 +44,7 @@ describe("Adding a page", function() {
 
         var site = crossbow.builder({
             config: {
-                cwd: "test/fixtures"
+                base: "test/fixtures"
             }
         });
 

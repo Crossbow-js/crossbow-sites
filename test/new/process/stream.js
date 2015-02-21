@@ -38,7 +38,7 @@
 //        ])
 //            .pipe(crossbow.stream({
 //                config: {
-//                    cwd: "test/fixtures"
+//                    base: "test/fixtures"
 //                },
 //                data: {
 //                    site: "file:_config.yml"

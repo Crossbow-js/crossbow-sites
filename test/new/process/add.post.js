@@ -7,7 +7,7 @@ describe("Adding a post", function() {
 
         var site = crossbow.builder({
             config: {
-                cwd: "src",
+                base: "src",
                 urlFormat: {
                     "type:post": "/:filepath"
                 }
@@ -27,7 +27,7 @@ describe("Adding a post", function() {
 
         var site = crossbow.builder({
             config: {
-                cwd: "src",
+                base: "src",
                 prettyUrls: true,
                 urlFormat: {
                     "type:post": "/:filename"
@@ -49,7 +49,7 @@ describe("Adding a post", function() {
 
         var site = crossbow.builder({
             config: {
-                cwd: "src"
+                base: "src"
             }
         });
 
@@ -84,7 +84,7 @@ describe("Adding a post", function() {
 
         var site = crossbow.builder({
             config: {
-                cwd: "src",
+                base: "src",
                 urlFormat: {
                     "type:post": "/blog/:filename"
                 }
@@ -122,7 +122,7 @@ describe("Adding a post", function() {
 
         var site = crossbow.builder({
             config: {
-                cwd: "src",
+                base: "src",
                 markdown: false,
                 urlFormat: {
                     "type:post": "/blog/:filename"
@@ -162,7 +162,7 @@ describe("Adding a post", function() {
 
         var site = crossbow.builder({
             config: {
-                cwd: "src",
+                base: "src",
                 markdown: false,
                 urlFormat: {
                     "type:post": "/blog/:filename"
@@ -201,7 +201,7 @@ describe("Adding a post", function() {
     it("Orders posts by created data", function(done) {
         var site = crossbow.builder({
             config: {
-                cwd: "src"
+                base: "src"
             }
         });
 
