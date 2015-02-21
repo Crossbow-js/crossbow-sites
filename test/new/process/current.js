@@ -21,6 +21,9 @@ describe("Current helper", function() {
         site.compile({
             item: item,
             cb: function (err, out) {
+                if (err) {
+                    return done(err);
+                }
                 assert.include(out.get("compiled"), ':Should:'); // jshint ignore:line
                 done();
             }

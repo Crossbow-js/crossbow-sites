@@ -17,7 +17,7 @@ describe("registering custom handlebars helpers", function(){
             content: "{{shane}}",
             cb: function (err, out) {
                 if (err) {
-                    done(err);
+                    return done(err);
                 }
                 assert.equal(out.get("compiled"), "Index - kittie");
                 done();
