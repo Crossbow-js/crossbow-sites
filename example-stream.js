@@ -14,7 +14,7 @@ fs.src([
 ])
 .pipe(crossbow.stream({
     config: {
-        cwd:        "test/fixtures",
+        base:        "test/fixtures",
         prettyUrls: true
     }
 }))

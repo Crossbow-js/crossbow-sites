@@ -12,7 +12,7 @@ var about = fs.readFileSync("./test/fixtures/about.html", "utf-8");
 fs.mkdirSync(outpath);
 
 var config = {
-    cwd: "test/fixtures",
+    base: "test/fixtures",
     siteConfig: {
         css: "/core.css"
     }
@@ -20,7 +20,7 @@ var config = {
 
 var site = crossbow.builder({
     config: {
-        cwd: "test/fixtures"
+        base: "test/fixtures"
     }
 });
 
