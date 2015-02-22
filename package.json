@@ -38,6 +38,7 @@
     "rimraf": "^2.2.8",
     "sinon": "^1.10.3",
     "through2": "^0.6.3",
+    "vinyl": "^0.4.6",
     "vinyl-fs": "^0.3.13"
   },
   "dependencies": {
