@@ -9,6 +9,7 @@ rimraf(outpath);
 console.time("bench");
 fs.src([
     "_bench/*.html"
+    //"_bench/1-file.html"
 ])
     .pipe(crossbow({config: {base: "_bench"}}))
     .pipe(fs.dest(outpath)).on("end", function () {
