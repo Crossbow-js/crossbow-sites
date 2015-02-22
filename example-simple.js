@@ -11,21 +11,16 @@ var about = fs.readFileSync("./test/fixtures/about.html", "utf-8");
 
 fs.mkdirSync(outpath);
 
-var config = {
-    base: "test/fixtures",
-    siteConfig: {
-        css: "/core.css"
-    }
-};
-
 var site = crossbow.builder({
     config: {
         base: "test/fixtures"
     }
 });
 
-var out1 = site.addPage("test/fixtures/index.html", index);
-var out2 = site.addPage("test/fixtures/about.html", about);
+var out1 = site.add({key: "test/fixtures/index.html", content: index});
+var out2 = site.add({key: "test/fixtures/about.html", content: about});
+
+site.freeze();
 
 site.compile({
     item: out1,
