@@ -4,8 +4,9 @@
   "description": "Static Site Generator - built for speed & extendibility",
   "main": "index.js",
   "scripts": {
-    "unit": "mocha --recursive test/new/process",
-    "test": "gulp lint && npm run unit"
+    "lint": "jshint lib/*.js lib/plugins/**/*.js lib/public/*.js test/specs/**/*.js",
+    "unit": "mocha --recursive test/specs",
+    "test": "npm run lint && npm run unit"
   },
   "homepage": "https://github.com/shakyshane/crossbow.js",
   "author": {
@@ -28,8 +29,8 @@
     "gulp": "^3.8.8",
     "gulp-autoprefixer": "^2.0.0",
     "gulp-jscs": "^1.1.2",
-    "gulp-jshint": "^1.8.4",
     "gulp-util": "^3.0.0",
+    "jshint": "^2.6.0",
     "mocha": "*",
     "multiline": "^1.0.1",
     "no-abs": "0.0.0",
@@ -41,18 +42,18 @@
   },
   "dependencies": {
     "easy-extender": "^2.2.0",
-    "eazy-logger": "^2.0.0",
-    "gulp-util": "^3.0.2",
+    "eazy-logger": "^2.1.1",
+    "gulp-util": "^3.0.3",
     "handlebars": "git://github.com/shakyshane/hb-fork",
     "highlight.js": "^8.4.0",
-    "immutable": "^3.3.0",
-    "js-yaml": "^3.2.3",
-    "lodash": "^3.1.0",
+    "immutable": "^3.6.2",
+    "js-yaml": "^3.2.7",
+    "lodash": "^3.3.0",
     "marked": "^0.3.3",
     "meow": "^3.0.0",
-    "moment": "^2.8.4",
+    "moment": "^2.9.0",
     "object-path": "^0.9.0",
-    "q": "^1.1.2",
+    "q": "^1.2.0",
     "readable-stream": "^1.0.33",
     "slugify": "^0.1.0",
     "through2": "^0.6.3"

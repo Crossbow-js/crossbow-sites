@@ -1,24 +1,9 @@
 var gulp         = require("gulp");
-var jshint       = require("gulp-jshint");
 var crossbow     = require("./");
 var browserSync  = require("browser-sync");
 var noAbs        = require("no-abs");
 var rimraf       = require("rimraf");
 var htmlInjector = require("bs-html-injector");
-
-gulp.task("lint", function () {
-    gulp.src([
-        "index.js",
-        "plugins/*.js",
-        "test/**/*.js",
-        "lib/**/*.js",
-        "!lib/core/*.js"
-    ])
-    .pipe(noAbs())
-    .pipe(jshint("test/.jshintrc"))
-    .pipe(jshint.reporter("default"))
-    .pipe(jshint.reporter("fail"));
-});
 
 /**
  * Start BrowserSync
