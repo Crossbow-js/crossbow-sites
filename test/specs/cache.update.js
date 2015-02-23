@@ -3,7 +3,7 @@ var crossbow = require("../../index");
 
 describe("Updating an item from the cache", function() {
 
-    it("should update an item in the cache without creating dupes", function(done) {
+    it("should update an item in the cache without creating dupes", function() {
 
         var site = crossbow.builder();
 
@@ -26,7 +26,5 @@ describe("Updating an item from the cache", function() {
         assert.equal(collection.get(0).get("content"), "About page");
         assert.equal(collection.get(0).get("shane"),   "awesome");
         assert.equal(collection.get(1).get("content"), "Blog page");
-
-        done();
     });
 });

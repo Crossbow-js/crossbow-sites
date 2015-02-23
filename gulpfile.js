@@ -39,15 +39,12 @@ gulp.task("serve", function () {
 
 function buildSite() {
     return gulp.src([
-        //"test/fixtures/*.html",
-        //"test/fixtures/_posts/**"
         "test/fixtures/index.html",
         "test/fixtures/docs/**"
-        //"test/fixtures/projects/**"
     ])
         .pipe(crossbow.stream({builder: site}))
         .pipe(gulp.dest("_site"));
-};
+}
 
 /**
  * Default task
@@ -58,7 +55,7 @@ gulp.task("crossbow", function () {
 
 gulp.task("watch", function () {
     gulp.watch(["test/fixtures/**"]).on("change", function (file) {
-        if (file.type === "deleted" || file.type === "added") {
+        if (file.type === "deleted" || file.type === "added" || file.type === "renamed") {
             buildSite().on("end", function () {
                 browserSync.reload();
             });

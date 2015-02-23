@@ -43,16 +43,30 @@ module.exports = function (opts) {
 
     }, function (cb) {
 
-        var queue    = [];
+        var queue      = [];
+        var compileAll = false;
 
         Object.keys(files).forEach(function (key) {
 
-            queue.push(site.cache.add(site.add({
+            var existing = site.cache._items.has(key);
+            var front;
+
+            if (existing) {
+                front = site.cache.byKey(key).get("front");
+            }
+
+            var added = site.add({
                 type:    site.getType(key),
                 key:     key,
                 content: files[key].content,
                 stat:    files[key].stat
-            })));
+            });
+
+            if (front && !added.get("front").equals(front)) {
+                compileAll = true;
+            }
+
+            queue.push(added);
         });
 
         if (!queue.length) {
@@ -61,22 +75,15 @@ module.exports = function (opts) {
 
             if (queue.some(function (item) {
                 return item.get("type") === "partial";
-            })) {
-                site.logger.info("Partials changed, re-compiling all items");
+            }) || compileAll) {
+                site.logger.info("Re-compiling all items");
                 site.freeze();
                 site.compileAll({
                     cb: function (err, out) {
                         if (err) {
                             return console.log("ERROR");
                         }
-                        out.forEach(function (item) {
-                            stream.push(new File({
-                                cwd:  "./",
-                                base: "./",
-                                path: item.get("filepath"),
-                                contents: new Buffer(item.get("compiled"))
-                            }));
-                        });
+                        streampush(out, stream);
                         cb();
                     }
                 });
@@ -94,15 +101,7 @@ module.exports = function (opts) {
                             queue.length > 1 ? "s" : "",
                             new Date().getTime() - timestart
                         );
-                        out.forEach(function (item) {
-                            stream.push(new File({
-                                cwd:  "./",
-                                base: "./",
-                                path: item.get("filepath"),
-                                contents: new Buffer(item.get("compiled"))
-                            }));
-                        });
-
+                        streampush(out, stream);
                         cb();
                     }
                 });
@@ -110,3 +109,19 @@ module.exports = function (opts) {
         }
     });
 };
+
+/**
+ * Push multiple files down stream
+ * @param collection
+ * @param stream
+ */
+function streampush (collection, stream) {
+    collection.forEach(function (item) {
+        stream.push(new File({
+            cwd:  "./",
+            base: "./",
+            path: item.get("filepath"),
+            contents: new Buffer(item.get("compiled"))
+        }));
+    });
+}
