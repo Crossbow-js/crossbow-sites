@@ -4,6 +4,17 @@ var browserSync  = require("browser-sync");
 var noAbs        = require("no-abs");
 var rimraf       = require("rimraf");
 var htmlInjector = require("bs-html-injector");
+var builder      = crossbow.builder({
+    config: {
+        base: "test/fixtures",
+        defaultLayout: "default.html",
+        prettyUrls: true
+    },
+    data: {
+        site: "file:_config.yml",
+        cats: "file:_config.json"
+    }
+});
 
 /**
  * Start BrowserSync
@@ -32,22 +43,17 @@ gulp.task("crossbow", function () {
         "test/fixtures/docs/**"
         //"test/fixtures/projects/**"
     ])
-    .pipe(crossbow.stream({
-        config: {
-            base: "test/fixtures",
-            defaultLayout: "default.html",
-            prettyUrls: true
-        },
-        data: {
-            site: "file:_config.yml",
-            cats: "file:_config.json"
-        }
-    }))
+    .pipe(crossbow.stream({builder: builder}))
     .pipe(gulp.dest("_site"));
 });
 
 gulp.task("watch", function () {
-    gulp.watch(["test/fixtures/**"], ["crossbow", browserSync.reload]);
+    gulp.watch(["test/fixtures/**"]).on("change", function (file) {
+        gulp.src(file.path)
+            .pipe(crossbow.stream({builder: builder}))
+            .pipe(gulp.dest("_site"))
+            .on("end", browserSync.reload)
+    });
 });
 
 gulp.task("clean", function (done) {

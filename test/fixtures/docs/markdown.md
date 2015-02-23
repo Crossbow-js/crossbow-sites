@@ -79,8 +79,9 @@ The real goal behind this automation, is to allow full, 100% portability
  document to output to your blog, and will also read correctly if viewed
  by a platform such as github.
 
-```whatever
-ahsna
+```js
+var shane = "kittie";
+
 ```
 
 

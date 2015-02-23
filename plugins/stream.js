@@ -43,63 +43,63 @@ module.exports = function (opts) {
 
     }, function (cb) {
 
-        var promises = [];
         var queue    = [];
 
         Object.keys(files).forEach(function (key) {
-            queue.push(site.add({
+
+            queue.push(site.cache.add(site.add({
                 type:    site.getType(key),
                 key:     key,
                 content: files[key].content,
                 stat:    files[key].stat
-            }));
+            })));
         });
 
         if (!queue.length) {
             return;
         } else {
-            site.freeze();
-        }
 
-        _.each(queue, function (item) {
-            promises.push(buildOne(site, stream, item));
-        });
-
-        Q.all(promises).then(function (err, out) {
-            cb();
-        }).catch(function (err) {
-            console.log(err.stack);
-            site.logger.warn(site.getErrorString(err));
-            stream.emit("end");
-            cb();
-        });
-    });
-};
-
-
-/**
- *
- */
-function buildOne(site, stream, item) {
-
-    var deferred = Q.defer();
-
-    site.compile({
-        item: item,
-        cb: function (err, out) {
-            if (err) {
-                deferred.reject(err);
+            console.log("compiling: ", queue.length);
+            if (queue.some(function (item) {
+                return item.get("type") === "partial";
+            })) {
+                site.freeze();
+                site.compileAll({
+                    cb: function (err, out) {
+                        if (err) {
+                            return console.log("ERROR");
+                        }
+                        out.forEach(function (item) {
+                            stream.push(new File({
+                                cwd:  "./",
+                                base: "./",
+                                path: item.get("filepath"),
+                                contents: new Buffer(item.get("compiled"))
+                            }));
+                        });
+                        cb();
+                    }
+                });
             } else {
-                stream.push(new File({
-                    cwd:  "./",
-                    base: "./",
-                    path: out.get("filepath"),
-                    contents: new Buffer(out.get("compiled"))
-                }));
-                deferred.resolve(out);
+                site.freeze();
+                site.compileMany({
+                    collection: queue,
+                    cb: function (err, out) {
+                        if (err) {
+                            return console.log("ERROR");
+                        }
+                        out.forEach(function (item) {
+                            stream.push(new File({
+                                cwd:  "./",
+                                base: "./",
+                                path: item.get("filepath"),
+                                contents: new Buffer(item.get("compiled"))
+                            }));
+                        });
+                        cb();
+                    }
+                });
             }
         }
     });
-
-    return deferred.promise;
-}
+};
