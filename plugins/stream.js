@@ -59,10 +59,10 @@ module.exports = function (opts) {
             return;
         } else {
 
-            console.log("compiling: ", queue.length);
             if (queue.some(function (item) {
                 return item.get("type") === "partial";
             })) {
+                site.logger.info("Partials changed, re-compiling all items");
                 site.freeze();
                 site.compileAll({
                     cb: function (err, out) {
@@ -81,6 +81,7 @@ module.exports = function (opts) {
                     }
                 });
             } else {
+                var timestart = new Date().getTime();
                 site.freeze();
                 site.compileMany({
                     collection: queue,
@@ -88,6 +89,11 @@ module.exports = function (opts) {
                         if (err) {
                             return console.log("ERROR");
                         }
+                        site.logger.info("Compiling {yellow:%s} item%s took {yellow:%sms}",
+                            queue.length,
+                            queue.length > 1 ? "s" : "",
+                            new Date().getTime() - timestart
+                        );
                         out.forEach(function (item) {
                             stream.push(new File({
                                 cwd:  "./",
@@ -96,6 +102,7 @@ module.exports = function (opts) {
                                 contents: new Buffer(item.get("compiled"))
                             }));
                         });
+
                         cb();
                     }
                 });

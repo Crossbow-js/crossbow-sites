@@ -4,7 +4,7 @@ var browserSync  = require("browser-sync");
 var noAbs        = require("no-abs");
 var rimraf       = require("rimraf");
 var htmlInjector = require("bs-html-injector");
-var builder      = crossbow.builder({
+var site         = crossbow.builder({
     config: {
         base: "test/fixtures",
         defaultLayout: "default.html",
@@ -20,8 +20,10 @@ var builder      = crossbow.builder({
  * Start BrowserSync
  */
 gulp.task("serve", function () {
+    browserSync.use(htmlInjector);
     browserSync({
         open: false,
+        logLevel: "silent",
         server: {
             baseDir: "_site",
             routes: {
@@ -29,6 +31,9 @@ gulp.task("serve", function () {
                 "/css": "test/fixtures/css"
             }
         }
+    }, function (err, bs) {
+        site.logger.info("View your website at: {yellow:%s}", bs.getOptionIn(["urls", "local"]));
+        site.logger.info("View your website at: {yellow:%s}", bs.getOptionIn(["urls", "external"]));
     });
 });
 
@@ -43,16 +48,19 @@ gulp.task("crossbow", function () {
         "test/fixtures/docs/**"
         //"test/fixtures/projects/**"
     ])
-    .pipe(crossbow.stream({builder: builder}))
+    .pipe(crossbow.stream({builder: site}))
     .pipe(gulp.dest("_site"));
 });
 
 gulp.task("watch", function () {
     gulp.watch(["test/fixtures/**"]).on("change", function (file) {
         gulp.src(file.path)
-            .pipe(crossbow.stream({builder: builder}))
+            .pipe(crossbow.stream({builder: site}))
             .pipe(gulp.dest("_site"))
-            .on("end", browserSync.reload)
+            .on("end", function () {
+                browserSync.notify("<span style='color: magenta'>Crossbow:</span> Injecting HTML");
+                htmlInjector();
+            });
     });
 });
 
