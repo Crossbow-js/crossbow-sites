@@ -37,10 +37,7 @@ gulp.task("serve", function () {
     });
 });
 
-/**
- * Default task
- */
-gulp.task("crossbow", function () {
+function buildSite() {
     return gulp.src([
         //"test/fixtures/*.html",
         //"test/fixtures/_posts/**"
@@ -48,19 +45,32 @@ gulp.task("crossbow", function () {
         "test/fixtures/docs/**"
         //"test/fixtures/projects/**"
     ])
-    .pipe(crossbow.stream({builder: site}))
-    .pipe(gulp.dest("_site"));
+        .pipe(crossbow.stream({builder: site}))
+        .pipe(gulp.dest("_site"));
+};
+
+/**
+ * Default task
+ */
+gulp.task("crossbow", function () {
+    buildSite();
 });
 
 gulp.task("watch", function () {
     gulp.watch(["test/fixtures/**"]).on("change", function (file) {
-        gulp.src(file.path)
-            .pipe(crossbow.stream({builder: site}))
-            .pipe(gulp.dest("_site"))
-            .on("end", function () {
-                browserSync.notify("<span style='color: magenta'>Crossbow:</span> Injecting HTML");
-                htmlInjector();
+        if (file.type === "deleted" || file.type === "added") {
+            buildSite().on("end", function () {
+                browserSync.reload();
             });
+        } else {
+            gulp.src(file.path)
+                .pipe(crossbow.stream({builder: site}))
+                .pipe(gulp.dest("_site"))
+                .on("end", function () {
+                    browserSync.notify("<span style='color: magenta'>Crossbow:</span> Injecting HTML");
+                    htmlInjector();
+                });
+        }
     });
 });
 
