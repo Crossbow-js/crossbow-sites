@@ -21,12 +21,6 @@ module.exports = function (opts) {
     var files = {};
     var stream;
 
-    if (!opts.config.errorHandler) {
-        opts.config.errorHandler = function (err, compiler) {
-            compiler.logger.error(compiler.getErrorString(err));
-        };
-    }
-
     var site = opts.builder || crossbow.builder(opts);
 
     return through2.obj(function (file, enc, cb) {

@@ -9,9 +9,7 @@ describe("Content transforms", function() {
 
         site.transform({type: "content", when: "before templates", fn: function (opts) {
             return opts.content + " Kittie";
-        }});
-
-        site.compile({
+        }}).compile({
             content: "Hi",
             key: "page1.html",
             cb: function (err, out) {

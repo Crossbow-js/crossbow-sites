@@ -3,6 +3,7 @@ var crossbow     = require("./");
 var browserSync  = require("browser-sync");
 var rimraf       = require("rimraf");
 var htmlInjector = require("bs-html-injector");
+
 var site         = crossbow.builder({
     config: {
         base: "test/fixtures",
@@ -32,7 +33,9 @@ gulp.task("serve", function () {
         }
     }, function (err, bs) {
         site.logger.info("View your website at: {yellow:%s}", bs.getOptionIn(["urls", "local"]));
-        site.logger.info("View your website at: {yellow:%s}", bs.getOptionIn(["urls", "external"]));
+        if (bs.getOptionIn(["urls", "external"])) {
+            site.logger.info("View your website at: {yellow:%s}", bs.getOptionIn(["urls", "external"]));
+        }
     });
 });
 
@@ -44,6 +47,14 @@ function buildSite() {
         .pipe(crossbow.stream({builder: site}))
         .pipe(gulp.dest("_site"));
 }
+
+process.stdin.on("data", function (buff) {
+    if (buff.toString() === "cb\n") {
+        buildSite().on("end", function () {
+            browserSync.reload();
+        });
+    }
+});
 
 /**
  * Default task
