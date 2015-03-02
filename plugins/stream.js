@@ -72,7 +72,6 @@ module.exports = function (opts) {
         if (!queue.length) {
             return;
         } else {
-
             if (queue.some(function (item) {
                 return item.get("type") === "partial";
             }) || compileAll) {
