@@ -28,6 +28,7 @@ function vp (dir, file) {
 }
 
 describe("E2E stream - posts with cache", function() {
+
     it("works with base config", function(done) {
 
         var site = crossbow.builder({
