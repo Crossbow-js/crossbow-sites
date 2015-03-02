@@ -12,3 +12,4 @@ _bench/
 _bench-out/
 simple-out/
 npm-debug.log
+example-*.js

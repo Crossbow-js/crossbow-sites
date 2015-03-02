@@ -1,5 +1,4 @@
 var crossbow    = require("./plugins/stream");
-//var through     = require("through2");
 var fs          = require("vinyl-fs");
 var rimraf      = require("rimraf").sync;
 var outpath     = "./_bench-out";
@@ -13,8 +12,9 @@ var site        = require("./").builder({
 rimraf(outpath);
 
 console.time("bench");
+
 fs.src([
-    "_bench/*.html"
+    "_bench/*.md"
     //"_bench/1-file.html"
 ])
     .pipe(crossbow({builder: site}))
