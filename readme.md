@@ -5,6 +5,8 @@
 If you want Jekyll-style thingy that's actually fast, 100% Javascript & has an amazing
 development workflow out of the box - you've come to correct place.
 
+![Crossbow-js](http://cl.ly/image/2W0V2J2G390v/md.gif)
+
 # Killer Features
 
 - **Speed** - In comparison to Jekyll, the most popular static site generator, our benchmark
