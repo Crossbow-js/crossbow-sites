@@ -69,7 +69,7 @@ module.exports = function (opts) {
             if (queue.some(function (item) {
                 return item.get("type") === "partial";
             }) || compileAll) {
-                site.logger.info("Re-compiling all items");
+                site.logger.debug("Re-compiling all items");
                 site.freeze();
                 site.compileAll({
                     cb: function (err, out) {
@@ -89,7 +89,7 @@ module.exports = function (opts) {
                         if (err) {
                             return console.log("ERROR");
                         }
-                        site.logger.info("Compiling {yellow:%s} item%s took {yellow:%sms}",
+                        site.logger.debug("Compiling {yellow:%s} item%s took {yellow:%sms}",
                             queue.length,
                             queue.length > 1 ? "s" : "",
                             new Date().getTime() - timestart
