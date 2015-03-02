@@ -3,7 +3,7 @@
 > Static Site Generator + Blog engine
 
 If you want Jekyll-style thingy that's actually fast, 100% Javascript & has an amazing
-development workflow out of the box - you've come to correct place.
+development workflow out of the box - you've come to correct place. Checkout this [2 min screencast](http://quick.as/mvrsaqz) for a preview. Also, here's a gif.
 
 ![Crossbow-js](http://cl.ly/image/2W0V2J2G390v/md.gif)
 
