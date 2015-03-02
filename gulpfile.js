@@ -1,7 +1,6 @@
 var gulp         = require("gulp");
 var crossbow     = require("./");
 var browserSync  = require("browser-sync");
-var noAbs        = require("no-abs");
 var rimraf       = require("rimraf");
 var htmlInjector = require("bs-html-injector");
 var site         = crossbow.builder({
