@@ -8,7 +8,7 @@ describe("Adding a page", function() {
         var site = crossbow.builder();
 
         var index = site.add({key: "src/docs/index.html", content: "<p>{{itemTitle}} is rad, {{page.url}}, {{site.title}}</p>"});
-        var about = site.add({key: "src/docs/about.html", content: "<div>About page</div>"});
+        var about = site.add({key: "src/docs/about.html", content: "<div>About page</div>"}); //jshint ignore:line
 
         assert.equal(index.get("key"),   "src/docs/index.html");
         assert.equal(index.get("url"),   "/src/docs/index.html");

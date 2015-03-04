@@ -1,17 +1,12 @@
 var crossbow = require("../../../index");
 var through  = require("through2");
 var fs       = require("vinyl-fs");
-var path     = require("path");
 var assert   = require("chai").assert;
 
 var outpath   = "./stream-out";
 var rimraf    = require("rimraf").sync;
 
 rimraf(outpath);
-
-function vp (dir, file) {
-    return path.resolve(process.cwd(), outpath, dir, path.basename(file));
-}
 
 describe("E2E stream - posts", function(){
     it("works with base config", function(done){

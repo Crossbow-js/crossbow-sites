@@ -1,8 +1,6 @@
 var crossbow = require("../../../index");
 var through  = require("through2");
-var fs       = require("vinyl-fs");
 var File     = require("vinyl");
-var path     = require("path");
 var assert   = require("chai").assert;
 
 var outpath   = "./stream-out";
@@ -22,10 +20,6 @@ function readStream (content) {
 }
 
 rimraf(outpath);
-
-function vp (dir, file) {
-    return path.resolve(process.cwd(), outpath, dir, path.basename(file));
-}
 
 describe("E2E stream - posts with cache", function() {
 

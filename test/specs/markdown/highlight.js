@@ -86,7 +86,9 @@ describe("Doing Highlight includes", function() {
 
         site.compile({
             item: item,
-            cb: function (err, out) {}
+            cb: function () {
+
+            }
         });
     });
 
@@ -110,7 +112,7 @@ describe("Doing Highlight includes", function() {
 
         site.compile({
             item: item,
-            cb: function (err, out) {}
+            cb: function () {}
         });
     });
 });

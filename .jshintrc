@@ -8,7 +8,7 @@
     "noarg": true,
     "sub": true,
     "undef": false,
-    "unused": false,
+    "unused": true,
     "quotmark": "double",
     "boss": true,
     "eqnull": true,

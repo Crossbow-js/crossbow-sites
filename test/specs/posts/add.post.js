@@ -1,4 +1,3 @@
-var fs        = require("fs");
 var assert    = require("chai").assert;
 var crossbow  = require("../../../index");
 
