@@ -1,21 +1,20 @@
-var crossbow  = require("../index");
-var yaml      = require("../lib/yaml");
-var utils     = crossbow.utils;
-var through2  = require("through2");
-var gutil     = require("gulp-util");
-var File      = gutil.File;
-var path      = require("path");
+var crossbow = require("../index");
+var yaml = require("../lib/yaml");
+var utils = crossbow.utils;
+var through2 = require("through2");
+var gutil = require("gulp-util");
+var File = gutil.File;
+var path = require("path");
 var Immutable = require("immutable");
-var Q         = require("q");
-var _         = require("lodash");
-var errors    = require("../lib/errors").fails;
+var _ = require("lodash");
+var errors     = require("../lib/errors").fails;
 
 /**
  * @returns {Function}
  */
 module.exports = function (opts) {
 
-    opts        = opts        || {};
+    opts = opts || {};
     opts.config = opts.config || {};
 
     var files = {};
@@ -28,16 +27,16 @@ module.exports = function (opts) {
         stream = this;
 
         if (file._contents) {
-            var contents        = file._contents.toString();
-            var relFilePath     = file.path.replace(file.cwd, "");
-            relFilePath         = relFilePath.replace(/^\//, "");
-            files[relFilePath]  = {stat: file.stat, content: contents};
+            var contents = file._contents.toString();
+            var relFilePath = file.path.replace(file.cwd, "");
+            relFilePath = relFilePath.replace(/^\//, "");
+            files[relFilePath] = {stat: file.stat, content: contents};
         }
         cb();
 
     }, function (cb) {
 
-        var queue      = [];
+        var queue = [];
         var compileAll = false;
 
         Object.keys(files).forEach(function (key) {
@@ -63,12 +62,11 @@ module.exports = function (opts) {
             queue.push(added);
         });
 
-        if (!queue.length) {
-            return;
-        } else {
+        if (queue.length) {
+
             if (queue.some(function (item) {
-                return item.get("type") === "partial";
-            }) || compileAll) {
+                    return item.get("type") === "partial";
+                }) || compileAll) {
                 site.logger.debug("Re-compiling all items");
                 site.freeze();
                 site.compileAll({
@@ -85,7 +83,7 @@ module.exports = function (opts) {
                 site.freeze();
                 site.compileMany({
                     collection: queue,
-                    cb: function (err, out) {
+                    cb:         function (err, out) {
                         if (err) {
                             return console.log("ERROR");
                         }
@@ -108,12 +106,12 @@ module.exports = function (opts) {
  * @param collection
  * @param stream
  */
-function streampush (collection, stream) {
+function streampush(collection, stream) {
     collection.forEach(function (item) {
         stream.push(new File({
-            cwd:  "./",
-            base: "./",
-            path: item.get("filepath"),
+            cwd:      "./",
+            base:     "./",
+            path:     item.get("filepath"),
             contents: new Buffer(item.get("compiled"))
         }));
     });

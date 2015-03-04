@@ -65,8 +65,10 @@ gulp.task("crossbow", function () {
 
 gulp.task("watch", function () {
     gulp.watch(["test/fixtures/**"]).on("change", function (file) {
+        var time = new Date().getTime();
         if (file.type === "deleted" || file.type === "added" || file.type === "renamed") {
             buildSite().on("end", function () {
+                site.logger.info("Recompiled in %sms", new Date().getTime() - time);
                 browserSync.reload();
             });
         } else {
@@ -74,6 +76,7 @@ gulp.task("watch", function () {
                 .pipe(crossbow.stream({builder: site}))
                 .pipe(gulp.dest("_site"))
                 .on("end", function () {
+                    site.logger.info("Recompiled & saved to disk in {yellow:%sms}", new Date().getTime() - time);
                     browserSync.notify("<span style='color: magenta'>Crossbow:</span> Injecting HTML");
                     htmlInjector();
                 });
