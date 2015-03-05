@@ -1,9 +1,18 @@
-#Crossbow [![Build Status](https://travis-ci.org/shakyShane/crossbow.js.svg?branch=master)](https://travis-ci.org/shakyShane/crossbow.js)
+<p align="center">
+    <img alt="babel" src="https://avatars3.githubusercontent.com/u/11148006?v=3&s=200" width="164">
+</p>
 
-> Static Site Generator + Blog engine
+<p align="center">
+  <strong>Crossbow</strong> is a <em>lightning fast</em> Static Site Generator & Blog Engine
+</p>
 
-If you want Jekyll-style thingy that's actually fast, 100% Javascript & has an amazing
-development workflow out of the box - you've come to correct place. Checkout this [2 min screencast](http://quick.as/mvrsaqz) for a preview. Also, here's a gif.
+<p align="center">
+  It gives you insane speed, unique features and the best development workflow on the planet! 
+</p>
+
+<p align="center">
+So if you want Jekyll-style thing, minus the all the Ruby and the *slowness* you've come to correct place. Checkout this [2 min screencast](http://quick.as/mvrsaqz) for a preview. Also, here's a gif.
+</p>
 
 ![Crossbow-js](http://cl.ly/image/2W0V2J2G390v/md.gif)
 
