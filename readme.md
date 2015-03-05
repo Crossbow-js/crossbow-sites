@@ -11,7 +11,8 @@
 </p>
 
 <p align="center">
-So if you want Jekyll-style thing, minus the all the Ruby and the *slowness* you've come to correct place. Checkout this [2 min screencast](http://quick.as/mvrsaqz) for a preview. Also, there's a gif below.
+So, if you want Jekyll-style thing, minus the all the Ruby and the <em>slowness</em>, then you've come to correct place! 
+<a href="http://quick.as/mvrsaqz">Checkout this 2 min screencast</a> for a preview. Also, there's a gif below.
 </p>
 
 #Crossbow [![Build Status](https://travis-ci.org/shakyShane/crossbow.js.svg?branch=master)](https://travis-ci.org/shakyShane/crossbow.js)
