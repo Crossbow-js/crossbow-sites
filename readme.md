@@ -81,6 +81,10 @@ site.compile({
 });
 ```
 
+### Credits
+
+- Logo design by [@chrisbailey](https://dribbble.com/chris3ailey)
+
 ### Todo 
 
 - [ ] Allow options for https://github.com/chjj/marked#overriding-renderer-methods
