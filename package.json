@@ -50,7 +50,7 @@
     "highlight.js": "^8.4.0",
     "immutable": "^3.6.2",
     "js-yaml": "^3.2.7",
-    "lodash": "^3.3.0",
+    "lodash": "^3.4.0",
     "marked": "^0.3.3",
     "meow": "^3.0.0",
     "moment": "^2.9.0",

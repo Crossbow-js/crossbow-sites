@@ -80,7 +80,6 @@ module.exports = function (opts) {
                 });
             } else {
                 var timestart = new Date().getTime();
-                site.freeze();
                 site.compileMany({
                     collection: queue,
                     cb:         function (err, out) {

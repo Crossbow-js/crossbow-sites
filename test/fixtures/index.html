@@ -8,3 +8,19 @@ title: Crossbow Home
 {{/if_not_eq}}
 {{/each}}
 </ul>
+
+
+{{#each posts}}
+<li><a href="{{this.url}}">{{this.title}}</a></li>
+{{/each}}
+
+
+{{#each categories}}
+<h2>{{$_ "startCase" this.name}}</h2>
+{{#each this.items}}
+<ul>
+    <li><a href="{{this.url}}">{{$_ "startCase" this.title}}</a></li>
+</ul>
+{{/each}}
+{{/each}}
+

@@ -42,7 +42,8 @@ gulp.task("serve", function () {
 function buildSite() {
     return gulp.src([
         "test/fixtures/index.html",
-        "test/fixtures/docs/**"
+        "test/fixtures/docs/**",
+        "test/fixtures/_posts/**"
     ])
         .pipe(crossbow.stream({builder: site}))
         .pipe(gulp.dest("_site"));
