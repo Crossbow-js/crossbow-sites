@@ -21,6 +21,6 @@ describe("Adding a post with categories", function() {
 
         assert.equal(index.get("key"),      "src/_posts/javascript/whatevers.md");
         assert.equal(index.get("url"),      "/javascript/whatevers.html");
-        assert.deepEqual(index.get("categories").toJS(), ["js", "node"]);
+        assert.deepEqual(index.get("_categories").toJS(), ["js", "node"]);
     });
 });
