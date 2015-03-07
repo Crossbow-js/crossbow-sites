@@ -15,12 +15,11 @@ title: Crossbow Home
 {{/each}}
 
 
-
 {{#each categories}}
-<h2>{{_ method="" value=this.name}}{{this.name}}</h2>
+<h2>{{$_ "startCase" this.name}}</h2>
 {{#each this.items}}
 <ul>
-    <li><a href="{{this.url}}">{{$_ method="capitalize" value=this.title}}</a></li>
+    <li><a href="{{this.url}}">{{$_ "startCase" this.title}}</a></li>
 </ul>
 {{/each}}
 {{/each}}
