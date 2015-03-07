@@ -2,7 +2,9 @@
 layout: parent
 ---
 <div class="post-content">
-    {{post.categories}}
+    {{#post.categories}}
+        {{$dump this}}
+    {{/post.categories}}
     <p><a href="/">&lt; back</a></p>
     {{ content }}
 </div>
