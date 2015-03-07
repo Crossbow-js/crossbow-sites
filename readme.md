@@ -89,6 +89,6 @@ site.compile({
 
 - [ ] Allow options for https://github.com/chjj/marked#overriding-renderer-methods
 - [x] Categories for posts
-- [ ] Tags for posts
+- [x] Tags for posts
 - [ ] Permalinks in front-matter
 - [ ] Pagination
