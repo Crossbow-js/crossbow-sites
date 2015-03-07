@@ -15,6 +15,12 @@ title: Crossbow Home
 {{/each}}
 
 
+
 {{#each categories}}
-{{this.name}}
+<h2>{{_ method="" value=this.name}}{{this.name}}</h2>
+{{#each this.items}}
+<ul>
+    <li><a href="{{this.url}}">{{this.title}}</a></li>
+</ul>
+{{/each}}
 {{/each}}
