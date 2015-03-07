@@ -4,5 +4,15 @@ layout: parent
 
 <div class="post-content">
     <p><a href="/">&lt; back</a></p>
-    {{ content }}
+    <p>Tags:
+    {{#post.tags}}
+        <a href="{{this.url}}">{{$_ 'startCase' this.name}}</a>
+    {{/post.tags}}
+    </p>
+    <p>Categories:
+    {{#post.categories}}
+        <a href="{{this.url}}">{{$_ 'startCase' this.name}}</a>
+    {{/post.categories}}
+    </p>
+    {{content}}
 </div>

@@ -14,7 +14,7 @@ rimraf(outpath);
 console.time("bench");
 
 fs.src([
-    "_bench/index.md"
+    "_bench/*.md"
     //"_bench/1-file.html"
 ])
     .pipe(crossbow({builder: site}))

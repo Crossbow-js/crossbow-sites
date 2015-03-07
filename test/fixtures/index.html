@@ -10,13 +10,9 @@ title: Crossbow Home
 </ul>
 
 
-{{#each posts}}
-<li><a href="{{this.url}}">{{this.title}}</a></li>
-{{/each}}
-
-
+<h1>Categories</h1>
 {{#each categories}}
-<h2>{{$_ "startCase" this.name}}</h2>
+<h4>{{$_ "startCase" this.name}}</h4>
 {{#each this.items}}
 <ul>
     <li><a href="{{this.url}}">{{$_ "startCase" this.title}}</a></li>
@@ -24,3 +20,12 @@ title: Crossbow Home
 {{/each}}
 {{/each}}
 
+<h1>Tags</h1>
+{{#each tags}}
+<h4>{{$_ "startCase" this.name}}</h4>
+{{#each this.items}}
+<ul>
+    <li><a href="{{this.url}}">{{$_ "startCase" this.title}}</a></li>
+</ul>
+{{/each}}
+{{/each}}

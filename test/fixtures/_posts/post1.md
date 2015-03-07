@@ -1,6 +1,6 @@
 ---
 layout: "post.hbs"
-title: "Test post"
+title: "Test Post"
 categories: javascript, node js
 tags: scss
 ---
