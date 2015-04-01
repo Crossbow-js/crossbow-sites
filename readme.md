@@ -17,6 +17,8 @@ So, if you want Jekyll-style thing, minus the all the Ruby and the <em>slowness<
 
 #Crossbow [![Build Status](https://travis-ci.org/shakyShane/crossbow.js.svg?branch=master)](https://travis-ci.org/shakyShane/crossbow.js)
 
+[![Join the chat at https://gitter.im/Crossbow-js/crossbow](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Crossbow-js/crossbow?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 ![Crossbow-js](http://cl.ly/image/2W0V2J2G390v/md.gif)
 
 # Killer Features
