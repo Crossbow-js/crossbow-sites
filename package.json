@@ -6,7 +6,7 @@
   "scripts": {
     "lint": "jshint lib/*.js lib/plugins/**/*.js lib/public/*.js test/specs/**/*.js",
     "unit": "mocha --recursive test/specs",
-    "test": "npm run lint && npm run unit"
+    "test": "npm run unit"
   },
   "homepage": "https://github.com/shakyshane/crossbow.js",
   "author": {
