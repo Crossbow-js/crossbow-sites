@@ -12,7 +12,8 @@ var site         = crossbow.builder({
     },
     data: {
         site: "file:_config.yml",
-        cats: "file:_config.json"
+        cats: "file:_config.json",
+        work: "dir:work"
     }
 });
 
