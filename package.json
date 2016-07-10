@@ -1,6 +1,6 @@
 {
   "name": "crossbow",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "Static Site Generator - built for speed & extendibility",
   "main": "index.js",
   "scripts": {
