@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Images</h1>
+    {{#imgs src="dir:images"}}
+    <img src="{{this.src}}" width="{{this.width}}" height="{{this.height}}" alt="">
+    {{/imgs}}
+</body>
+</html>

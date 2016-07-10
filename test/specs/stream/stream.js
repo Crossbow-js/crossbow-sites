@@ -58,7 +58,7 @@ describe("E2E stream", function(){
                 cb();
             }))
             .on("end", function () {
-                assert.equal(count, 5);
+                assert.equal(count, 6);
                 done();
             });
     });
