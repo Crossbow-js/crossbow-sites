@@ -1,6 +1,6 @@
 {
-  "name": "crossbow",
-  "version": "0.7.1",
+  "name": "crossbow-sites",
+  "version": "1.0.0",
   "description": "Static Site Generator - built for speed & extendibility",
   "main": "index.js",
   "scripts": {
@@ -8,16 +8,16 @@
     "unit": "mocha --recursive test/specs",
     "test": "npm run unit"
   },
-  "homepage": "https://github.com/shakyshane/crossbow.js",
+  "homepage": "https://github.com/crossbow-js/crossbow-sites.js",
   "author": {
     "name": "Shane Osbourne"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/shakyshane/crossbow.js.git"
+    "url": "git://github.com/crossbow-js/crossbow-sites.js.git"
   },
   "bugs": {
-    "url": "https://github.com/shakyshane/crossbow.js/issues"
+    "url": "https://github.com/crossbow-js/crossbow-sites.js/issues"
   },
   "license": "ISC",
   "devDependencies": {
